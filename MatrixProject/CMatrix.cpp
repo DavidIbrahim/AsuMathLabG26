@@ -1,3 +1,4 @@
+//Const and dest
 #include"CMatrix.h"
 #include<iostream>
 
