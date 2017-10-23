@@ -1,4 +1,5 @@
 //Const and dest
+//rogina is HERE 
 #include"CMatrix.h"
 #include<iostream>
 
