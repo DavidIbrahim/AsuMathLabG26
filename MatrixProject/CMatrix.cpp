@@ -1,5 +1,6 @@
 //Const and dest
 #include"CMatrix.h"
+#include <iomanip>
 #include<iostream>
 
 using namespace std;
@@ -39,4 +40,18 @@ CMatrix :: CMatrix (int nR, int nC, int initialization, double initializationVal
 			}
 		}
 	}
-}
+};
+
+string CMatrix::getString() { 
+	string s; 
+	for(int iR=0;iR<nR;iR++)
+	{ 
+		for(int iC=0;iC<nC;iC++)
+		{ 
+			char buffer[50]; sprintf_s(buffer, 50, "%g\t", values[iR][iC]);
+			s += buffer;
+		} 
+	s+="\n"; }
+	return s; 
+};
+void CMatrix::reset() { if(values) { for(int i=0;i<nR;i++) delete[] values[i]; delete[] values; } nR = nC = 0; values = NULL; }
