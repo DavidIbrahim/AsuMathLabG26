@@ -40,3 +40,40 @@ CMatrix :: CMatrix (int nR, int nC, int initialization, double initializationVal
 		}
 	}
 }
+
+/*-----------------TUNA---------------------*/
+CMatrix::CMatrix(double d){
+	nR = nC = 0;
+	values = NULL;
+	copy(d);
+}
+
+CMatrix::CMatrix(CMatrix& m){
+	nR = nC = 0;
+	values = NULL;
+	copy(m);
+}
+
+CMatrix::CMatrix(string s){
+	nR = nC = 0;
+	values = NULL;
+	copy(s);
+}
+
+CMatrix::CMatrix(int nR, int nC, double first, ...){
+	this->nR = nR;
+	this->nC = nC;
+	if((nR*nC)==0){
+		values=NULL;
+		return;
+	}
+	values = new double*[nR];
+	va_list va;va_start(va, first);
+	for(int iR=0;iR<nR;iR++){
+		values[iR] = new double[nC];
+		for(int iC=0;iC<nC;iC++){
+			values[iR][iC] = (iC==0&&iR==0) ? first : va_arg(va, double);
+		}
+	}
+	va_end(va);
+}
