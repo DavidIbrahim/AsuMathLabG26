@@ -1,5 +1,7 @@
 #include<fstream>
 #include<string>
+#ifndef CMatrix_H
+
 using namespace std;
 class CMatrix
 {
@@ -55,8 +57,15 @@ public:
 	double& operator[](int i) { return values[i / nC][i%nC]; } double& operator()(int i) {
 		return
 			values[i / nC][i%nC];
-	} double& operator()(int r, int c) { return values[r][c]; }
-	int getn() { return nR*nC; }; int getnR() { return nR; }; int getnC() { return nC; }; double
-		getDeterminant(); double getTranspose(); double getInverse();
+	};
+	double& operator()(int r, int c)
+	{ return values[r][c]; };
+	int getn() { return nR*nC; }; 
+	int getnR() { return nR; };
+	int getnC() { return nC; }; 
+	double getDeterminant();
+	double getTranspose(); 
+	double getInverse();
 };
 
+#endif
