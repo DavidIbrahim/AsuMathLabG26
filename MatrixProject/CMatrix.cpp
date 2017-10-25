@@ -1,47 +1,13 @@
-//Const and dest
-//rogina is HERE 
+
 #include"CMatrix.h"
 #include <iomanip>
 #include<iostream>
 
-using namespace std;
 
 CMatrix::CMatrix()
 {
 	nR = nC = 0;
 	values = NULL;
-}
-CMatrix::CMatrix(CMatrix& m)
-{
-	nR = nC = 0;
-	values = NULL;
-	copy(m);
-}
-CMatrix::CMatrix(string s)
-{
-	nR = nC = 0;
-	values = NULL;
-	copy(s);
-}
-CMatrix::CMatrix(double d)
-{
-	nR = nC = 0;
-	values = NULL;
-	copy(d);
-}
-void CMatrix::copy(double d)
-{
-	reset();
-	this->nR = 1;
-	this->nC = 1;
-	values = new double*[1];
-	values[0] = new double[1];
-	values[0][0] = d;
-}
-
-CMatrix :: ~CMatrix()
-{
-	reset();
 }
 CMatrix::CMatrix(int nR, int nC, int initialization, double initializationValue)
 {
@@ -69,6 +35,39 @@ CMatrix::CMatrix(int nR, int nC, int initialization, double initializationValue)
 		}
 	}
 }
+CMatrix::CMatrix(CMatrix& m)
+{
+	nR = nC = 0;
+	values = NULL;
+	copy(m);
+}
+CMatrix::CMatrix(string s)
+{
+	nR = nC = 0;
+	values = NULL;
+	//copy(s);
+}
+CMatrix::CMatrix(double d)
+{
+	nR = nC = 0;
+	values = NULL;
+	copy(d);
+}
+void CMatrix::copy(double d)
+{
+	reset();
+	this->nR = 1;
+	this->nC = 1;
+	values = new double*[1];
+	values[0] = new double[1];
+	values[0][0] = d;
+}
+
+CMatrix :: ~CMatrix()
+{
+	reset();
+}
+
 void CMatrix::copy(CMatrix& m)
 {
 	reset();
@@ -86,7 +85,6 @@ void CMatrix::copy(CMatrix& m)
 	}
 }
 
-
 string CMatrix::getString() {
 	string s;
 	for (int iR = 0; iR<nR; iR++)
@@ -100,4 +98,13 @@ string CMatrix::getString() {
 	}
 	return s;
 }
-void CMatrix::reset() { if (values) { for (int i = 0; i<nR; i++) delete[] values[i]; delete[] values; } nR = nC = 0; values = NULL; }
+void CMatrix::reset() {
+	if (values) { 
+		for (int i = 0; i<nR; i++) 
+			delete[] values[i]; 
+		delete[] values; 
+	}
+	nR = nC = 0; values = NULL;
+}
+
+
