@@ -41,6 +41,8 @@ CMatrix::CMatrix(CMatrix& m)
 	values = NULL;
 	copy(m);
 }
+
+//Waiting for copy(string) implementation to test
 CMatrix::CMatrix(string s)
 {
 	nR = nC = 0;
@@ -107,4 +109,45 @@ void CMatrix::reset() {
 	nR = nC = 0; values = NULL;
 }
 
+void CMatrix::add(CMatrix& m) {
+	if(nR!=m.nR||nC!=m.nC) 
+		throw("Invalid matrix dimension");
+	for(int iR=0;iR<nR;iR++) 
+		for(int iC=0;iC<nC;iC++) 
+			values[iR][iC] += m.values[iR][iC];
+}
 
+CMatrix CMatrix::operator=(CMatrix& m) { 
+	copy(m); 
+	return *this; 
+}
+void CMatrix::operator/=(double d) {
+	for(int iR=0;iR<nR;iR++) 
+		for(int iC=0;iC<nC;iC++) 
+			values[iR][iC] /=d;
+}
+
+/*void CMatrix::addColumn(CMatrix& m) { 
+	CMatrix n(max(nR, m.nR), nC+m.nC); 
+	n.setMatrix(0, 0, *this); 
+	n.setMatrix(0, nC, m); 
+	*this = n; 
+}*/
+
+CMatrix CMatrix::operator--() { 
+	add(CMatrix(nR, nC, MI_VALUE, -1.0));
+	return *this; 
+} 
+CMatrix CMatrix::operator--(int) 
+{ 
+	CMatrix r = *this; 
+	add(CMatrix(nR, nC, MI_VALUE, -1.0));
+	return r;
+}
+
+//still need to check its functionality
+CMatrix CMatrix::operator-() {
+	for(int iR=0;iR<nR;iR++) 
+		for(int iC=0;iC<nC;iC++) 
+			values[iR][iC] = -values[iR][iC];
+	return *this; }
