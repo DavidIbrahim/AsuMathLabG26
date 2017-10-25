@@ -1,7 +1,7 @@
 #include<fstream>
 #include<string>
 #ifndef CMatrix_H
-
+#define CMatrix_H
 using namespace std;
 class CMatrix
 {
