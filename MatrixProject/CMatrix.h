@@ -54,7 +54,7 @@ public:
 	void setSubMatrix(int iR, int iC, CMatrix& m); CMatrix getSubMatrix(int r, int c, int nr, int nc);
 	CMatrix getCofactor(int r, int c);
 
-	//void addColumn(CMatrix& m);
+void addColumn(CMatrix& m);
 //	void addRow(CMatrix& m);
 
 	double& operator[](int i) { return values[i / nC][i%nC]; } double& operator()(int i) {
