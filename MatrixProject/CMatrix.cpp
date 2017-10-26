@@ -150,4 +150,24 @@ CMatrix CMatrix::operator-() {
 	for(int iR=0;iR<nR;iR++) 
 		for(int iC=0;iC<nC;iC++) 
 			values[iR][iC] = -values[iR][iC];
-	return *this; }
+	return *this;
+}
+
+CMatrix CMatrix::operator++() { 
+	add(CMatrix(nR, nC, MI_VALUE, 1.0));
+	return *this; 
+} 
+
+
+//r and c are the beginning of where you want ur subMatrix
+// nr and nc are the size of the subMatrix
+CMatrix CMatrix::getSubMatrix(int r, int c, int nr, int nc) {
+	if((r+nr)>nR || (c+nc)>nC)
+		throw("Invalid matrix dimension"); 
+	CMatrix m(nr, nc); 
+	for(int iR=0;iR<m.nR;iR++) 
+		for(int iC=0;iC<m.nC;iC++) 
+			m.values[iR][iC] = values[r+iR][c+iC]; 
+	return m; 
+}
+
