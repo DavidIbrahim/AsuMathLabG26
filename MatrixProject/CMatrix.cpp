@@ -205,4 +205,48 @@ CMatrix CMatrix::getSubMatrix(int r, int c, int nr, int nc) {
 			m.values[iR][iC] = values[r+iR][c+iC]; 
 	return m; 
 }
+void CMatrix::operator+=(CMatrix& m)//tested
+{
+	add(m);
+}
+/*CMatrix CMatrix :: operator-(CMatrix& m)// this function needs (-=)operator to work
+{
+	CMatrix r = *this;
+	r-=m;
+	return r;
+}
+/*CMatrix CMatrix::operator*(double d)//this function needs (*=) operator to work
+{
+	CMatrix r = *this;
+	r*=d;
+	return r;
+}*/
+CMatrix CMatrix::operator/ (double d)
+{
+	CMatrix r = *this;
+	r/=d;
+	return r;
+}
+CMatrix CMatrix::operator++(int)
+{
+	CMatrix C = *this;
+	add(CMatrix(nR, nC, MI_VALUE, 1.0));
+    return C;
+}
+CMatrix CMatrix::getCofactor(int r, int c)// r and c represents the index of the element that we want to find its cofactor//tested
+{
+	if(nR<=1 && nC<=1)
+		throw("Invalid matrix dimension");
+	CMatrix m(nR-1, nC-1);
+	for(int iR=0;iR<m.nR;iR++)
+		for(int iC=0;iC<m.nC;iC++)
+		{
+			int sR = (iR<r)?iR:iR+1;
+			int sC = (iC<c)?iC:iC+1;
+			m.values[iR][iC] = values[sR][sC];
+		}
+		return m;
+}
+
+
 

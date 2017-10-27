@@ -29,9 +29,13 @@ public:
 	void operator+=(CMatrix& m); void operator+=(double d); CMatrix operator+(CMatrix& m); CMatrix
 		operator+(double d);
 
-	 void sub(CMatrix& m);
-	void operator-=(CMatrix& m); void operator-=(double d); CMatrix operator-(CMatrix& m); CMatrix
-		operator-(double d);
+
+	void sub(CMatrix& m);
+	void operator-=(CMatrix& m); void operator-=(double d); 
+	CMatrix operator-(CMatrix& m);
+	CMatrix operator-(double d);
+		
+
 
 	void mul(CMatrix& m);
 	void operator*=(CMatrix& m); void operator*=(double d); CMatrix operator*(CMatrix& m); CMatrix
