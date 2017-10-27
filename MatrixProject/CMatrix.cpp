@@ -41,6 +41,41 @@ CMatrix::CMatrix(CMatrix& m)
 	values = NULL;
 	copy(m);
 }
+CMatrix CMatrix::operator=(double d)
+{
+	copy(d);
+	return *this; 
+}
+void CMatrix::operator+=(double d)
+{
+	add(CMatrix(nR, nC, MI_VALUE, d));
+}
+double CMatrix::getDeterminant() //(waiting)
+{
+	if (nR != nC)throw("Invalid matrix dimension");
+	if (nR == 1 && nC == 1)return values[0][0];
+	double value = 0, m = 1;
+	for (int iR = 0; iR<nR; iR++)
+	{
+	//	value += m * values[0][iR] * getCofactor(0, iR).getDeterminant(); m *= -1;
+	}
+	return value;
+}
+void CMatrix::operator+=(CMatrix& m)
+{
+	add(m);
+}
+CMatrix CMatrix::operator+(CMatrix& m)
+{
+	CMatrix r = *this;
+	r += m;
+	return r; 
+}
+void CMatrix::operator-=(CMatrix& m) //(waiting)
+{
+	//sub(m);
+}
+
 
 //Waiting for copy(string) implementation to test
 CMatrix::CMatrix(string s)
