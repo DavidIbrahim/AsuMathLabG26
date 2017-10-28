@@ -56,7 +56,7 @@ public:
 	//friend ostream& operator << (ostream &os, CMatrix& C); //Stream
 
 	void setSubMatrix(int iR, int iC, CMatrix& m); CMatrix getSubMatrix(int r, int c, int nr, int nc);
-	//CMatrix getCofactor(int r, int c);
+	CMatrix getCofactor(int r, int c);
 
 void addColumn(CMatrix& m);
 //	void addRow(CMatrix& m);

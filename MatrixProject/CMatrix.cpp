@@ -61,10 +61,7 @@ double CMatrix::getDeterminant() //(waiting)
 	}
 	return value;
 }
-void CMatrix::operator+=(CMatrix& m)
-{
-	add(m);
-}
+
 CMatrix CMatrix::operator+(CMatrix& m)
 {
 	CMatrix r = *this;
@@ -249,7 +246,7 @@ CMatrix CMatrix::getCofactor(int r, int c)// r and c represents the index of the
 }
 
 
-
+/*
 void CMatrix::mul(CMatrix& m)
 {
 	if (nC != m.nR)
@@ -325,3 +322,4 @@ CMatrix CMatrix::operator/(double d)
 	r /= d;
 	return r;
 }
+*/
