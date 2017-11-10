@@ -1,0 +1,13 @@
+# depslib dependency file v1.0
+1510343864 source:e:\projects\matrixproject\cmatrix.cpp
+	"CMatrix.h"
+	<iomanip>
+	<iostream>
+	<stdlib.h>
+	<string.h>
+	<time.h>
+
+1510343864 e:\projects\matrixproject\cmatrix.h
+	<fstream>
+	<string>
+
