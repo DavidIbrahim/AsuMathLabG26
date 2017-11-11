@@ -60,7 +60,7 @@ CMatrix::CMatrix(string s) {
   values = NULL;
   copy(s);
 }
-CMatrix CMatrix::operator=(string s) {
+CMatrix CMatrix::operator=(string s) {///////////////////////////////////////////////
   copy(s);
   return *this;
 }
@@ -116,7 +116,7 @@ CMatrix::CMatrix(CMatrix &m) {
   copy(m);
 }
 
-CMatrix CMatrix::operator=(double d) {
+CMatrix CMatrix::operator=(double d) {///////////////////////////////////////////////
   copy(d);
   return *this;
 }
@@ -403,3 +403,16 @@ CMatrix CMatrix::operator/(double d)
         return r;
 }
 */
+/*void CMatrix::operator-=(double d){
+    sub(CMatrix(nR, nC, MI_VALUE, d));
+    }
+
+void CMatrix::sub(CMatrix& m){
+    if(nR!=m.nR||nC!=m.nC)
+        throw("Invalid matrix dimension");
+    for(int iR=0;iR<nR;iR++)
+        for(int iC=0;iC<nC;iC++)
+        values[iR][iC] -= m.values[iR][iC];
+    }
+*/
+
