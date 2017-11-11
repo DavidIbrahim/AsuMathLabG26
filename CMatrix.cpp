@@ -143,6 +143,12 @@ CMatrix CMatrix::operator+(CMatrix &m) {
   r += m;
   return r;
 }
+istream& operator >> (istream &is, CMatrix& m) { string s; getline(is, s, ']'); s+="]";
+m = CMatrix(s);
+return is;
+}
+
+ostream& operator << (ostream &os, CMatrix& m) { os<<m.getString(); return os; }
 void CMatrix::operator-=(CMatrix &m) //(waiting)
 {
   // sub(m);
