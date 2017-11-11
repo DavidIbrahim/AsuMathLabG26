@@ -226,11 +226,11 @@ CMatrix CMatrix::operator=(const CMatrix &m) {
   copy(m);
   return *this;
 }
-void CMatrix::operator/=(double d) {
+/*void CMatrix::operator/=(double d) {
   for (int iR = 0; iR < nR; iR++)
     for (int iC = 0; iC < nC; iC++)
       values[iR][iC] /= d;
-}
+}*/
 /*
 void CMatrix::addColumn(CMatrix& m) {
         CMatrix n(max(nR, m.nR), nC+m.nC);
@@ -324,9 +324,10 @@ CMatrix CMatrix::getCofactor(int r,
   return m;
 }
 
-/*
+
 void CMatrix::mul(CMatrix& m)
 {
+    cout<<nC<<endl<<m.nR<<endl;
         if (nC != m.nR)
                 throw("Invalid matrix dimension");
         CMatrix r(nR, m.nC);
@@ -336,8 +337,7 @@ void CMatrix::mul(CMatrix& m)
                 {
                         r.values[iR][iC] = 0;
                         for (int k = 0; k<m.nC; k++)
-                                r.values[iR][iC] += values[iR][k] *
-m.values[k][iC];
+                                r.values[iR][iC] += values[iR][k] *m.values[k][iC];
                 }
         copy(r);
 }
@@ -349,7 +349,7 @@ void CMatrix::operator*=(double d)
 {
         for (int iR = 0; iR<nR; iR++)
                 for (int iC = 0; iC<nC; iC++)
-                        values[iR][iC] *= 9;
+                        values[iR][iC] *= d;
 }
 CMatrix CMatrix::operator*(CMatrix& m)
 {
@@ -388,7 +388,7 @@ void CMatrix::operator/=(double d)
 {
         for (int iR = 0; iR<nR; iR++)
                 for (int iC = 0; iC<nC; iC++)
-                        values[iR][iC] /= 9;
+                        values[iR][iC] /= d;
 }
 CMatrix CMatrix::operator/(CMatrix& m)
 {
@@ -402,4 +402,3 @@ CMatrix CMatrix::operator/(double d)
         r /= d;
         return r;
 }
-*/
