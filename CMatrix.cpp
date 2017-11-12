@@ -416,7 +416,10 @@ CMatrix CMatrix::operator-(double d){ //tested and works - tuna
     return r;
     }
 CMatrix CMatrix::getTranspose(){      //CMatrix in UML, void in header file!!
-    if(nR==1&&nC==1)return values[0][0];
+    if(nR==1&&nC==1){
+        CMatrix m(values[0][0]);
+        return m;
+    }
     CMatrix m(nC, nR);
 
     for(int iR=0;iR<m.nR;iR++)
