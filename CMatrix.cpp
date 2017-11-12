@@ -132,8 +132,8 @@ double CMatrix::getDeterminant() //(waiting)
     return values[0][0];
   double value = 0, m = 1;
   for (int iR = 0; iR < nR; iR++) {
-    //	value += m * values[0][iR] * getCofactor(0,iR).getDeterminant(); m *=
-    //-1;
+    	value += m * values[0][iR] * getCofactor(0,iR).getDeterminant(); m *=
+    -1;
   }
   return value;
 }
@@ -429,3 +429,38 @@ CMatrix CMatrix::getTranspose(){      //CMatrix in UML, void in header file!!
 
     return m;
 }
+CMatrix CMatrix::getInverse(){
+    if (nR != nC)
+        throw("Invalid matrix dimension");
+    double det =getDeterminant();
+    if (det==0)
+        throw("Matrix has no Inverse");
+    CMatrix cof(nC , nR);//to find cofactor matrix
+    CMatrix trans (nC,nR);//to find transpose of matrix
+    CMatrix Inv (nC,nR);
+    int sign=1;
+    for(int i=0;i<nR;i++)
+    {
+        for(int j=0;j<nC;j++)
+        {
+            cof.values[i][j]=sign*getCofactor(i,j).getDeterminant();
+            sign*=-1;
+        }
+    }
+    for(int i=0;i<nR;i++)
+        for(int j=0;j<nC;j++)
+            Inv.values[i][j]=cof.values[j][i] / det;
+
+    return Inv;
+
+
+
+
+
+
+
+
+}
+
+
+

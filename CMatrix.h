@@ -79,7 +79,7 @@ class CMatrix {
   int getnC() { return nC; };
   double getDeterminant();
   CMatrix getTranspose();
-  void getInverse();
+  CMatrix getInverse();
 };
 
 #endif
