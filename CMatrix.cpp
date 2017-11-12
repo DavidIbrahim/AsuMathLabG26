@@ -143,6 +143,12 @@ CMatrix CMatrix::operator+(CMatrix &m) {
   r += m;
   return r;
 }
+istream& operator >> (istream &is, CMatrix& m) { string s; getline(is, s, ']'); s+="]";
+m = CMatrix(s);
+return is;
+}
+
+ostream& operator << (ostream &os, CMatrix& m) { os<<m.getString(); return os; }
 void CMatrix::operator-=(CMatrix &m) //(waiting)
 {
    sub(m);
@@ -385,6 +391,7 @@ CMatrix CMatrix::operator/(double d)
 }
 */
 
+
 void CMatrix::sub(CMatrix& m){ //tested and works - tuna
     if(nR!=m.nR||nC!=m.nC)
         throw("Invalid matrix dimension");
@@ -418,3 +425,4 @@ CMatrix CMatrix::operator-(double d){ //tested and works - tuna
 
     return m;
 }*/
+
