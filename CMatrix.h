@@ -8,7 +8,7 @@ class CMatrix {
   int nR, nC;
   double **values;
 
-public:
+  public:
   CMatrix();
   ~CMatrix();
   enum MI { MI_ZEROS, MI_ONES, MI_EYE, MI_RAND, MI_VALUE };
@@ -69,7 +69,7 @@ public:
   CMatrix getCofactor(int r, int c);
 
   void addColumn(CMatrix &m);
-void addRow(CMatrix& m);
+  void addRow(CMatrix& m);
 
   double &operator[](int i) { return values[i / nC][i % nC]; }
   double &operator()(int i) { return values[i / nC][i % nC]; };
@@ -78,8 +78,8 @@ void addRow(CMatrix& m);
   int getnR() { return nR; };
   int getnC() { return nC; };
   double getDeterminant();
-  double getTranspose();
-  double getInverse();
+  CMatrix getTranspose();
+  void getInverse();
 };
 
 #endif

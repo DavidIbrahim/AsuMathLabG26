@@ -428,13 +428,13 @@ CMatrix CMatrix::operator-(double d){ //tested and works - tuna
     r-=d;
     return r;
     }
-/*CMatrix CMatrix::getTranspose(){ //CMatrix in UML, void in header file
+CMatrix CMatrix::getTranspose(){      //CMatrix in UML, void in header file!!
     //if(nR==1&&nC==1)return values[0][0];
     CMatrix m(nC, nR);
 
     for(int iR=0;iR<m.nR;iR++)
         for(int iC=0;iC<m.nC;iC++)
-            m.values[iC][iR] = values[iR][iC];
+            m.values[iR][iC] = values[iC][iR];
 
     return m;
-}*/
+}
