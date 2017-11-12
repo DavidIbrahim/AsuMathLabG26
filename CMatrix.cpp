@@ -47,7 +47,7 @@ CMatrix::CMatrix(int nR, int nC, int initialization,
   }
 }
 
-void CMatrix::setSubMatrix(int r, int c, CMatrix &m) {
+void CMatrix::setSubMatrix(int r, int c, CMatrix &m) {/////////////////////////////////////////
   if ((r + m.nR) > nR || (c + m.nC) > nC)
     throw("Invalid matrix dimension");
   for (int iR = 0; iR < m.nR; iR++)
@@ -60,7 +60,7 @@ CMatrix::CMatrix(string s) {
   values = NULL;
   copy(s);
 }
-CMatrix CMatrix::operator=(string s) {
+CMatrix CMatrix::operator=(string s) {///////////////////////////////////////////////
   copy(s);
   return *this;
 }
@@ -116,7 +116,7 @@ CMatrix::CMatrix(CMatrix &m) {
   copy(m);
 }
 
-CMatrix CMatrix::operator=(double d) {
+CMatrix CMatrix::operator=(double d) {///////////////////////////////////////////////
   copy(d);
   return *this;
 }
@@ -151,24 +151,11 @@ return is;
 ostream& operator << (ostream &os, CMatrix& m) { os<<m.getString(); return os; }
 void CMatrix::operator-=(CMatrix &m) //(waiting)
 {
-  // sub(m);
+   sub(m);
 }
-/*
 
-//Waiting for copy(string) implementation to test
-CMatrix::CMatrix(string s)
-{
-        nR = nC = 0;
-        values = NULL;
-        //copy(s);
-}
-CMatrix::CMatrix(double d)
-{
-        nR = nC = 0;
-        values = NULL;
-        copy(d);
-}
-*/
+
+
 void CMatrix::copy(double d) {
   reset();
   this->nR = 1;
@@ -237,14 +224,7 @@ void CMatrix::operator/=(double d) {
     for (int iC = 0; iC < nC; iC++)
       values[iR][iC] /= d;
 }
-/*
-void CMatrix::addColumn(CMatrix& m) {
-        CMatrix n(max(nR, m.nR), nC+m.nC);
-        n.setMatrix(0, 0, *this);
-        n.setMatrix(0, nC, m);
-        *this = n;
-}
-*/
+
 CMatrix CMatrix::operator--() {
   add(CMatrix(nR, nC, MI_VALUE, -1.0));
   return *this;
@@ -257,7 +237,7 @@ CMatrix CMatrix::operator--(int) {
 }
 
 // tested
-CMatrix CMatrix::operator-() {
+CMatrix CMatrix::operator-() {//////////////////////////////////////
   CMatrix C = *this;
   for (int iR = 0; iR < nR; iR++)
     for (int iC = 0; iC < nC; iC++)
@@ -271,9 +251,10 @@ CMatrix CMatrix::operator++() {
   return *this;
 }
 
-/*
+
 //r and c are the beginning of where you want ur subMatrix
 // nr and nc are the size of the subMatrix
+
 CMatrix CMatrix::getSubMatrix(int r, int c, int nr, int nc) {
         if((r+nr)>nR || (c+nc)>nC)
                 throw("Invalid matrix dimension");
@@ -283,7 +264,7 @@ CMatrix CMatrix::getSubMatrix(int r, int c, int nr, int nc) {
                         m.values[iR][iC] = values[r+iR][c+iC];
         return m;
 }
-*/
+
 void CMatrix::operator+=(CMatrix &m) // tested
 {
   add(m);
@@ -409,3 +390,39 @@ CMatrix CMatrix::operator/(double d)
         return r;
 }
 */
+
+
+void CMatrix::sub(CMatrix& m){ //tested and works - tuna
+    if(nR!=m.nR||nC!=m.nC)
+        throw("Invalid matrix dimension");
+    for(int iR=0;iR<nR;iR++)
+        for(int iC=0;iC<nC;iC++)
+        values[iR][iC] -= m.values[iR][iC];
+    }
+
+void CMatrix::operator-=(double d){ //tested and works - tuna
+    CMatrix x(nR,nC,MI_VALUE,d);
+    sub(x);
+    }
+
+CMatrix CMatrix::operator+(double d){ //tested and works - tuna
+    CMatrix r = *this;
+    r+=d;
+    return r;
+    }
+CMatrix CMatrix::operator-(double d){ //tested and works - tuna
+    CMatrix r = *this;
+    r-=d;
+    return r;
+    }
+/*CMatrix CMatrix::getTranspose(){ //CMatrix in UML, void in header file
+    //if(nR==1&&nC==1)return values[0][0];
+    CMatrix m(nC, nR);
+
+    for(int iR=0;iR<m.nR;iR++)
+        for(int iC=0;iC<m.nC;iC++)
+            m.values[iC][iR] = values[iR][iC];
+
+    return m;
+}*/
+
