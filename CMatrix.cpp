@@ -143,26 +143,19 @@ CMatrix CMatrix::operator+(CMatrix &m) {
   r += m;
   return r;
 }
+istream& operator >> (istream &is, CMatrix& m) { string s; getline(is, s, ']'); s+="]";
+m = CMatrix(s);
+return is;
+}
+
+ostream& operator << (ostream &os, CMatrix& m) { os<<m.getString(); return os; }
 void CMatrix::operator-=(CMatrix &m) //(waiting)
 {
-  // sub(m);
+   sub(m);
 }
-/*
 
-//Waiting for copy(string) implementation to test
-CMatrix::CMatrix(string s)
-{
-        nR = nC = 0;
-        values = NULL;
-        //copy(s);
-}
-CMatrix::CMatrix(double d)
-{
-        nR = nC = 0;
-        values = NULL;
-        copy(d);
-}
-*/
+
+
 void CMatrix::copy(double d) {
   reset();
   this->nR = 1;
@@ -231,14 +224,7 @@ void CMatrix::operator/=(double d) {
     for (int iC = 0; iC < nC; iC++)
       values[iR][iC] /= d;
 }
-/*
-void CMatrix::addColumn(CMatrix& m) {
-        CMatrix n(max(nR, m.nR), nC+m.nC);
-        n.setMatrix(0, 0, *this);
-        n.setMatrix(0, nC, m);
-        *this = n;
-}
-*/
+
 CMatrix CMatrix::operator--() {
   add(CMatrix(nR, nC, MI_VALUE, -1.0));
   return *this;
@@ -265,7 +251,7 @@ CMatrix CMatrix::operator++() {
   return *this;
 }
 
-/*
+
 //r and c are the beginning of where you want ur subMatrix
 // nr and nc are the size of the subMatrix
 
@@ -278,7 +264,7 @@ CMatrix CMatrix::getSubMatrix(int r, int c, int nr, int nc) {
                         m.values[iR][iC] = values[r+iR][c+iC];
         return m;
 }
-*/
+
 void CMatrix::operator+=(CMatrix &m) // tested
 {
   add(m);
@@ -405,6 +391,7 @@ CMatrix CMatrix::operator/(double d)
 }
 */
 
+
 void CMatrix::sub(CMatrix& m){ //tested and works - tuna
     if(nR!=m.nR||nC!=m.nC)
         throw("Invalid matrix dimension");
@@ -429,7 +416,7 @@ CMatrix CMatrix::operator-(double d){ //tested and works - tuna
     return r;
     }
 CMatrix CMatrix::getTranspose(){      //CMatrix in UML, void in header file!!
-    //if(nR==1&&nC==1)return values[0][0];
+    if(nR==1&&nC==1)return values[0][0];
     CMatrix m(nC, nR);
 
     for(int iR=0;iR<m.nR;iR++)

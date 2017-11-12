@@ -61,8 +61,8 @@ class CMatrix {
   CMatrix operator-();
   CMatrix operator+();
 
-  //	friend istream& operator >> (istream &is, CMatrix& C);  //Stream
-  // friend ostream& operator << (ostream &os, CMatrix& C); //Stream
+  	friend istream& operator >> (istream &is, CMatrix& C);  //Stream
+  friend ostream& operator << (ostream &os, CMatrix& C); //Stream
 
   void setSubMatrix(int iR, int iC, CMatrix &m);
   CMatrix getSubMatrix(int r, int c, int nr, int nc);
