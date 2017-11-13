@@ -219,11 +219,12 @@ CMatrix CMatrix::operator=(const CMatrix &m) {
   copy(m);
   return *this;
 }
+/*
 void CMatrix::operator/=(double d) {
   for (int iR = 0; iR < nR; iR++)
     for (int iC = 0; iC < nC; iC++)
       values[iR][iC] /= d;
-}
+}*/
 
 CMatrix CMatrix::operator--() {
   add(CMatrix(nR, nC, MI_VALUE, -1.0));
@@ -311,87 +312,6 @@ CMatrix CMatrix::getCofactor(int r,
   return m;
 }
 
-/*
-void CMatrix::mul(CMatrix& m)
-{
-        if (nC != m.nR)
-                throw("Invalid matrix dimension");
-        CMatrix r(nR, m.nC);
-
-        for (int iR = 0; iR<r.nR; iR++)
-                for (int iC = 0; iC<r.nC; iC++)
-                {
-                        r.values[iR][iC] = 0;
-                        for (int k = 0; k<m.nC; k++)
-                                r.values[iR][iC] += values[iR][k] *
-m.values[k][iC];
-                }
-        copy(r);
-}
-void CMatrix::operator*=(CMatrix& m)
-{
-        mul(m);
-}
-void CMatrix::operator*=(double d)
-{
-        for (int iR = 0; iR<nR; iR++)
-                for (int iC = 0; iC<nC; iC++)
-                        values[iR][iC] *= 9;
-}
-CMatrix CMatrix::operator*(CMatrix& m)
-{
-        CMatrix r = *this;
-        r *= m;
-        return r;
-}
-CMatrix CMatrix::operator*(double d)
-{
-        CMatrix r = *this;
-        r *= d;
-        return r;
-}
-
-void CMatrix::div(CMatrix& m)
-{
-        if (nC != m.nR)
-                throw("Invalid matrix dimension");
-        CMatrix r(nR, m.nC);
-
-        for (int iR = 0; iR<r.nR; iR++)
-                for (int iC = 0; iC<r.nC; iC++)
-                {
-                        r.values[iR][iC] = 0;
-                        for (int k = 0; k<m.nC; k++)
-                                r.values[iR][iC] += values[iR][k] /
-m.values[k][iC];
-                }
-        copy(r);
-}
-void CMatrix::operator/=(CMatrix& m)
-{
-        div(m);
-}
-void CMatrix::operator/=(double d)
-{
-        for (int iR = 0; iR<nR; iR++)
-                for (int iC = 0; iC<nC; iC++)
-                        values[iR][iC] /= 9;
-}
-CMatrix CMatrix::operator/(CMatrix& m)
-{
-        CMatrix r = *this;
-        r /= m;
-        return r;
-}
-CMatrix CMatrix::operator/(double d)
-{
-        CMatrix r = *this;
-        r /= d;
-        return r;
-}
-*/
-
-
 void CMatrix::sub(CMatrix& m){ //tested and works - tuna
     if(nR!=m.nR||nC!=m.nC)
         throw("Invalid matrix dimension");
@@ -461,6 +381,90 @@ CMatrix CMatrix::getInverse(){
 
 
 }
+void CMatrix::mul(CMatrix& m)
+{
+        if (nC != m.nR)
+                throw("Invalid matrix dimension");
+        CMatrix r(nR, m.nC);
+
+        for (int iR = 0; iR<r.nR; iR++)
+                for (int iC = 0; iC<r.nC; iC++)
+                {
+                        r.values[iR][iC] = 0;
+                        for (int k = 0; k<m.nC; k++)
+                                r.values[iR][iC] += values[iR][k] *
+m.values[k][iC];
+                }
+        copy(r);
+}
+void CMatrix::operator*=(CMatrix& m)
+{
+        mul(m);
+}
+void CMatrix::operator*=(double d)
+{
+        for (int iR = 0; iR<nR; iR++)
+                for (int iC = 0; iC<nC; iC++)
+                        values[iR][iC] *= d;
+}
+CMatrix CMatrix::operator*(CMatrix& m)
+{
+        CMatrix r = *this;
+        r *= m;
+        return r;
+}
+CMatrix CMatrix::operator*(double d)
+{
+        CMatrix r = *this;
+        r *= d;
+        return r;
+}
+
+void CMatrix::div(CMatrix& m)
+{
+    CMatrix t;
+    t=m.getInverse();
+    mul(t);
+        /*if (nC != m.nR)
+                throw("Invalid matrix dimension");
+        CMatrix r(nR, m.nC);
+
+        for (int iR = 0; iR<r.nR; iR++)
+                for (int iC = 0; iC<r.nC; iC++)
+                {
+                        r.values[iR][iC] = 0;
+                        for (int k = 0; k<m.nC; k++)
+                                r.values[iR][iC] += values[iR][k] /
+m.values[k][iC];
+                }
+        copy(r);*/
+}
+void CMatrix::operator/=(CMatrix& m)
+{
+        div(m);
+}
+void CMatrix::operator/=(double d)
+{
+        for (int iR = 0; iR<nR; iR++)
+                for (int iC = 0; iC<nC; iC++)
+                        values[iR][iC] /= d;
+}
+CMatrix CMatrix::operator/(CMatrix& m)
+{
+        CMatrix r = *this;
+        r /= m;
+        return r;
+}
+CMatrix CMatrix::operator/(double d)
+{
+        CMatrix r = *this;
+        r /= d;
+        return r;
+}
+
+
+
+
 
 
 
