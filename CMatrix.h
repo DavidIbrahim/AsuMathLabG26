@@ -4,9 +4,10 @@
 #define CMatrix_H
 using namespace std;
 class CMatrix {
-
-  int nR, nC;
-  double **values;
+private:
+    int nR, nC;
+    double **values;
+    double getDeterminant2();
 
   public:
   CMatrix();
@@ -63,7 +64,7 @@ class CMatrix {
 
   	friend istream& operator >> (istream &is, CMatrix& C);  //Stream
   friend ostream& operator << (ostream &os, CMatrix& C); //Stream
-
+friend CMatrix operator /(double d ,CMatrix &m);
   void setSubMatrix(int iR, int iC, CMatrix &m);
   CMatrix getSubMatrix(int r, int c, int nr, int nc);
   CMatrix getCofactor(int r, int c);
@@ -82,7 +83,7 @@ class CMatrix {
   CMatrix getInverse();
   string getString2();
   void writeMatrixInFile(string file);
-  double getDeterminant2();
+
 };
 
 #endif

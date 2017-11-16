@@ -124,7 +124,7 @@ void CMatrix::operator+=(double d) {
   CMatrix C(nR, nC, MI_VALUE, d);
   add(C);
 }
-double CMatrix::getDeterminant() //(waiting)
+double CMatrix::getDeterminant2() //(waiting)
 {
   if (nR != nC)
     throw("Invalid matrix dimension");
@@ -132,8 +132,8 @@ double CMatrix::getDeterminant() //(waiting)
     return (values[0][0]*values[1][1]-values[0][1]*values[1][0]);
   double value = 0, m = 1;
   for (int iR = 0; iR < nR; iR++) {
-    	value += m * values[0][iR] * getCofactor(0,iR).getDeterminant(); m *=
-    -1;
+        if(!values[0][iR]==0)
+            value += m * values[0][iR] * getCofactor(0,iR).getDeterminant(); m *=-1;
   }
   return value;
 }
@@ -149,11 +149,25 @@ return is;
 }
 
 ostream& operator << (ostream &os, CMatrix& m) { os<<m.getString(); return os; }
-void CMatrix::operator-=(CMatrix &m) //(waiting)
+void CMatrix::operator-=(CMatrix &m)
 {
    sub(m);
 }
 
+CMatrix operator /(double d,CMatrix &m){
+
+        CMatrix ans(m.nR,m.nC);
+        for (int iR = 0; iR<m.nR; iR++)
+                for (int iC = 0; iC<m.nC; iC++)
+                        ans.values[iR][iC] = d/m.values[iR][iC];
+    return ans;
+}
+
+CMatrix CMatrix:: operator-(CMatrix &m){
+    CMatrix r=*this;
+    r.sub(m);
+    return r;
+}
 
 
 void CMatrix::copy(double d) {
@@ -467,13 +481,54 @@ void CMatrix::writeMatrixInFile(string file) {
     out.close();
 }
 
-double CMatrix::getDeterminant2(){
+double CMatrix::getDeterminant(){
+    if(nR==2) return (getDeterminant2());
     if (nR != nC)
-    throw("Invalid matrix dimension");
-    CMatrix l(nR,nC);
-    CMatrix u(nR,nC);
+        throw("Invalid matrix dimension");
+    CMatrix L(nR,nC);
+    CMatrix U(nR,nC);
+    double** l = L.values;
+    double** u = U.values;
+ int i = 0, j = 0, k = 0;
+    for (i = 0; i < nR; i++)
+    {
+        for (j = 0; j < nR; j++)
+        {
+            if (j < i)
+                l[j][i] = 0;
+            else
+            {
+                l[j][i] = values[j][i];
+                for (k = 0; k < i; k++)
+                {
+                    l[j][i] = l[j][i] - l[j][k] * u[k][i];
+                }
+            }
+        }
+        for (j = 0; j < nR; j++)
+        {
+            if (j < i)
+                u[i][j] = 0;
+            else if (j == i)
+                u[i][j] = 1;
+            else
+            {
+                u[i][j] = values[i][j] / l[i][i];
+                for (k = 0; k < i; k++)
+                {
+                    u[i][j] = u[i][j] - ((l[i][k] * u[k][j]) / l[i][i]);
+                }
+            }
+        }
+    }
 
-    return 0;
+    double ans =1;
+
+    for(int i=0;i<nR; i++)
+        ans*=l[i][i];
+
+    return ans;
+
 }
 
 
