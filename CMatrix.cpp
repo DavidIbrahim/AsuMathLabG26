@@ -1,4 +1,4 @@
-
+#include <fstream>
 #include "CMatrix.h"
 #include <iomanip>
 #include <iostream>
@@ -128,8 +128,8 @@ double CMatrix::getDeterminant() //(waiting)
 {
   if (nR != nC)
     throw("Invalid matrix dimension");
-  if (nR == 1 && nC == 1)
-    return values[0][0];
+  if (nR == 2 && nC == 2)
+    return (values[0][0]*values[1][1]-values[0][1]*values[1][0]);
   double value = 0, m = 1;
   for (int iR = 0; iR < nR; iR++) {
     	value += m * values[0][iR] * getCofactor(0,iR).getDeterminant(); m *=
@@ -270,27 +270,7 @@ void CMatrix::operator+=(CMatrix &m) // tested
 {
   add(m);
 }
-/*
-/*CMatrix CMatrix :: operator-(CMatrix& m)// this function needs (-=)operator to
-work
-{
-        CMatrix r = *this;
-        r-=m;
-        return r;
-}
-/*CMatrix CMatrix::operator*(double d)//this function needs (*=) operator to
-work
-{
-        CMatrix r = *this;
-        r*=d;
-        return r;
-}
-CMatrix CMatrix::operator/ (double d)
-{
-        CMatrix r = *this;
-        r/=d;
-        return r;
-}*/
+
 CMatrix CMatrix::operator++(int) {
   CMatrix C = *this;
   add(CMatrix(nR, nC, MI_VALUE, 1.0));
@@ -462,9 +442,39 @@ CMatrix CMatrix::operator/(double d)
         return r;
 }
 
+/*
+*
+*
+*/
+string CMatrix:: getString2(){
+     string s="[";
+  for (int iR = 0; iR < nR; iR++) {
+    for (int iC = 0; iC < nC; iC++) {
+      char buffer[200];
+      sprintf(buffer, "%g ", values[iR][iC]);
+      s += buffer;
+    }
+    s += ";";
+  }
+  s+="]";
+  return s;
+}
 
+void CMatrix::writeMatrixInFile(string file) {
 
+     std::ofstream out(file.c_str());
+     out<<getString2();
+    out.close();
+}
 
+double CMatrix::getDeterminant2(){
+    if (nR != nC)
+    throw("Invalid matrix dimension");
+    CMatrix l(nR,nC);
+    CMatrix u(nR,nC);
+
+    return 0;
+}
 
 
 

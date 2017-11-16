@@ -80,6 +80,9 @@ class CMatrix {
   double getDeterminant();
   CMatrix getTranspose();
   CMatrix getInverse();
+  string getString2();
+  void writeMatrixInFile(string file);
+  double getDeterminant2();
 };
 
 #endif
