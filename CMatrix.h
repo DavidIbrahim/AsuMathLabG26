@@ -8,7 +8,7 @@ private:
     int nR, nC;
     double **values;
     double getDeterminant2();
-
+    static bool fixMatrix(CMatrix &m,int r,int c);
   public:
   CMatrix();
   ~CMatrix();
