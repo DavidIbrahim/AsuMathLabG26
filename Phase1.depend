@@ -11,3 +11,32 @@
 	<fstream>
 	<string>
 
+1510845205 source:d:\users\samue\documents\code blocks\phase1_1\matrixproject\cmatrix.cpp
+	<fstream>
+	"CMatrix.h"
+	<iomanip>
+	<iostream>
+	<stdlib.h>
+	<string.h>
+	<time.h>
+
+1510840912 d:\users\samue\documents\code blocks\phase1_1\matrixproject\cmatrix.h
+	<fstream>
+	<string>
+
+1510840912 source:d:\users\samue\documents\code blocks\phase1_1\matrixproject\matlab.cpp
+	"Matlab.h"
+
+1510840912 d:\users\samue\documents\code blocks\phase1_1\matrixproject\matlab.h
+	"CMatrix.h"
+
+1510844402 source:d:\users\samue\documents\code blocks\phase1_1\matrixproject\source.cpp
+	<stdio.h>
+	<iostream>
+	"CMatrix.h"
+	<fstream>
+	<string>
+	<vector>
+	<string.h>
+	<stdlib.h>
+

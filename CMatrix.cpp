@@ -203,7 +203,7 @@ string CMatrix::getString() {
   for (int iR = 0; iR < nR; iR++) {
     for (int iC = 0; iC < nC; iC++) {
       char buffer[200];
-      sprintf(buffer, "%g\t", values[iR][iC]);
+      sprintf(buffer, "%10g", values[iR][iC]);
       s += buffer;
     }
     s += "\n";
