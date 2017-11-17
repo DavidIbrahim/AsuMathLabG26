@@ -55,7 +55,7 @@ int main(int argc, char*argv[])
     string mat ="";
     bool mat_intit = false;
     bool mat_cont = false;
-    bool echo = true;
+    bool echo = false;
     char name [10];
     char *s_value;
     //CMatrix *M ;
@@ -64,7 +64,8 @@ int main(int argc, char*argv[])
 
     while(getline(*in,s))
     {
-        if(file_input) s.erase(s.length()-1); /*use in case of linux only, comment otherwise*/
+        int l = s.length();
+        if(s[l-1]=='\r' || s[l-1]=='\n') s.erase(l-1); //fixing new line issue between Windows and Linux
         if(s=="")continue;
         SM.m = new CMatrix;
 
