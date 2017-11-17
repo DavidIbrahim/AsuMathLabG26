@@ -34,29 +34,41 @@ void printData(vector<SMatrix> &SV)
 
 
 using namespace std;
-int main()
+int main(int argc, char*argv[])
 {
-
-
+    /*
+    	ifstream infile ("//home//samuel//Documents//CodeBlocks//Phase1_linux//example.m");
+    */
+    bool file_input = false;
+    istream* in = &cin;
+    ifstream infile;
+    if (argc == 2)
+    {
+        infile.open(argv[1]);
+        in = &infile;
+        file_input = true;
+    }
 
     vector<SMatrix> data;
     string s;
     vector<string> script;
-    char var[100];
     string mat ="";
     bool mat_intit = false;
     bool mat_cont = false;
     bool echo = true;
     char name [10];
     char *s_value;
-    CMatrix *M;
+    //CMatrix *M ;
     SMatrix SM;
-    ifstream infile("D:\\Users\\samue\\Documents\\Code Blocks\\Phase1\\example.m");
-    while(getline(infile,s))
-    {
-        M= new CMatrix;
+    //ifstream infile("D:\\Users\\samue\\Documents\\Code Blocks\\Phase1\\example.m");
 
-        cout<<s<<endl;
+    while(getline(*in,s))
+    {
+        if(file_input) s.erase(s.length()-1); /*use in case of linux only, comment otherwise*/
+        if(s=="")continue;
+        SM.m = new CMatrix;
+
+        // cout<<s<<endl;
         if(s.find('[')!= string::npos || mat_cont)
             mat_intit = true;
         else
@@ -84,20 +96,32 @@ int main()
                 mat.erase(mat.length()-1);
                 echo = false;
             }
+            else echo = true;
             s_value = new char[mat.length()];
             sscanf(mat.c_str(),"%s = %[^\n]s",name,s_value);
-            printData(data);
-            *M = CMatrix(s_value);
-            printData(data);
+            // printData(data);
+            *SM.m = CMatrix(s_value);
+            //printData(data);
             //cout << M.getString();
 
-            SM = {M, name};
-            cout<< SM.m->getString();
+            SM.name = name;
+            //cout<< SM.m->getString();
+            int m_index = SMfind(data,SM.name);
+            if(m_index >=0)
+            {
+                data[m_index] = SM;
 
-            data.push_back(SM);
-            printData(data);
+            }
+            else
+            {
+                data.push_back(SM);
+            }
+
+
 
             mat= "";
+            //if(echo) cout << SM.name << " =\n"<<SM.m->getString();
+
             delete[] s_value;
             //delete M;
         }
@@ -105,9 +129,10 @@ int main()
         {
             if(s[s.length()-1]== ';')
             {
-                s.erase(mat.length()-1);
+                s.erase(s.length()-1);
                 echo = false;
             }
+            else echo = true;
 
             //Splitting input to tokens
             char *buffer = new char[s.length() + 1];
@@ -125,95 +150,111 @@ int main()
 
 
             //Applying operations
-            int len = script.size();
-            if(len == 3)
-            {
 
-                string RHS = script.back();
-                script.pop_back();
-                script.pop_back();
-                string LHS = script.back();
-                //script.pop_back();
 
-                //Transpose
-                if(RHS[RHS.length()-1] == '\'')
+                int len = script.size();
+                if(len == 3)
                 {
-                    RHS.erase(RHS.length()-1);
-                    int LHS_index = SMfind(data,LHS);
-                    int RHS_index = SMfind(data,RHS);
 
-                    if(RHS_index!=-1)
+                    string RHS = script.back();
+                    script.pop_back();
+                    script.pop_back();
+                    string LHS = script.back();
+                    //script.pop_back();
+
+                    //Transpose
+                    if(RHS[RHS.length()-1] == '\'')
                     {
-                        *M = data[RHS_index].m->getTranspose();
-                        SMatrix SM = {M, LHS};
-                        if(LHS_index >=0)
+                        RHS.erase(RHS.length()-1);
+                        int LHS_index = SMfind(data,LHS);
+                        int RHS_index = SMfind(data,RHS);
+
+                        if(RHS_index!=-1)
                         {
-                            data[LHS_index] = SM;
-                        }
-                        else
-                        {
-                            data.push_back(SM);
+                            *SM.m = data[RHS_index].m->getTranspose();
+                            SM = {SM.m, LHS};
+                            if(LHS_index >=0)
+                            {
+                                data[LHS_index] = SM;
+                            }
+                            else
+                            {
+                                data.push_back(SM);
+                            }
                         }
                     }
 
-                    //Equal
-                    //TODO
-
+                    len = script.size();
                 }
-                len = script.size();
-            }
 
 
-            while(len>1)
+                while(len>1)
+                {
+
+                    string operand_2 = script.back();
+                    script.pop_back();
+                    string op = script.back();
+                    script.pop_back();
+                    string operand_1 = script.back();
+                    script.pop_back();
+                    script.pop_back();
+                    string LHS = script.back();
+                    //script.pop_back();
+
+                    CMatrix A,B;
+                    double numA;
+
+                    if (op != "./")  A = *data[SMfind(data,operand_1)].m;
+                    else  numA = (double)atof(operand_1.c_str());
+
+                    B =  *data[SMfind(data,operand_2)].m;
+                    //B = CMatrix(4,4,CMatrix::MI_ONES);
+
+
+                    try
+                    {
+                    if(op == "+") *SM.m = A+B;
+
+                    else if (op == "-") *SM.m = A-B;
+
+                    else if (op == "*") *SM.m = A*B;
+
+                    else if (op == "/")
+                    *SM.m = A/B;
+
+                    else if (op == "./") *SM.m = numA/B;
+
+                    else continue;
+                    }
+            catch (char const * error)
             {
-
-                string operand_2 = script.back();
-                script.pop_back();
-                string op = script.back();
-                script.pop_back();
-                string operand_1 = script.back();
-                script.pop_back();
-                script.pop_back();
-                string LHS = script.back();
-                //script.pop_back();
-
-                CMatrix A,B;
-                double numA;
-
-                if (op != "./")  A = *data[SMfind(data,operand_1)].m;
-                else  numA = (double)atof(operand_1.c_str());
-
-                B = *data[SMfind(data,operand_2)].m;
-
-
-                if(op == "+") *M = A+B;
-
-                else if (op == "-") *M = A-B;
-
-                else if (op == "*") *M = A*B;
-
-                else if (op == "/") *M = A/B;
-
-                else if (op == "./") *M = numA/B;
-
-                else continue;
-
-                SM = {M,LHS};
-                int index = SMfind(data,LHS);
-                if (index >= 0)
-                {
-                    data[index] =SM ;
-                }
-                else
-                {
-                    data.push_back(SM);
-                }
-
-                len = script.size();
+                cout << "Error: " << error<< endl;
             }
+
+                    SM = {SM.m,LHS};
+                    int index = SMfind(data,LHS);
+                    if (index >= 0)
+                    {
+                        data[index] =SM ;
+                    }
+                    else
+                    {
+                        data.push_back(SM);
+                    }
+
+
+                    len = script.size();
+                }
+
+
         }
 
-        printData(data);
+
+//        printData(data);
+
+        if(echo) cout << SM.name << " =\n"<<SM.m->getString();
+
+
         script.clear();
 
         /*
@@ -290,9 +331,12 @@ int main()
 
 
     }
-    delete M;
-
-    infile.close();
+//delete M;
+    if(file_input) infile.close();
+    for(int i = 0; i<data.size(); i++)
+    {
+        if(data[i].m) delete data[i].m;
+    }
 
     /*
      CMatrix z;
