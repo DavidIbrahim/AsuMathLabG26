@@ -68,14 +68,12 @@ void CMatrix::copy(string s) {
   reset();
   char *buffer = new char[s.length() + 1];
   strcpy(buffer, s.c_str());
-  char *lineContext;
   const char *lineSeparators = ";\r\n";
   char *line = strtok(buffer, lineSeparators);
   char* remainlines = strtok(NULL, "");
 
   while (line) {
     CMatrix row;
-    char *context;
     const char *separators = " []";
     char *token = strtok(line, separators);
     while (token) {
@@ -203,7 +201,7 @@ string CMatrix::getString() {
   for (int iR = 0; iR < nR; iR++) {
     for (int iC = 0; iC < nC; iC++) {
       char buffer[200];
-      sprintf(buffer, "%10g", values[iR][iC]);
+      sprintf(buffer, "%8g\t", values[iR][iC]);
       s += buffer;
     }
     s += "\n";
