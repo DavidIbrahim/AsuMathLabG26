@@ -480,14 +480,50 @@ void CMatrix::writeMatrixInFile(string file) {
 }
 
 double CMatrix::getDeterminant(){
-    if(nR==2) return (getDeterminant2());
+    if(nR==1) return(values[0][0]);
+    if(nR==2) return (values[0][0]*values[1][1]-values[0][1]*values[1][0]);
     if (nR != nC)
         throw("Invalid matrix dimension");
-    CMatrix L(nR,nC);
-    CMatrix U(nR,nC);
-    double** l = L.values;
+   // CMatrix L(nR,nC);
+    CMatrix U(*this);
+   // double** l = L.values;
     double** u = U.values;
- int i = 0, j = 0, k = 0;
+    double factor =0;
+   int i = 0, j = 0, k = 0;
+
+
+    double temp = 0;
+   for(i= 0 ; i<nR;i++){
+
+        for(j = 0; j<i;j++){
+        if(u[j][j]==0){
+                if(!CMatrix::fixMatrix(U,j,j)) return 0;
+              //  cout<<"matrixFixed : "<<endl<<endl<<U<<endl<<endl;
+        }
+        factor = u[i][j]/u[j][j];
+        for(k=0;k<nR;k++) {
+
+            float x = u[i][k]- (factor * u[j][k]);
+            u[i][k]=u[i][k]- (factor * u[j][k]);
+
+            }
+       // cout<<U<<endl;
+    }
+
+
+
+
+   }
+
+
+   double ans =1;
+   for(int i=0;i<nR; i++){
+        ans*=u[i][i];
+        if(ans==0) return ans;
+    }
+    return ans;
+
+/*
     for (i = 0; i < nR; i++)
     {
         for (j = 0; j < nR; j++)
@@ -521,13 +557,31 @@ double CMatrix::getDeterminant(){
     }
 
     double ans =1;
-
-    for(int i=0;i<nR; i++)
+    cout<<U<<endl <<endl << L;
+    for(int i=0;i<nR; i++){
         ans*=l[i][i];
-
+        if(ans==0) return ans;
+    }
     return ans;
-
+    */
 }
 
+bool  CMatrix:: fixMatrix(CMatrix &m , int r,int c) {
+    int index =0;
+    bool ans= false;
+    for(int i = m.nR-1 ; i>0;i--){
+        if(i==r ) i--;
+        if(m.values[i][c]!=0){
+                index = i;
+                ans = true;
+                break;
+        }
+    }
+    if(ans==false ) return false;
+    for(int j = 0 ; j<m.nC ; j++){
+                m.values[r][j] += m.values[index][j];
+    }
+    return true;
+}
 
 
