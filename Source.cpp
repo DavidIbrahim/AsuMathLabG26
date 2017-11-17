@@ -189,7 +189,7 @@ int main(int argc, char*argv[])
                 }
 
 
-                while(len>1)
+                else
                 {
 
                     string operand_2 = script.back();
@@ -230,6 +230,7 @@ int main(int argc, char*argv[])
             catch (char const * error)
             {
                 cout << "Error: " << error<< endl;
+                continue;
             }
 
                     SM = {SM.m,LHS};
