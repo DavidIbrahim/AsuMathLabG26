@@ -358,6 +358,7 @@ CMatrix CMatrix::getInverse(){
             cof.values[i][j]=sign*getCofactor(i,j).getDeterminant();
             sign*=-1;
         }
+        if(nC%2==0) sign *= -1;
     }
     for(int i=0;i<nR;i++)
         for(int j=0;j<nC;j++)
