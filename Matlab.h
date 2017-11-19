@@ -1,6 +1,8 @@
 #ifndef MATLAB_H
 #define MATLAB_H
 #include"CMatrix.h"
+#include<vector>
+
 
 class Matlab
 {
@@ -12,7 +14,7 @@ class Matlab
 
     public:
         Matlab();
-        Matlab(string instruction);
+        Matlab(string instruction,vector<Matlab>& myVector);
         virtual ~Matlab();
 
     protected:
