@@ -1,2 +1,2 @@
 all:
-	g++ Source.cpp CMatrix.cpp -o matrix
+	g++ Source.cpp CMatrix.cpp -std=gnu++0x -g -o matrix

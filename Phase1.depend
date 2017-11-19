@@ -11,3 +11,91 @@
 	<fstream>
 	<string>
 
+1510845205 source:d:\users\samue\documents\code blocks\phase1_1\matrixproject\cmatrix.cpp
+	<fstream>
+	"CMatrix.h"
+	<iomanip>
+	<iostream>
+	<stdlib.h>
+	<string.h>
+	<time.h>
+
+1510840912 d:\users\samue\documents\code blocks\phase1_1\matrixproject\cmatrix.h
+	<fstream>
+	<string>
+
+1510840912 source:d:\users\samue\documents\code blocks\phase1_1\matrixproject\matlab.cpp
+	"Matlab.h"
+
+1510840912 d:\users\samue\documents\code blocks\phase1_1\matrixproject\matlab.h
+	"CMatrix.h"
+
+1510844402 source:d:\users\samue\documents\code blocks\phase1_1\matrixproject\source.cpp
+	<stdio.h>
+	<iostream>
+	"CMatrix.h"
+	<fstream>
+	<string>
+	<vector>
+	<string.h>
+	<stdlib.h>
+
+1510850358 source:/home/samuel/Desktop/Project/Phase1_1/MatrixProject/Matlab.cpp
+	"Matlab.h"
+
+1510850358 /home/samuel/Desktop/Project/Phase1_1/MatrixProject/Matlab.h
+	"CMatrix.h"
+
+1510949914 /home/samuel/Desktop/Project/Phase1_1/MatrixProject/CMatrix.h
+	<fstream>
+	<string>
+
+1510949914 source:/home/samuel/Desktop/Project/Phase1_1/MatrixProject/CMatrix.cpp
+	<fstream>
+	"CMatrix.h"
+	<iomanip>
+	<iostream>
+	<stdlib.h>
+	<string.h>
+	<time.h>
+
+1510953468 source:/home/samuel/Desktop/Project/Phase1_1/MatrixProject/Source.cpp
+	<stdio.h>
+	<iostream>
+	"CMatrix.h"
+	<fstream>
+	<string>
+	<vector>
+	<string.h>
+	<stdlib.h>
+
+1511129439 source:e:\projects\c++\matrixproject\cmatrix.cpp
+	<fstream>
+	"CMatrix.h"
+	<iomanip>
+	<iostream>
+	<stdlib.h>
+	<string.h>
+	<time.h>
+
+1511122872 e:\projects\c++\matrixproject\cmatrix.h
+	<fstream>
+	<string>
+
+1511103819 source:e:\projects\c++\matrixproject\matlab.cpp
+	"Matlab.h"
+
+1511103798 e:\projects\c++\matrixproject\matlab.h
+	"CMatrix.h"
+	<vector>
+
+1511129330 source:e:\projects\c++\matrixproject\source.cpp
+	<stdio.h>
+	<iostream>
+	"CMatrix.h"
+	<fstream>
+	<string>
+	<vector>
+	<string.h>
+	<stdlib.h>
+

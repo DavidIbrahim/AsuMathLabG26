@@ -37,7 +37,7 @@ CMatrix::CMatrix(int nR, int nC, int initialization,
         values[iR][iC] = (iR == iC) ? 1 : 0;
         break;
       case MI_RAND:
-        values[iR][iC] = (rand() % 1000000) / 1000.0;
+        values[iR][iC] = (rand() % 10-1 );
         break;
       case MI_VALUE:
         values[iR][iC] = initializationValue;
@@ -68,14 +68,12 @@ void CMatrix::copy(string s) {
   reset();
   char *buffer = new char[s.length() + 1];
   strcpy(buffer, s.c_str());
-  char *lineContext;
   const char *lineSeparators = ";\r\n";
   char *line = strtok(buffer, lineSeparators);
   char* remainlines = strtok(NULL, "");
 
   while (line) {
     CMatrix row;
-    char *context;
     const char *separators = " []";
     char *token = strtok(line, separators);
     while (token) {
@@ -126,16 +124,14 @@ void CMatrix::operator+=(double d) {
 }
 double CMatrix::getDeterminant2() //(waiting)
 {
-  if (nR != nC)
+  if(nR!=nC)
     throw("Invalid matrix dimension");
-  if (nR == 2 && nC == 2)
-    return (values[0][0]*values[1][1]-values[0][1]*values[1][0]);
-  double value = 0, m = 1;
-  for (int iR = 0; iR < nR; iR++) {
-        if(!values[0][iR]==0)
-            value += m * values[0][iR] * getCofactor(0,iR).getDeterminant(); m *=-1;
-  }
-  return value;
+  if(nR==1&&nC==1)return values[0][0];
+    double value = 0, m = 1;
+    for(int iR=0;iR<nR;iR++){
+         value+= m * values[0][iR] * getCofactor(0, iR).getDeterminant2();
+    m *= -1;
+    } return value;
 }
 
 CMatrix CMatrix::operator+(CMatrix &m) {
@@ -203,7 +199,7 @@ string CMatrix::getString() {
   for (int iR = 0; iR < nR; iR++) {
     for (int iC = 0; iC < nC; iC++) {
       char buffer[200];
-      sprintf(buffer, "%g\t", values[iR][iC]);
+      sprintf(buffer, "%8g\t", values[iR][iC]);
       s += buffer;
     }
     s += "\n";
@@ -360,6 +356,7 @@ CMatrix CMatrix::getInverse(){
             cof.values[i][j]=sign*getCofactor(i,j).getDeterminant();
             sign*=-1;
         }
+        if(nC%2==0) sign *= -1;
     }
     for(int i=0;i<nR;i++)
         for(int j=0;j<nC;j++)
@@ -492,33 +489,57 @@ double CMatrix::getDeterminant(){
     double** u = U.values;
     double factor =0;
    int i = 0, j = 0, k = 0;
+  double ans =1;
+ if(checkIfZeroMatrix(U))return 0;
+
+  if(u[0][0]==0){
+    if(!fixMatrix(U,0,0))
+        return 0;
+  }
+ if(u[0][0]!=1){
+    ans = u[0][0];
+    for(i=0; i<nC ; i++){
+        u[0][i]/=ans;
+    }
 
 
+
+  }
+
+//cout<<U<<endl<<endl;
+int counterFixMatrix =0;
     double temp = 0;
    for(i= 0 ; i<nR;i++){
 
-        for(j = 0; j<i;j++){
+         for(j = 0; j<i;j++){
         if(u[j][j]==0){
-                if(!CMatrix::fixMatrix(U,j,j)) return 0;
-              //  cout<<"matrixFixed : "<<endl<<endl<<U<<endl<<endl;
-        }
+                CMatrix::fixMatrix(U,j,j)   ;
+                i-=2;
+
+                if(i<0) i=0;
+
+
+                break;
+              }
         factor = u[i][j]/u[j][j];
         for(k=0;k<nR;k++) {
+            if(factor==0)break;
 
-            float x = u[i][k]- (factor * u[j][k]);
-            u[i][k]=u[i][k]- (factor * u[j][k]);
+            double x = u[i][k]- (factor * u[j][k]);
+            if(x<0.000000000000001 && x>-0.000000000000001) x =0;
+            u[i][k]=x;
 
             }
-       // cout<<U<<endl;
-    }
 
+    }
+//  cout<<U<<endl<<endl;
 
 
 
    }
 
 
-   double ans =1;
+
    for(int i=0;i<nR; i++){
         ans*=u[i][i];
         if(ans==0) return ans;
@@ -571,8 +592,8 @@ double CMatrix::getDeterminant(){
 bool  CMatrix:: fixMatrix(CMatrix &m , int r,int c) {
     int index =0;
     bool ans= false;
-    for(int i = m.nR-1 ; i>0;i--){
-        if(i==r ) i--;
+    for(int i = rand()%m.nR; i<m.nR;i++){
+        if(i==r) continue;
         if(m.values[i][c]!=0){
                 index = i;
                 ans = true;
@@ -587,3 +608,28 @@ bool  CMatrix:: fixMatrix(CMatrix &m , int r,int c) {
 }
 
 
+
+bool  CMatrix:: checkIfZeroMatrix(CMatrix &m ){
+
+    bool zeroMatrix = false ;
+    for(int i = 0 ; i <m.nR ; i++){
+       for(int j = i+1; j<m.nR; j++ ){
+            if ((m.values[i][0]!=0 && m.values[j][0]==0)
+                ||(m.values[i][0]==0 && m.values[j][0]!=0)) continue;
+            double factor = m.values[i][0]/m.values[j][0];
+            for(int k =1 ; k<m.nC ; k++){
+                zeroMatrix = true;
+                double temp = m.values[i][k]/m.values[j][k];
+                if(!( (temp - factor) <0.000000001 && (temp-factor)> - 0.000000001)){
+                    zeroMatrix = false;
+                    break;
+                }
+            }
+            if(zeroMatrix) return zeroMatrix;
+
+
+       }
+    }
+
+return zeroMatrix;
+}

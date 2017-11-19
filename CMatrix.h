@@ -7,10 +7,13 @@ class CMatrix {
 private:
     int nR, nC;
     double **values;
-    double getDeterminant2();
+
     static bool fixMatrix(CMatrix &m,int r,int c);
+    static bool checkIfZeroMatrix(CMatrix &m);
   public:
+
   CMatrix();
+  double getDeterminant2();
   ~CMatrix();
   enum MI { MI_ZEROS, MI_ONES, MI_EYE, MI_RAND, MI_VALUE };
 

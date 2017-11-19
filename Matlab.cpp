@@ -7,7 +7,7 @@ Matlab::Matlab(){
 }
 
 
-Matlab::Matlab(string instruction)
+Matlab::Matlab(string instruction, vector<Matlab>& myVector)
 {
 
 }

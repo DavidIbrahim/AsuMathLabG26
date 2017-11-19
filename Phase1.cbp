@@ -31,6 +31,12 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="CMatrix.cpp" />
+		<Unit filename="CMatrix.h" />
+		<Unit filename="Makefile" />
+		<Unit filename="Matlab.cpp" />
+		<Unit filename="Matlab.h" />
+		<Unit filename="Source.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
