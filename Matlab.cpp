@@ -1,6 +1,13 @@
 #include "Matlab.h"
 
+string Matlab::getStringValue(string complexString,vector<matlab> savedMatrices)
+{
 
+}
+string Matlab::getReadyInstruction(string instruction,vector<matlab> savedMatrices)
+{
+
+}
 Matlab::Matlab(){
 
 
