@@ -37,7 +37,7 @@ CMatrix::CMatrix(int nR, int nC, int initialization,
         values[iR][iC] = (iR == iC) ? 1 : 0;
         break;
       case MI_RAND:
-        values[iR][iC] = (rand() % 10-1 );
+        values[iR][iC] = (rand() % 100-1 );
         break;
       case MI_VALUE:
         values[iR][iC] = initializationValue;
@@ -343,8 +343,9 @@ CMatrix CMatrix::getInverse(){
     if (nR != nC)
         throw("Invalid matrix dimension");
     double det =getDeterminant();
-    if (det==0)
-        throw("Matrix has no Inverse");
+   // if (det==0)
+      //  throw("Matrix has no Inverse");
+
     CMatrix cof(nC , nR);//to find cofactor matrix
     CMatrix trans (nC,nR);//to find transpose of matrix
     CMatrix Inv (nC,nR);
@@ -354,10 +355,13 @@ CMatrix CMatrix::getInverse(){
         for(int j=0;j<nC;j++)
         {
             cof.values[i][j]=sign*getCofactor(i,j).getDeterminant();
+
             sign*=-1;
+
         }
         if(nC%2==0) sign *= -1;
     }
+
     for(int i=0;i<nR;i++)
         for(int j=0;j<nC;j++)
             Inv.values[i][j]=cof.values[j][i] / det;
@@ -383,8 +387,7 @@ void CMatrix::mul(CMatrix& m)
                 {
                         r.values[iR][iC] = 0;
                         for (int k = 0; k<m.nC; k++)
-                                r.values[iR][iC] += values[iR][k] *
-m.values[k][iC];
+                                r.values[iR][iC] += values[iR][k] *m.values[k][iC];
                 }
         copy(r);
 }
@@ -414,7 +417,9 @@ CMatrix CMatrix::operator*(double d)
 void CMatrix::div(CMatrix& m)
 {
     CMatrix t;
+
     t=m.getInverse();
+
     mul(t);
         /*if (nC != m.nR)
                 throw("Invalid matrix dimension");
@@ -479,12 +484,15 @@ void CMatrix::writeMatrixInFile(string file) {
 }
 
 double CMatrix::getDeterminant(){
+    if(nR!=nC)
+    throw("Invalid matrix dimension");
     if(nR==1) return(values[0][0]);
     if(nR==2) return (values[0][0]*values[1][1]-values[0][1]*values[1][0]);
     if (nR != nC)
         throw("Invalid matrix dimension");
    // CMatrix L(nR,nC);
     CMatrix U(*this);
+    fixMatrix(U ,  -1,-1);
    // double** l = L.values;
     double** u = U.values;
     double factor =0;
@@ -493,27 +501,30 @@ double CMatrix::getDeterminant(){
  if(checkIfZeroMatrix(U))return 0;
 
   if(u[0][0]==0){
-    if(!fixMatrix(U,0,0))
-        return 0;
+    if(fixMatrix(U,0,0))
+       ans*=-1;
   }
  if(u[0][0]!=1){
-    ans = u[0][0];
+    ans *= u[0][0];
+    double temp = u[0][0];
     for(i=0; i<nC ; i++){
-        u[0][i]/=ans;
+        u[0][i]/=temp;
     }
 
 
 
   }
 
-//cout<<U<<endl<<endl;
-int counterFixMatrix =0;
-    double temp = 0;
+
+
+
+
    for(i= 0 ; i<nR;i++){
 
          for(j = 0; j<i;j++){
         if(u[j][j]==0){
                 CMatrix::fixMatrix(U,j,j)   ;
+                ans*=-1;
                 i-=2;
 
                 if(i<0) i=0;
@@ -526,13 +537,12 @@ int counterFixMatrix =0;
             if(factor==0)break;
 
             double x = u[i][k]- (factor * u[j][k]);
-            if(x<0.000000000000001 && x>-0.000000000000001) x =0;
+            if(x<0.00000000000001 && x>-0.000000000000001) x =0;
             u[i][k]=x;
 
             }
 
     }
-//  cout<<U<<endl<<endl;
 
 
 
@@ -590,19 +600,42 @@ int counterFixMatrix =0;
 }
 
 bool  CMatrix:: fixMatrix(CMatrix &m , int r,int c) {
+
     int index =0;
-    bool ans= false;
-    for(int i = rand()%m.nR; i<m.nR;i++){
+    static int fR=-1;
+    static int fC=-1;
+    static int fnR = 0;
+    if(r == -1 && c == -1){
+         fR=-1;
+         fC=-1;
+
+        return true;
+    }
+    if(r == fR && fC==c){
+        fnR-=1;
+    }
+    else {
+        fR = r ;
+        fC = c ;
+        fnR = m.nR;
+    }
+
+    for(int i = fnR-1; i>-1;i--){
+
         if(i==r) continue;
-        if(m.values[i][c]!=0){
+        if(m.values[r][i]!=0){
                 index = i;
-                ans = true;
+
+
                 break;
         }
     }
-    if(ans==false ) return false;
+
+   double temp;
     for(int j = 0 ; j<m.nC ; j++){
-                m.values[r][j] += m.values[index][j];
+                temp = m.values[j][c];
+                m.values[j][c] = m.values[j][index];
+                m.values[j][index] = temp;
     }
     return true;
 }
@@ -630,6 +663,72 @@ bool  CMatrix:: checkIfZeroMatrix(CMatrix &m ){
 
        }
     }
+    for(int i = 0 ; i <m.nR ; i++){
+       for(int j = i+1; j<m.nR; j++ ){
+            if ((m.values[i][0]!=0 && m.values[j][0]==0)
+                ||(m.values[i][0]==0 && m.values[j][0]!=0)) continue;
+            double factor = m.values[0][i]/m.values[0][j];
+            for(int k =1 ; k<m.nC ; k++){
+                zeroMatrix = true;
+                double temp = m.values[k][i]/m.values[k][j];
+                if(!( (temp - factor) <0.000000001 && (temp-factor)> - 0.000000001)){
+                    zeroMatrix = false;
+                    break;
+                }
+            }
+            if(zeroMatrix) return zeroMatrix;
+
+
+       }
+    }
 
 return zeroMatrix;
+}
+
+
+/*
+*   function to getDeterminant (Intel research Paper)
+*
+*/
+double CMatrix::getDeterminant3(){
+    int *ri = new int[nR];
+    int i, j, k;
+
+    double    det = 1.0;
+    CMatrix M(*this);
+    double ** m = M.values;
+// Initialize the pointer vector.
+    for (i = 0 ; i < nR; i++)
+        ri[i] = i;
+
+    for (int p = 1 ; p <= nR - 1; p++) {
+        // Find pivot element
+        for (i = p + 1 ; i <= nR; i++) {
+            if (abs(m[ri[i-1]][p-1]) > abs(m[ri[p-1]][p-1])) {
+                // Switch the index for the p-1 pivot row if necessary.
+                int t = ri[p-1];
+                ri[p-1] = ri[i-1];
+                ri[i-1] = t;
+                det = -det;
+            }
+        }
+        if (m[ri[p-1]][p-1] == 0) {
+            // The matrix is singular.
+                    return false;
+            }
+        // Multiply the diagonal elements.
+        det = det * m[ri[p-1]][p-1];
+
+        // Form multiplier.
+        for (i = p + 1 ; i <= nR; i++) {
+            m[ri[i-1]][p-1] /= m[ri[p-1]][p-1];
+            // Eliminate [p-1].
+            for (int j = p + 1 ; j <= nR; j++)
+                m[ri[i-1]][j-1] -= m[ri[i-1]][p-1] * m[ri[p-1]][j-1];
+        }
+    }
+    det = det * m[ri[nR-1]][nR-1];
+
+
+    return det;
 }

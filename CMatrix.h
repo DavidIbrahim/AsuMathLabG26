@@ -14,6 +14,7 @@ private:
 
   CMatrix();
   double getDeterminant2();
+  double getDeterminant3();
   ~CMatrix();
   enum MI { MI_ZEROS, MI_ONES, MI_EYE, MI_RAND, MI_VALUE };
 
