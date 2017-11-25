@@ -3,16 +3,21 @@
 #include"CMatrix.h"
 #include<vector>
 
-
+///The object of this class consists of the matrix and it's name
 class Matlab
 {
     private:
         CMatrix matrix;
         string name;
 
-        bool checkIfSpecialMatrix(string instruction);
-        string getStringValue(string complexString,vector<Matlab> savedMatrices); //this fn should take an expression and return it's value as a string
-        string getReadyInstruction(string instruction,vector<Matlab> savedMatrices); //this fn takes the instruction as it is and returns it back without any expressions(the simplest input form)
+        //bool checkIfSpecialMatrix(string instruction);
+        string getInstructionWithoutMatlabNames(string instruction,vector<Matlab> savedMatrices);
+        string getInstructionWithoutSpecialMatrices(string instruction);
+        string getInstructionWithoutConcatenation(string instruction);
+        bool checkStringForMatrix(string complexString);
+        string getStringValue(string complexString);
+        string getStringMatrix(string complexString);
+        string getReadyInstruction(string instruction,vector<Matlab> savedMatrices);
     public:
         Matlab();
         Matlab(string instruction,vector<Matlab>& myVector);
