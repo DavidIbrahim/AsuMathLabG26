@@ -173,7 +173,7 @@ int main(int argc, char*argv[])
                         if(RHS_index!=-1)
                         {
                             *SM.m = data[RHS_index].m->getTranspose();
-                            SM = {SM.m, LHS};
+                            SM.name = LHS;
                             if(LHS_index >=0)
                             {
                                 data[LHS_index] = SM;
@@ -233,7 +233,7 @@ int main(int argc, char*argv[])
                 continue;
             }
 
-                    SM = {SM.m,LHS};
+                    SM.name = LHS;
                     int index = SMfind(data,LHS);
                     if (index >= 0)
                     {
