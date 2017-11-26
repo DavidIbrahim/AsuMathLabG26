@@ -37,7 +37,9 @@ CMatrix::CMatrix(int nR, int nC, int initialization,
         values[iR][iC] = (iR == iC) ? 1 : 0;
         break;
       case MI_RAND:
+
         values[iR][iC] = (rand() % (100-1))/20.0 ;
+
         break;
       case MI_VALUE:
         values[iR][iC] = initializationValue;
@@ -483,7 +485,9 @@ void CMatrix::writeMatrixInFile(string file) {
     out.close();
 }
 
+
 double CMatrix::getDeterminant3(){
+
     if(nR!=nC)
     throw("Invalid matrix dimension");
     if(nR==1) return(values[0][0]);
@@ -537,7 +541,9 @@ double CMatrix::getDeterminant3(){
             if(factor==0)break;
 
             double x = u[i][k]- (factor * u[j][k]);
+
             if(x<0.000000000000001 && x>-0.00000000000001) x =0;
+
             u[i][k]=x;
 
             }
@@ -691,6 +697,7 @@ return zeroMatrix;
 *
 */
 double CMatrix::getDeterminant(){
+
     int *ri = new int[nR];
     int i, j, k;
 
