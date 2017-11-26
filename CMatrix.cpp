@@ -74,7 +74,7 @@ void CMatrix::copy(string s) {
 
   while (line) {
     CMatrix row;
-    const char *separators = " []";
+    const char *separators = " [],";
     char *token = strtok(line, separators);
     while (token) {
       CMatrix item(atof(token));
@@ -472,6 +472,7 @@ string CMatrix:: getString2(){
     }
     s += ";";
   }
+  s.erase(s.end()-1);//removes the last semicolon.
   s+="]";
   return s;
 }
@@ -742,8 +743,21 @@ double CMatrix::getDeterminant(){
  *
  */
 
-CMatrix CMatrix::horizontalConcatenation(CMatrix m1,CMatrix m2)
+CMatrix CMatrix::horizontalConcatenation(CMatrix &m1,CMatrix &m2)
 {
+    if(m1.nR!=m2.nR)throw("invalid matrix dimension");
+    CMatrix m(m1.nR,(m2.nC +m1.nC));
+    for(int iR=0;iR<m1.nR;iR++)
+    {
+        for(int iC=0;iC<m1.nC;iC++)
+            {m.values[iR][iC]= m1.values[iR][iC];}
+    }
+    for(int iR=0;iR<m2.nR;iR++)
+        for(int iC=0;iC<m2.nC;iC++)
+            m.values[iR][iC+m1.nC]= m2.values[iR][iC];
+    return m;
+
+
 
 }
 /** @brief this fn makes vertical concatenation of 2 matrices
@@ -753,7 +767,19 @@ CMatrix CMatrix::horizontalConcatenation(CMatrix m1,CMatrix m2)
  * @return the concatenated matrix
  *
  */
-CMatrix CMatrix::verticalConcatenation(CMatrix m1,CMatrix m2)
+CMatrix CMatrix::verticalConcatenation(CMatrix &m1,CMatrix &m2)
 {
 
+    if(m1.nC!=m2.nC)throw("invalid matrix dimension");
+    CMatrix m((m1.nR+m2.nR),m1.nC);
+
+    for(int iR=0;iR<m1.nR;iR++)
+    {
+        for(int iC=0;iC<m1.nC;iC++)
+            {m.values[iR][iC]= m1.values[iR][iC];}
+    }
+    for(int iR=0;iR<m2.nR;iR++)
+        for(int iC=0;iC<m2.nC;iC++)
+            m.values[iR+m1.nR][iC]= m2.values[iR][iC];
+    return m;
 }
