@@ -33,6 +33,9 @@ string Matlab::getInstructionWithoutSpecialMatrices(string instruction)
 string Matlab::getInstructionWithoutConcatenation(string instruction)
 {
 
+    CMatrix m(instruction);
+    return m.getString2();//returns the string with  concatinations removed.
+
 }
 /** @brief check if there are matrices in this string
  *
