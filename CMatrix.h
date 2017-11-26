@@ -10,6 +10,8 @@ private:
 
     static bool fixMatrix(CMatrix &m,int r,int c);
     static bool checkIfZeroMatrix(CMatrix &m);
+    CMatrix horizontalConcatenation(CMatrix m1,CMatrix m2);
+    CMatrix verticalConcatenation(CMatrix m1,CMatrix m2);
   public:
 
   CMatrix();

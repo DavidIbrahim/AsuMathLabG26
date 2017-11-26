@@ -732,3 +732,28 @@ double CMatrix::getDeterminant(){
 
     return det;
 }
+
+
+/** @brief this fn makes horizontal concatenation of 2 matrices
+ *
+ * @param m1 the first matrix
+ * @param m2 the second matrix
+ * @return the concatenated matrix
+ *
+ */
+
+CMatrix CMatrix::horizontalConcatenation(CMatrix m1,CMatrix m2)
+{
+
+}
+/** @brief this fn makes vertical concatenation of 2 matrices
+ *
+ * @param m1 the first matrix
+ * @param m2 the second matrix
+ * @return the concatenated matrix
+ *
+ */
+CMatrix CMatrix::verticalConcatenation(CMatrix m1,CMatrix m2)
+{
+
+}
