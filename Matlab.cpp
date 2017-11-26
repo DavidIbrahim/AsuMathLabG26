@@ -1,5 +1,23 @@
 #include "Matlab.h"
 
+/** @brief replace a substring in a string with another one .
+ *
+ * @param mainString the string that will be changed;
+ * @param replacedString ... this is a string which should be a substring of the mainString and that will be replaced
+ *@param replacingString ... this is the string that will be a substring of the mainString
+ *@return False if couldn't find the replacedString in the mainString and True otherwise
+ */
+
+bool replaceString(string& mainString , string& replacedString , string& replacingString){
+
+    size_t start_pos = mainString.find(replacedString);
+    if(start_pos == std::string::npos)
+        return false;
+    mainString.replace(start_pos, replacedString.length(), replacingString);
+    return true;
+
+}
+
 /** @brief remove any matlab names and replace them by their matrices
  *
  * @param instruction the input instruction from the user ex: A=[B,[1.2 2.3]]; where B=[2.0 3.0];
