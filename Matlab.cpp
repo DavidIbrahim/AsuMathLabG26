@@ -88,10 +88,18 @@ Matlab::Matlab(){
 
 
 }
+/**
+*   @brief this constructor used only for debugging ....
+*/
+Matlab::Matlab(string name,CMatrix matrix){
+    this->name = name;
+    this->matrix = matrix;
 
+}
 
 Matlab::Matlab(string instruction, vector<Matlab>& myVector)
 {
+
 
 }
 
@@ -111,3 +119,12 @@ bool Matlab::checkIfSpecialMatrix(string instruction){
 
     return false;
 }*/
+/**
+* @return  the string representation of the matlab object ...
+*           eg A = [ 1 2 ; 3 4]      where A is the name of matrix
+*/
+
+string Matlab::getString(){
+
+    return name+matrix.getString2();
+}
