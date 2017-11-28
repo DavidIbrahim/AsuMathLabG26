@@ -106,10 +106,14 @@ Matlab::Matlab(){
 
 
 }
+Matlab::Matlab(const Matlab& x){
+    *this = x;
+
+}
 /**
 *   @brief this constructor used only for debugging ....
 */
-Matlab::Matlab(string name,CMatrix matrix){
+Matlab::Matlab(string name,const CMatrix &matrix){
     this->name = name;
     this->matrix = matrix;
 
@@ -144,5 +148,5 @@ bool Matlab::checkIfSpecialMatrix(string instruction){
 
 string Matlab::getString(){
 
-    return name+matrix.getString2();
+    return name+" = "+matrix.getString2();
 }
