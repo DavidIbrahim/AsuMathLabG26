@@ -13,14 +13,18 @@ class Matlab
         //bool checkIfSpecialMatrix(string instruction);
         string getInstructionWithoutMatlabNames(string instruction,vector<Matlab> savedMatrices);
         string getInstructionWithoutSpecialMatrices(string instruction);
-        string getInstructionWithoutConcatenation(string instruction);
+
         bool checkStringForMatrix(string complexString);
         string getStringValue(string complexString);
         string getStringMatrix(string complexString);
         string getReadyInstruction(string instruction,vector<Matlab> savedMatrices);
     public:
         Matlab();
+
+        Matlab(string name , CMatrix matrix);
         Matlab(string instruction,vector<Matlab>& myVector);
+        string getString();
+         string getInstructionWithoutConcatenation(string instruction);
         virtual ~Matlab();
 
     protected:
