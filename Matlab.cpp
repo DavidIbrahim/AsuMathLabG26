@@ -1,22 +1,39 @@
 #include "Matlab.h"
-
-/** @brief replace a substring in a string with another one .
+#include <iostream>
+/** @brief replace a substring in a  string with another substring .
  *
  * @param mainString the string that will be changed;
  * @param replacedString ... this is a string which should be a substring of the mainString and that will be replaced
  *@param replacingString ... this is the string that will be a substring of the mainString
+ *@param int from  ... if u want to replace the string which found from a specific index i.e for not first concurrence
+ *        by default it is set to 0 i.e it will replace the first concurrence of the substring
  *@return False if couldn't find the replacedString in the mainString and True otherwise
  */
 
-bool replaceString(string& mainString , string& replacedString , string& replacingString){
+bool replaceString(string& mainString , string replacedString , string replacingString,int from = 0){
 
-    size_t start_pos = mainString.find(replacedString);
+    size_t start_pos = mainString.find(replacedString,from);
     if(start_pos == std::string::npos)
         return false;
     mainString.replace(start_pos, replacedString.length(), replacingString);
     return true;
 
 }
+
+
+/*
+Matlab getMatlab(string name,vector<Matlab> & savedMatrices){
+
+     for(int i =0; i<savedMatrices.size(); i++) {
+       if(savedMatrices[i].getName()==name)
+        return savedMatrices[i];
+    }
+
+
+ }*/
+
+
+
 
 /** @brief remove any matlab names and replace them by their matrices
  *
@@ -27,6 +44,36 @@ bool replaceString(string& mainString , string& replacedString , string& replaci
 
 string Matlab::getInstructionWithoutMatlabNames(string instruction,vector<Matlab> savedMatrices)
 {
+      string notMatlabNames = "0123456789 ,;[]";
+      string notVariableNames =" ;[],()+-%^*/.";
+    for(int i =0;i<savedMatrices.size(); i++){
+        int position = 1;
+        while(true){
+
+            string currentName = savedMatrices[i].name;
+            position = instruction.find(currentName,position);
+            if(position != std::string::npos){
+                char afterVariableName = instruction[position+currentName.length()];
+                char beforeVariableName = instruction[position-1];
+                if(notVariableNames.find(afterVariableName)!=string::npos &&  // ea3ny law el 7rf el abl wa b3d el name
+                   notVariableNames.find(beforeVariableName)!=string::npos){  // tl3o 7aga msh bt3'erle fe asm el variable
+                                                                            //eb2a dh aked hwa el variable el mtsgl 3ndy fe
+                                                                              //current name ... 3lshan mmkn ekon currentName = s
+                    replaceString(instruction,currentName,savedMatrices[i].matrix.getString2(),position)   ;
+                                                                              //wa ala2e el s dh gwa sin() bs dh msh variable bta3y
+                   }
+                position++;
+            }
+            else{
+                break;
+            }
+
+        }
+    }
+
+
+     return instruction;
+
 
 }
 /** @brief remove any specialMatrix in the input string and replace it with it's string
@@ -124,6 +171,7 @@ Matlab::Matlab(string instruction, vector<Matlab>& myVector)
 
 
 }
+
 
 
 Matlab::~Matlab()
