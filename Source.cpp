@@ -8,54 +8,152 @@
 #include <stdlib.h>
 #include "Matlab.h"
 
+#include<string.h>
+#include<algorithm>
+#include<functional>
+#include<cctype>
+#include<locale>
+#include<sstream>
+#include<math.h>
+
+
+
+
 using namespace std;
 
-
-void stressTesting(){
-
-while(true){
-        CMatrix B(32,32,CMatrix::MI_RAND);
-        //cout<<B.getString2()<<"  ";
-         float ans1 = B.getDeterminant();
-        float ans2 = B.getDeterminant3();
-
-        if(abs(ans1-ans2)<0.001)
-            cout<<" test is ok"<<endl;
-        else {
-            cout<<endl<<"testFailed"<<endl;
-            cout<<"Det 1 = "<<ans1<<endl<<"Det 2 = "<<ans2<<endl;
-            B.writeMatrixInFile("error.txt");
-            break;
-        }
-
-
-    }
-
-}
-void printVector( vector<Matlab>& myVector){
-    for(int i =0; i<myVector.size(); i++) {
-        cout<<myVector[i].getString()<<endl;
-    }
+void reverse(string & s)
+{   char temp;
+	for (int i = 0 , j = s.length()-1 ; i < s.length()/2; i++ , j--)
+	{
+		temp = s[j];
+		s[j] = s[i];
+		s[i] = temp;
+	}
 }
 
 
-int main(int argc, char*argv[])
+
+void trimAllSpaces(string & s)
+{   //	s.erase(s.begin(),std::find_if(s.begin(), s.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));//l. only
+    //	s.erase( std::find_if(s.rbegin(), s.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(),  s.end());//r. only
+	for (int i = 0; i < s.length(); i++)
+	{ if (s[i] == ' ') {  s.erase( i,1 );       i--;       }        }}
+
+
+
+
+string NormalOperationsAndBrackets(string s)
 {
-    /*  a brief example on how to use vectors  */
+	 s = "5+4+3(5*3)+5";
 
-    vector<Matlab> myVector;   //initialized a vector  for matlab objects
-    CMatrix m("[1 2 3;4 5 6]");// initialized a matrix  m
-    myVector.push_back( Matlab("A",m));// put a new Matlab object with name A and matrix m in myVector;
-    cout<<myVector[0].getString()<<endl;// the same as array myVector[0] will return the firstMatlab object pushed in myVector
 
-   /*           Now I will add another Matlab objects for u to test           */
 
-    myVector.push_back(Matlab("luffy",CMatrix("[1 2 3 ; 4 5 6 ; 7 8 9]")));
 
-    myVector.push_back(Matlab("x",CMatrix("[0 0 0 0 ; 0 0 0 0 ; 0 0 0 0]")));
+	int pos = s.find('(');
+	if (pos != string::npos)
+	{
+		int pos2 = s.find(')');
+		string temp = s.substr(pos + 1, s.length() - pos2);
+		//here call again
+		cout<<temp<<endl;
+	}
 
-    cout<<endl<<"printing the Matlab Objects in the Vector"<<endl<<endl;
-    printVector(myVector);
+	s = "5+4*3-6/5^9";
+	//stringstream ss;
+	//ss >> s;
+	string operators[8] = { "^","*", "/","+","-" };
+	for (int i = 0; i <9; i++)
+	{
+		int pos = s.find(operators[i]);
+		if (pos != string::npos)
+		{
+			s.erase(pos, 1);
+			double   Dafter, Dbefore, Dresult;
+			string   Safter, Sbefore, Sresult;
+			Safter = s.substr(pos, s.length() - pos);
+			Sbefore = s.substr(0, pos);
+			reverse(Sbefore);
+			stringstream SSbefore, SSafter, ssresult;
+			SSafter << Safter;
+			SSafter >> Dafter;
+			SSafter >> Safter;
+			SSbefore << Sbefore;
+			SSbefore >> Dbefore;
+			SSbefore << Sbefore;
+			switch (i) {
+			case 0: Dresult = pow(Dbefore, Dafter); break;
+			case 1: Dresult = Dbefore * Dafter; break;
+			case 2: Dresult = Dbefore / Dafter; break;
+			case 3: Dresult = Dbefore + Dafter; break;
+			case 4: Dresult = Dbefore - Dafter; break;
+				//case 6: result = before % after; break;
+			}
+			ssresult << Dresult;
+			ssresult >> Sresult;
+			s = Sbefore + Sresult + Safter;
+
+
+
+
+			i--;
+		}
+
+	}
+
+
+
+
+
+
+
+	return s;
+}
+
+
+string myfunction(string s)
+{
+	// trim at first
+    trimAllSpaces(s);
+	//make sure all operations are in the form expected
+	//transform(s.begin(), s.end(), s.begin(), ::tolower);
+    // look for sin cos tan
+	string constants[3] = { "sin" , "cos" , "tan"  };
+	for (int i = 0; i < 4 ; i++)
+	{
+		int pos = s.find(constants[i]);
+		if (pos != string::npos)
+		{
+
+			string temp = s.substr(pos+3, s.length()-pos);
+			int pos2 = temp.find(')');
+			string temp2 = temp.substr(0, pos2+1);
+			//string temp3 =  myfunction(temp2);
+			string temp3 = "5"; // comment it
+
+
+
+
+			s.replace(pos, temp2.length()+3, temp3);
+			cout << s<<endl;
+
+			i--;
+		}
+
+	s=	NormalOperationsAndBrackets(s);
+
+
+	}
+
+
+	return  s;
+}
+
+int main()
+{
+    string s = "dsd";
+    s=	NormalOperationsAndBrackets(s);
+
+cout<<"hello world";
 
 
 
