@@ -25,7 +25,7 @@ bool replaceString(string& mainString , string& replacedString , string& replaci
  * @return the instruction as a string but with matrix instead of matlab names ex: A=[[2.0 3.0],[1.2 2.3]];
  */
 
-string Matlab::getInstructionWithoutMatlabNames(string instruction,vector<Matlab> savedMatrices)
+string Matlab::getInstructionWithoutMatlabNames(string instruction,vector<Matlab>& savedMatrices)
 {
 
 }
@@ -85,7 +85,44 @@ string Matlab::getStringMatrix(string complexString)
 {
 
 }
+/** @brief this fn replace any expression in the instruction by it's equivalent value or matrix
+ *
+ * @param instruction the full instruction but without Matlab names or special matrix ex: A=[6+2 2+[1 2 3]];
+ * @return the instruction without any expressions ex: A=[8 [3 4 5]];
+ *
+ */
 
+string Matlab::getInstructionWithoutExpressions(string instruction)
+{
+    istringstream is;
+    is.str(instruction);
+    char c; //to loop each character in the instruction
+    string s;
+    string temp; //stores the equivalent value or matrix of the string
+    while(is.get(c))
+    {
+        if(c!='['&&c!=']'&&c!=','&&c!=';'&&c!=' ')
+        {
+            s+=string(1,c);
+        }
+        else
+        {
+            if(checkStringForMatrix(s))//the string contains a matrix
+            {
+                temp=getStringMatrix(s);
+                replaceString(instruction,s,temp);
+            }
+            else //the string contains no matrix
+            {
+                temp=getStringValue(s);
+                replaceString(instruction,s,temp);
+            }
+            s="";
+            temp="";
+        }
+    }
+    return instruction;
+}
 /**
 * this fn takes the full instruction as it is ex: B = [1.2 2.3 A;[1.3 2.4;4.6 1.3],[3.2;7.8]];
 * and returns it ready for cmatrix constructor ex: B= [1.2 2.3 3.0;1.3 2.4 3.2; 4.6 1.3 7.8];
@@ -94,7 +131,7 @@ string Matlab::getStringMatrix(string complexString)
 * @param savedMatrices the vector where all Matlab objects are stored
   @return a simple instruction without any Matlab names in between, concatenations or expressions.
 */
-string Matlab::getReadyInstruction(string instruction,vector<Matlab> savedMatrices)
+string Matlab::getReadyInstruction(string instruction,vector<Matlab>& savedMatrices)
 {
 
 }
