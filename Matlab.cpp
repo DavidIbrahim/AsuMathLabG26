@@ -133,7 +133,11 @@ string Matlab::getInstructionWithoutExpressions(string instruction)
 */
 string Matlab::getReadyInstruction(string instruction,vector<Matlab>& savedMatrices)
 {
-
+    instruction=getInstructionWithoutMatlabNames(instruction,savedMatrices);
+    instruction=getInstructionWithoutSpecialMatrices(instruction);
+    instruction=getInstructionWithoutExpressions(instruction);
+    instruction=getInstructionWithoutConcatenation(instruction);
+    return instruction;
 }
 
 Matlab::Matlab(){
