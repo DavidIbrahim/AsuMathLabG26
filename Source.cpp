@@ -48,11 +48,13 @@ int main(int argc, char*argv[])
     myVector.push_back( Matlab("A",m));// put a new Matlab object with name A and matrix m in myVector;
     cout<<myVector[0].getString()<<endl;// the same as array myVector[0] will return the firstMatlab object pushed in myVector
 
+
    /*           Now I will add another Matlab objects for u to test           */
 
     myVector.push_back(Matlab("luffy",CMatrix("[1 2 3 ; 4 5 6 ; 7 8 9]")));
 
     myVector.push_back(Matlab("x",CMatrix("[0 0 0 0 ; 0 0 0 0 ; 0 0 0 0]")));
+
 
     cout<<endl<<"printing the Matlab Objects in the Vector"<<endl<<endl;
     printVector(myVector);

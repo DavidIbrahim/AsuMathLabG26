@@ -20,8 +20,8 @@ class Matlab
         string getReadyInstruction(string instruction,vector<Matlab> savedMatrices);
     public:
         Matlab();
-
-        Matlab(string name , CMatrix matrix);
+        Matlab(const Matlab& x);
+        Matlab(string name ,const CMatrix &matrix);
         Matlab(string instruction,vector<Matlab>& myVector);
         string getString();
          string getInstructionWithoutConcatenation(string instruction);
