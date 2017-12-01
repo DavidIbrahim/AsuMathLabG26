@@ -9,42 +9,6 @@
 #include "Matlab.h"
 
 using namespace std;
-string test(string instruction)
-{
-
-    CMatrix primary;
-    size_t Begin,End;
-    size_t start=0;
-    Begin =instruction.find("[",start);
-    End =instruction.find("]",start+1);
-    string s=instruction.substr(Begin,(End+1)-Begin);
-    primary=(s);
-    start=End;
-    cout<<"s="<<s<<endl;
-    Begin =instruction.find("[",start);
-     if(Begin==std::string::npos)//to check if its only one matrix.
-        {
-            cout<<"s="<<s<<endl;
-
-           return s;
-         }
-    else
-    {
-        End =instruction.find("]",start+1);
-        s=instruction.substr(Begin,(End+1)-Begin);
-        CMatrix secondary(s);
-        string s1=instruction.substr((start+1),(Begin-(start+1)));
-        if ((s1.find(";"))!=std::string::npos||(s1.find("\r\n"))!=std::string::npos||(s1.find("\n"))!=std::string::npos)
-        {primary=secondary.verticalConcatenation(primary,secondary);
-        cout<<primary.getString2()<<endl;}
-        else {primary=secondary.horizontalConcatenation(primary,secondary);}
-        start=End;
-    //cout<<(m2.getString2())<<endl<<instruction.substr(start)<<endl;
-        instruction=(primary.getString2())+instruction.substr(start+1);
-         test(instruction);
-    }
-
-}
 
 
 void stressTesting(){
@@ -68,39 +32,32 @@ while(true){
     }
 
 }
-
-
-bool replaceString(string& mainString , string& replacedString , string& replacingString){
-
-    size_t start_pos = mainString.find(replacedString);
-    if(start_pos == std::string::npos)
-        return false;
-    mainString.replace(start_pos, replacedString.length(), replacingString);
-    return true;
-
+void printVector( vector<Matlab>& myVector){
+    for(int i =0; i<myVector.size(); i++) {
+        cout<<myVector[i].getString()<<endl;
+    }
 }
+
 
 int main(int argc, char*argv[])
 {
-  Matlab matlab;
-string s ="[[1.2 2.4 ; 3.2 , 1.1] [2.6 0;2 4] [1 1;1 1] [2 2;2 2]]";
-   string r="[1.2 3.2],[2.2];[2.0 2.0 2.0]";
-    string A="[[1.2 3.2], [2.2] \n [2.0 2.0 2.0] ]";
-  /* expected output
-    1.20000   2.40000   2.60000   0.00000
-   3.20000   1.10000   2.00000   4.00000
+    /*  a brief example on how to use vectors  */
 
-   found : 1.2 2.4
-           2    4
+    vector<Matlab> myVector;   //initialized a vector  for matlab objects
+    CMatrix m("[1 2 3;4 5 6]");// initialized a matrix  m
+    myVector.push_back( Matlab("A",m));// put a new Matlab object with name A and matrix m in myVector;
+    cout<<myVector[0].getString()<<endl;// the same as array myVector[0] will return the firstMatlab object pushed in myVector
 
-  */
-    //cout<<matlab.getInstructionWithoutConcatenation(r);
-cout<<test(s)<<endl;
+   /*           Now I will add another Matlab objects for u to test           */
 
+    myVector.push_back(Matlab("luffy",CMatrix("[1 2 3 ; 4 5 6 ; 7 8 9]")));
 
-//stressTesting();//
+    myVector.push_back(Matlab("x",CMatrix("[0 0 0 0 ; 0 0 0 0 ; 0 0 0 0]")));
+
+    cout<<endl<<"printing the Matlab Objects in the Vector"<<endl<<endl;
+    printVector(myVector);
+
 
 
     return 0;
 }
-
