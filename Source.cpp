@@ -11,35 +11,28 @@
 using namespace std;
 string test(string instruction)
 {
-      CMatrix m2;
+    CMatrix m2; //the primary matrix to operate on.
     size_t Begin,End;
     size_t start=0;
-while(true)
-    {
-
-     Begin =instruction.find("[",start);
-     if(Begin==std::string::npos)
-        break;
-     End =instruction.find("]",start+1);
-    string s=instruction.substr(Begin,(End+1)-Begin);
-
-   if(start==0)
-    {
+    Begin =instruction.find("[",start);
+    End =instruction.find("]",start+1);
+    string s=instruction.substr(Begin,(End+1)-Begin);//Primary matrix string.
     m2=(s);
-    }
-
+    start=End;
+    Begin =instruction.find("[",start);
+    if(Begin==std::string::npos)//to check if its only one matrix.
+        return m2.getString2();
     else
     {
-        CMatrix m1(s);
-        string s1=instruction.substr(start,(Begin-start));
-        if ((s1.find(";"))!=std::string::npos||(s1.find("\r\n"))!=std::string::npos||(s1.find("\n"))!=std::string::npos)
+        End =instruction.find("]",start+1);
+        s=instruction.substr(Begin,(End+1)-Begin);
+        CMatrix m1(s);// secondary matrix .
+        string s1=instruction.substr((start+1),(Begin-(start+1)));// the substring between the two matrices that determines the type of concatination between them.
+        if ((s1.find(";"))!=std::string::npos||(s1.find("\r\n"))!=std::string::npos||(s1.find("\n"))!=std::string::npos)//to check if its horizontal or vertical conc.
         {m2=m1.verticalConcatenation(m2,m1);}
         else {m2=m1.horizontalConcatenation(m2,m1);}
+        return m2.getString2();
     }
-    start=End;
-}
-    return m2.getString2();//returns the string with  concatinations removed.
-
 }
 
 
@@ -91,7 +84,7 @@ string s ="[[1.2 2.4 ; 3.2 , 1.1]  [2.6 0;2 4]]";
 
   */
     //cout<<matlab.getInstructionWithoutConcatenation(r);
-cout<<test(A)<<endl;
+cout<<test(s)<<endl;
 
 
 //stressTesting();//
