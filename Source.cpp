@@ -8,15 +8,16 @@
 #include <stdlib.h>
 #include "Matlab.h"
 
-#include<string.h>
+#include<string>
 #include<algorithm>
 #include<functional>
 #include<cctype>
 #include<locale>
 #include<sstream>
 #include<math.h>
-
-
+#include <iomanip>
+#include <limits>
+#include <boost/lexical_cast.hpp>
 
 
 using namespace std;
@@ -42,44 +43,111 @@ void trimAllSpaces(string & s)
 
 
 
+
+
 string NormalOperationsAndBrackets(string s)
 {
 	 s = "5+4+3(5*3)+5";
 
-
-
-
-	int pos = s.find('(');
-	if (pos != string::npos)
+	 int poss = s.find('(');
+	if (poss != string::npos)
 	{
 		int pos2 = s.find(')');
-		string temp = s.substr(pos + 1, s.length() - pos2);
+		string temp = s.substr(poss + 1, s.length() - pos2);
 		//here call again
 		cout<<temp<<endl;
 	}
 
-	s = "5+4*3-6/5^9";
-	//stringstream ss;
-	//ss >> s;
+	s = "5656565+5656565-995656565659";
+
 	string operators[8] = { "^","*", "/","+","-" };
-	for (int i = 0; i <9; i++)
+
+	for (int i = 0; i <5; i++)
 	{
 		int pos = s.find(operators[i]);
 		if (pos != string::npos)
 		{
-			s.erase(pos, 1);
-			double   Dafter, Dbefore, Dresult;
+            s.erase(pos, 1);
+			double   Dafter , Dbefore, Dresult;
 			string   Safter, Sbefore, Sresult;
-			Safter = s.substr(pos, s.length() - pos);
+			Safter =  s.substr(pos, s.length() - pos);
 			Sbefore = s.substr(0, pos);
+/*
+			int count =0,flag=0;
+			for(int j=0;;j++)
+                {
+
+                 for(int d=0;d<11;d++)
+                {
+                    if(Safter[j]==numbers[d])
+                    { count++;
+                    Dafter = numberss[d] * pow(10,j);
+                    flag=1;
+                    break;
+
+                                        }
+
+
+                }
+                  if(flag==0)
+                        break;
+                  flag = 0 ;
+
+                }
+		//	for(int j=0;;j--)
+			//{
+
+			//}
+
+
+
+
+*/
+
+
+
+
+
+
+
+
+
+
+			stringstream SSbefore, SSafter, ssresult , temp;
+		// for after
+		//turn into double
+			SSafter <<std::setprecision (std::numeric_limits<double>::digits10 + 1)<< Safter;//puts after in ss form
+			SSafter >> std::fixed>>std::setprecision (std::numeric_limits<double>::digits10 + 1)>>Dafter;//takes double i want
+
+	//turn into string
+			ostringstream strss;
+            strss << lexical_cast<string>(Dafter);
+			string strr = strss.str();
+            Safter.erase( 0,strr.length());
+
+            // for before
+            // turn into double
 			reverse(Sbefore);
-			stringstream SSbefore, SSafter, ssresult;
-			SSafter << Safter;
-			SSafter >> Dafter;
-			SSafter >> Safter;
 			SSbefore << Sbefore;
 			SSbefore >> Dbefore;
-			SSbefore << Sbefore;
+// turn into string
+			ostringstream strs;
+            strs << Dbefore;
+            string str = strs.str();
+         // reverse back
+            reverse(str);
+// urn into actual double
+            temp << std::fixed<<str;
+            temp >> std::fixed>>Dbefore;
+
+			Sbefore.erase(0,str.length());
+			reverse(Sbefore);
+
+
+
+
+
+
 			switch (i) {
 			case 0: Dresult = pow(Dbefore, Dafter); break;
 			case 1: Dresult = Dbefore * Dafter; break;
@@ -89,12 +157,9 @@ string NormalOperationsAndBrackets(string s)
 				//case 6: result = before % after; break;
 			}
 			ssresult << Dresult;
-			ssresult >> Sresult;
+			ssresult >>std::fixed >> Sresult;
 			s = Sbefore + Sresult + Safter;
-
-
-
-
+			pos = string::npos;
 			i--;
 		}
 
@@ -150,10 +215,13 @@ string myfunction(string s)
 
 int main()
 {
+
+
     string s = "dsd";
     s=	NormalOperationsAndBrackets(s);
 
-cout<<"hello world";
+
+cout<<s<<endl;
 
 
 
