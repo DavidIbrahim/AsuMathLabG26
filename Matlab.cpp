@@ -1,4 +1,33 @@
+#include<stdio.h>
+#include <iostream>
+#include"CMatrix.h"
+#include <fstream>
+#include <string>
+#include <vector>
+#include <string.h>
+#include <stdlib.h>
 #include "Matlab.h"
+
+#include<string>
+#include<algorithm>
+#include<functional>
+#include<cctype>
+#include<locale>
+#include<sstream>
+#include<math.h>
+#include <iomanip>
+#include <limits>
+
+
+void reverse(string & s)
+{   char temp;
+	for (int i = 0 , j = s.length()-1 ; i < s.length()/2; i++ , j--)
+	{
+		temp = s[j];
+		s[j] = s[i];
+		s[i] = temp;
+	}
+}
 
 /** @brief replace a substring in a string with another one .
  *
@@ -63,17 +92,6 @@ string Matlab::getInstructionWithoutConcatenation(string instruction)
  */
 
 bool Matlab::checkStringForMatrix(string complexString)
-{
-
-}
-/** @brief simplify the expression to the final string value
- *
- * @param complexString it is a string of 1D expression, contains no matrices ex: 1+2/5*sin(2)
- * @return the final value of the expression as a string ex: 1.3637
- *
- */
-
-string Matlab::getStringValue(string complexString)
 {
 
 }
@@ -149,4 +167,202 @@ bool Matlab::checkIfSpecialMatrix(string instruction){
 string Matlab::getString(){
 
     return name+" = "+matrix.getString2();
+}
+
+/**
+* @brief remove all white spaces from the parameter s
+* @param string s where all white spaces will be removed from
+*/
+void Matlab:: trimAllSpaces(string & s)
+{   //	s.erase(s.begin(),std::find_if(s.begin(), s.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));//l. only
+    //	s.erase( std::find_if(s.rbegin(), s.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(),  s.end());//r. only
+	for (int i = 0; i < s.length(); i++){
+            if (s[i] == ' ') {
+            s.erase( i,1 );
+            i--;
+        }
+
+    }
+}
+/** @brief simplify the expression to the final string value
+ *
+ * @param complexString it is a string of 1D expression, contains no matrices ex: 1+2/5*sin(2)
+ * @return the final value of the expression as a string ex: 1.3637
+ *
+ */
+
+string Matlab::getStringValue(string complexString)
+{   trimAllSpaces(complexString);
+    bool isThereBrackets = true;
+    isThereBrackets=dealWithBrackets(complexString);
+    return complexString;
+}
+
+/**
+* @brief helper method for getStringValue
+*/
+
+bool Matlab:: dealWithBrackets(string complexString){
+ int poss = complexString.find('(');
+	if (poss != string::npos)
+	{
+		int pos2 = complexString.find(')');
+		string temp = complexString.substr(poss + 1, pos2-poss-1);
+        std::cout<<getStringValue(temp)<<endl;
+
+	}
+
+    return false;
+
+}
+
+
+string Matlab::calcSimpleExpression(string s){
+
+
+	string operators[8] = { "^","*", "/","+","-" };
+
+	char numbers [11] = {'0','1','2','3','4','5','6','7','8','9','.'};
+	for (int i = 0; i <5; i++)
+	{
+		int pos = s.find(operators[i]);
+		if (pos != string::npos)
+		{
+            s.erase(pos, 1);
+			double   Dafter , Dbefore, Dresult;
+			string   Safter , Sbefore, Sresult;
+			Safter =  s.substr(pos, s.length() - pos);
+			Sbefore = s.substr(0, pos);
+
+			int count =0,flag=0,end=12;
+			for(int j=0;;j++)
+                {
+                    for(int d=0;d<end;d++)
+                {
+                    if(Safter[j]==numbers[d])
+                    { count++;
+                    if(d==10)end=11;
+                    flag=1;
+                    break;
+
+                                        }
+
+
+                }
+                  if(flag==0)
+                        break;
+                  flag = 0 ;
+
+                }
+		//	for(int j=0;;j--)
+			//{
+
+			//}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			stringstream SSbefore, SSafter, ssresult , temp;
+		// for after
+		//turn into double
+			SSafter << Safter;//puts after in ss form
+			SSafter >>Dafter;//takes double i want
+
+	//turn into string
+	//		ostringstream strss;
+      //      strss <<(Dafter);
+		//	string strr = strss.str();
+            Safter.erase( 0,count);
+
+
+
+            /*
+
+            // for before
+            // turn into double
+			reverse(Sbefore);
+			SSbefore << Sbefore;
+			SSbefore >> fixed >> Dbefore;
+// turn into string
+			ostringstream strs;
+            strs << fixed<<Dbefore;
+            string str = strs.str();
+         // reverse back
+            reverse(str);
+// urn into actual double
+            temp << std::fixed<<str;
+            temp >> std::fixed>>Dbefore;
+
+			Sbefore.erase(0,str.length());
+			reverse(Sbefore);
+*/
+//reverse(Sbefore);
+
+
+count =0,flag=0,end=12;
+			for(int j=Sbefore.length();;j--)
+                {
+                    for(int d=0;d<end;d++)
+                {
+                    if(Sbefore[j]==numbers[d])
+                    { count++;
+                    if(j==10)end=11;
+                    flag=1;
+                    break;
+
+                                        }
+
+
+                }
+                  if(flag==0)
+                        break;
+                  flag = 0 ;
+
+                }
+count--;
+string copySbefore = Sbefore ;
+reverse(Sbefore);
+Sbefore.erase( 0,count);
+reverse(Sbefore);
+
+string beforenumber = copySbefore.substr(copySbefore.length()-count,count);
+
+            SSbefore << beforenumber;
+			SSbefore >> fixed >> Dbefore;
+
+
+
+
+			switch (i) {
+			case 0: Dresult = pow(Dbefore, Dafter); break;
+			case 1: Dresult = Dbefore * Dafter; break;
+			case 2: Dresult = Dbefore / Dafter; break;
+			case 3: Dresult = Dbefore + Dafter; break;
+			case 4: Dresult = Dbefore - Dafter; break;
+				//case 6: result = before % after; break;
+			}
+			ssresult << Dresult;
+			ssresult >>std::fixed >> Sresult;
+			s = Sbefore + Sresult + Safter;
+			pos = string::npos;
+			i--;
+		}
+
+	}
+
+    return s;
+
+
+
 }

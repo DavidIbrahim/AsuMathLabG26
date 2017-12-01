@@ -17,28 +17,14 @@
 #include<math.h>
 #include <iomanip>
 #include <limits>
-#include <boost/lexical_cast.hpp>
+
 
 
 using namespace std;
 
-void reverse(string & s)
-{   char temp;
-	for (int i = 0 , j = s.length()-1 ; i < s.length()/2; i++ , j--)
-	{
-		temp = s[j];
-		s[j] = s[i];
-		s[i] = temp;
-	}
-}
 
 
 
-void trimAllSpaces(string & s)
-{   //	s.erase(s.begin(),std::find_if(s.begin(), s.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));//l. only
-    //	s.erase( std::find_if(s.rbegin(), s.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(),  s.end());//r. only
-	for (int i = 0; i < s.length(); i++)
-	{ if (s[i] == ' ') {  s.erase( i,1 );       i--;       }        }}
 
 
 
@@ -121,13 +107,13 @@ string NormalOperationsAndBrackets(string s)
 
 	//turn into string
 			ostringstream strss;
-            strss << lexical_cast<string>(Dafter);
+            strss <<(Dafter);
 			string strr = strss.str();
             Safter.erase( 0,strr.length());
 
             // for before
             // turn into double
-			reverse(Sbefore);
+			//reverse(Sbefore);
 			SSbefore << Sbefore;
 			SSbefore >> Dbefore;
 // turn into string
@@ -135,13 +121,13 @@ string NormalOperationsAndBrackets(string s)
             strs << Dbefore;
             string str = strs.str();
          // reverse back
-            reverse(str);
+//            reverse(str);
 // urn into actual double
             temp << std::fixed<<str;
             temp >> std::fixed>>Dbefore;
 
 			Sbefore.erase(0,str.length());
-			reverse(Sbefore);
+//			reverse(Sbefore);
 
 
 
@@ -178,7 +164,7 @@ string NormalOperationsAndBrackets(string s)
 string myfunction(string s)
 {
 	// trim at first
-    trimAllSpaces(s);
+//    trimAllSpaces(s);
 	//make sure all operations are in the form expected
 	//transform(s.begin(), s.end(), s.begin(), ::tolower);
     // look for sin cos tan
@@ -216,12 +202,8 @@ string myfunction(string s)
 int main()
 {
 
-
-    string s = "dsd";
-    s=	NormalOperationsAndBrackets(s);
-
-
-cout<<s<<endl;
+    Matlab x ;
+    cout<<x.calcSimpleExpression("2^3-50*3+2^3")<<endl;
 
 
 

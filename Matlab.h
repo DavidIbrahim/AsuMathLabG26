@@ -15,16 +15,21 @@ class Matlab
         string getInstructionWithoutSpecialMatrices(string instruction);
 
         bool checkStringForMatrix(string complexString);
-        string getStringValue(string complexString);
         string getStringMatrix(string complexString);
         string getReadyInstruction(string instruction,vector<Matlab> savedMatrices);
+        void trimAllSpaces(string &s);
+        bool dealWithBrackets(string complexString);
+
     public:
+        string calcSimpleExpression(string s);
         Matlab();
         Matlab(const Matlab& x);
         Matlab(string name ,const CMatrix &matrix);
         Matlab(string instruction,vector<Matlab>& myVector);
+        string getStringValue(string complexString);
+
         string getString();
-         string getInstructionWithoutConcatenation(string instruction);
+        string getInstructionWithoutConcatenation(string instruction);
         virtual ~Matlab();
 
     protected:
