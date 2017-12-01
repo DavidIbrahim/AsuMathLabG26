@@ -43,7 +43,7 @@ bool replaceString(string& mainString , string& replacedString , string& replaci
     if(start_pos == std::string::npos)
         return false;
     mainString.replace(start_pos, replacedString.length(), replacingString);
-    return true;
+        return true;
 
 }
 
@@ -194,7 +194,8 @@ void Matlab:: trimAllSpaces(string & s)
 string Matlab::getStringValue(string complexString)
 {   trimAllSpaces(complexString);
     bool isThereBrackets = true;
-    isThereBrackets=dealWithBrackets(complexString);
+    complexString=dealWithBrackets(complexString);
+//    complexString = calcSimpleExpression(complexString);
     return complexString;
 }
 
@@ -202,27 +203,45 @@ string Matlab::getStringValue(string complexString)
 * @brief helper method for getStringValue
 */
 
-bool Matlab:: dealWithBrackets(string complexString){
- int poss = complexString.find('(');
+string Matlab:: dealWithBrackets(string inputString){
+ int poss = inputString.find('(');
 	if (poss != string::npos)
 	{
-		int pos2 = complexString.find(')');
-		string temp = complexString.substr(poss + 1, pos2-poss-1);
-        std::cout<<getStringValue(temp)<<endl;
+		int pos2 = findTheClosingBracket(inputString);
+		string stringInsideTheBrackets = inputString.substr(poss + 1, pos2-poss-1);
+        if(stringInsideTheBrackets.find('(')!=string::npos){
+                string temp = dealWithBrackets(stringInsideTheBrackets);
+                replaceString(inputString,stringInsideTheBrackets,temp);
+                inputString = dealWithBrackets(inputString);
+           }
+            else {
+            string calculatedValue = calcSimpleExpression(stringInsideTheBrackets);
+            stringInsideTheBrackets = "("+stringInsideTheBrackets+")";
+            replaceString(inputString,stringInsideTheBrackets,calculatedValue);
+            return inputString;
 
-	}
-
-    return false;
+           }
+ 	}
+ 	//if there's no brackets return inputString
+ 	return inputString;
 
 }
+
+
+// TODO (Rizk#9#12/01/17): Fix Bugs ...
+//
 
 
 string Matlab::calcSimpleExpression(string s){
 
 
 	string operators[8] = { "^","*", "/","+","-" };
-
 	char numbers [11] = {'0','1','2','3','4','5','6','7','8','9','.'};
+
+	if((s[0]=='+'||s[0]=='-'))
+        s='0'+s;
+
+
 	for (int i = 0; i <5; i++)
 	{
 		int pos = s.find(operators[i]);
@@ -365,4 +384,19 @@ string beforenumber = copySbefore.substr(copySbefore.length()-count,count);
 
 
 
+}
+
+/**
+* @brief : private Helper function for dealing with brackets (2+5)/(5-2)
+*
+*/
+int Matlab::findTheClosingBracket(string s){
+    int count =0;
+
+    for(int i =0 ; i<s.size()-1;i++) {
+        if(s.find('('),i) count++;
+        if(s.find(')'),i) count--;
+        if(count==0) return i;
+    }
+    return string::npos;
 }

@@ -203,7 +203,7 @@ int main()
 {
 
     Matlab x ;
-    cout<<x.calcSimpleExpression("2^3-50*3+2^3")<<endl;
+    cout<<x.getStringValue("(2*(((2+3)*2)-3))")<<endl;
 
 
 

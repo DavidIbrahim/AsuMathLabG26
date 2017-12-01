@@ -18,8 +18,8 @@ class Matlab
         string getStringMatrix(string complexString);
         string getReadyInstruction(string instruction,vector<Matlab> savedMatrices);
         void trimAllSpaces(string &s);
-        bool dealWithBrackets(string complexString);
-
+        string dealWithBrackets(string complexString);
+        int findTheClosingBracket(string s);
     public:
         string calcSimpleExpression(string s);
         Matlab();

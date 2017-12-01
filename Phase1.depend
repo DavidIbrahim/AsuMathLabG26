@@ -99,3 +99,60 @@
 	<string.h>
 	<stdlib.h>
 
+1512125598 source:e:\projects\c++\asumathlabg26\cmatrix.cpp
+	<fstream>
+	"CMatrix.h"
+	<iomanip>
+	<iostream>
+	<stdlib.h>
+	<string.h>
+	<time.h>
+
+1512125598 e:\projects\c++\asumathlabg26\cmatrix.h
+	<fstream>
+	<string>
+
+1512144045 source:e:\projects\c++\asumathlabg26\matlab.cpp
+	<stdio.h>
+	<iostream>
+	"CMatrix.h"
+	<fstream>
+	<string>
+	<vector>
+	<string.h>
+	<stdlib.h>
+	"Matlab.h"
+	<string>
+	<algorithm>
+	<functional>
+	<cctype>
+	<locale>
+	<sstream>
+	<math.h>
+	<iomanip>
+	<limits>
+
+1512143542 e:\projects\c++\asumathlabg26\matlab.h
+	"CMatrix.h"
+	<vector>
+
+1512142906 source:e:\projects\c++\asumathlabg26\source.cpp
+	<stdio.h>
+	<iostream>
+	"CMatrix.h"
+	<fstream>
+	<string>
+	<vector>
+	<string.h>
+	<stdlib.h>
+	"Matlab.h"
+	<string>
+	<algorithm>
+	<functional>
+	<cctype>
+	<locale>
+	<sstream>
+	<math.h>
+	<iomanip>
+	<limits>
+
