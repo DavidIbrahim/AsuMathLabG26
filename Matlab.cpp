@@ -45,14 +45,45 @@ string Matlab::getInstructionWithoutSpecialMatrices(string instruction)
  * @return the instruction as a string without any concatenation ex: A=[1.2 3.2 2.2;2.0 2.0 2.0];
  * note: horizontal concatenation occurs when there is space or ','
  * note: vertical concatenation occurs when there is ';' or a new line
+ * note: this function throws a syntax error message
  * hint: there is a horizontalConcatenation and verticalConcatenation fns in Cmatrix so you can convert the string to matrix then send it to it.
  */
 
 string Matlab::getInstructionWithoutConcatenation(string instruction)
 {
 
-    CMatrix m(instruction);
-    return m.getString2();//returns the string with  concatinations removed.
+    CMatrix primary;
+    size_t Begin,End;
+    size_t start=0;
+    Begin =instruction.find("[",start);// first occurence of "[".
+    End =instruction.find("]",start+1);//first occurence of "]"
+    string s=instruction.substr(Begin,(End+1)-Begin);// string between "[ ]"
+    primary=(s);
+    start=End;// new starting point to search from the end of first matrix.
+    Begin =instruction.find("[",start);
+    if(Begin==std::string::npos)//to check if its only one matrix.
+           return s;
+    else
+    {
+        End =instruction.find("]",start+1);
+        s=instruction.substr(Begin,(End+1)-Begin);
+        CMatrix secondary(s);
+        string s1=instruction.substr((start+1),(Begin-(start+1)));// the substring between the two matrices that determines the type of concatination between them.
+            for(unsigned int i=0;i<s1.length();i++)// to check for syntax errors between matrices.
+            {
+                if ((s1[i])!=(' ')&&(s1[i])!=(',')&&(s1[i])!=(';')&&(s1[i])!=('\n')&&(s1.find("\r\n"))==std::string::npos)
+                 {throw ("Syntax error");}
+            }
+        if ((s1.find(";"))!=std::string::npos||(s1.find("\r\n"))!=std::string::npos||(s1.find("\n"))!=std::string::npos)//to check if its horizontal or vertical conc.
+        {primary=secondary.verticalConcatenation(primary,secondary);}
+        else if((s1.find(","))!=std::string::npos||(s1.find(" "))!=std::string::npos)
+            {primary=secondary.horizontalConcatenation(primary,secondary);}
+        else
+            {throw ("Syntax error");}//this condition checks if there's no spaces between matrices at all ([][]).
+        start=End;
+        instruction=(primary.getString2())+instruction.substr(start+1);
+        return getInstructionWithoutConcatenation(instruction);
+    }
 
 }
 /** @brief check if there are matrices in this string
