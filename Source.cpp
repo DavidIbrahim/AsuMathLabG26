@@ -11,28 +11,39 @@
 using namespace std;
 string test(string instruction)
 {
-    CMatrix m2; //the primary matrix to operate on.
+
+    CMatrix primary;
     size_t Begin,End;
     size_t start=0;
     Begin =instruction.find("[",start);
     End =instruction.find("]",start+1);
-    string s=instruction.substr(Begin,(End+1)-Begin);//Primary matrix string.
-    m2=(s);
+    string s=instruction.substr(Begin,(End+1)-Begin);
+    primary=(s);
     start=End;
+    cout<<"s="<<s<<endl;
     Begin =instruction.find("[",start);
-    if(Begin==std::string::npos)//to check if its only one matrix.
-        return m2.getString2();
+     if(Begin==std::string::npos)//to check if its only one matrix.
+        {
+            cout<<"s="<<s<<endl;
+
+           return s;
+         }
     else
     {
         End =instruction.find("]",start+1);
         s=instruction.substr(Begin,(End+1)-Begin);
-        CMatrix m1(s);// secondary matrix .
-        string s1=instruction.substr((start+1),(Begin-(start+1)));// the substring between the two matrices that determines the type of concatination between them.
-        if ((s1.find(";"))!=std::string::npos||(s1.find("\r\n"))!=std::string::npos||(s1.find("\n"))!=std::string::npos)//to check if its horizontal or vertical conc.
-        {m2=m1.verticalConcatenation(m2,m1);}
-        else {m2=m1.horizontalConcatenation(m2,m1);}
-        return m2.getString2();
+        CMatrix secondary(s);
+        string s1=instruction.substr((start+1),(Begin-(start+1)));
+        if ((s1.find(";"))!=std::string::npos||(s1.find("\r\n"))!=std::string::npos||(s1.find("\n"))!=std::string::npos)
+        {primary=secondary.verticalConcatenation(primary,secondary);
+        cout<<primary.getString2()<<endl;}
+        else {primary=secondary.horizontalConcatenation(primary,secondary);}
+        start=End;
+    //cout<<(m2.getString2())<<endl<<instruction.substr(start)<<endl;
+        instruction=(primary.getString2())+instruction.substr(start+1);
+         test(instruction);
     }
+
 }
 
 
@@ -72,7 +83,7 @@ bool replaceString(string& mainString , string& replacedString , string& replaci
 int main(int argc, char*argv[])
 {
   Matlab matlab;
-string s ="[[1.2 2.4 ; 3.2 , 1.1]  [2.6 0;2 4]]";
+string s ="[[1.2 2.4 ; 3.2 , 1.1] [2.6 0;2 4] [1 1;1 1] [2 2;2 2]]";
    string r="[1.2 3.2],[2.2];[2.0 2.0 2.0]";
     string A="[[1.2 3.2], [2.2] \n [2.0 2.0 2.0] ]";
   /* expected output
