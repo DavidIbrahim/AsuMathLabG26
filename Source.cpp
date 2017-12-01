@@ -203,7 +203,7 @@ int main()
 {
 
     Matlab x ;
-    cout<<x.getStringValue("(2*(((2+3)*2)-3))")<<endl;
+    cout<<x.getStringValue("((2+1)/4+(3+5)/(2+5))")<<endl;
 
 
 

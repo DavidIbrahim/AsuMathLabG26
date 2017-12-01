@@ -19,7 +19,7 @@ class Matlab
         string getReadyInstruction(string instruction,vector<Matlab> savedMatrices);
         void trimAllSpaces(string &s);
         string dealWithBrackets(string complexString);
-        int findTheClosingBracket(string s);
+        int findTheClosingBracket(string s,char openingBracket);
     public:
         string calcSimpleExpression(string s);
         Matlab();

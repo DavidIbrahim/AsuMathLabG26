@@ -207,7 +207,8 @@ string Matlab:: dealWithBrackets(string inputString){
  int poss = inputString.find('(');
 	if (poss != string::npos)
 	{
-		int pos2 = findTheClosingBracket(inputString);
+		int pos2 = findTheClosingBracket(inputString,'(');
+
 		string stringInsideTheBrackets = inputString.substr(poss + 1, pos2-poss-1);
         if(stringInsideTheBrackets.find('(')!=string::npos){
                 string temp = dealWithBrackets(stringInsideTheBrackets);
@@ -390,13 +391,23 @@ string beforenumber = copySbefore.substr(copySbefore.length()-count,count);
 * @brief : private Helper function for dealing with brackets (2+5)/(5-2)
 *
 */
-int Matlab::findTheClosingBracket(string s){
+int Matlab::findTheClosingBracket(string s,char openingBracket){
     int count =0;
-
-    for(int i =0 ; i<s.size()-1;i++) {
-        if(s.find('('),i) count++;
-        if(s.find(')'),i) count--;
-        if(count==0) return i;
+    char closingBracket;
+    if (openingBracket == '(')
+            closingBracket=')';
+    else if (openingBracket == '[')
+            closingBracket=']';
+    else throw ("accepted openingBracets are '(' or '[' only");
+    bool foundFirstBracket = false;
+    for(int i =0 ; i<s.size();i++) {
+        if(s[i]==openingBracket){
+            count++;
+            foundFirstBracket = true;
+        }
+        if(s[i]==closingBracket)
+        count--;
+        if(count==0&&foundFirstBracket) return i;
     }
     return string::npos;
 }
