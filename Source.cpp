@@ -203,7 +203,8 @@ int main()
 {
 
     Matlab x ;
-    cout<<x.getStringValue("((2+1)/4+(3+5)/(2+5))")<<endl;
+    //error in : ((5+2)^((9+1)*3))-(5*(3-2)/3)/((5+6)^4)
+    cout<<x.getStringValue("((5+2)^((9+1)*3))-(5*(3-2)/3)/((5+6)^4)")<<endl;
 
 
 

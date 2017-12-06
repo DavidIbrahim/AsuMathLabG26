@@ -193,9 +193,9 @@ void Matlab:: trimAllSpaces(string & s)
 
 string Matlab::getStringValue(string complexString)
 {   trimAllSpaces(complexString);
-    bool isThereBrackets = true;
+
     complexString=dealWithBrackets(complexString);
-//    complexString = calcSimpleExpression(complexString);
+    complexString = calcSimpleExpression(complexString);
     return complexString;
 }
 
@@ -205,12 +205,12 @@ string Matlab::getStringValue(string complexString)
 
 string Matlab:: dealWithBrackets(string inputString){
  int poss = inputString.find('(');
-	if (poss != string::npos)
+	if (poss != string::npos)        //only enter if there's "(" else return input string
 	{
 		int pos2 = findTheClosingBracket(inputString,'(');
 
 		string stringInsideTheBrackets = inputString.substr(poss + 1, pos2-poss-1);
-        if(stringInsideTheBrackets.find('(')!=string::npos){
+        if(stringInsideTheBrackets.find('(')!=string::npos){            // this is to deal with brackets inside each others like ((5+2)(5*3)*4)
                 string temp = dealWithBrackets(stringInsideTheBrackets);
                 replaceString(inputString,stringInsideTheBrackets,temp);
                 inputString = dealWithBrackets(inputString);
@@ -219,7 +219,10 @@ string Matlab:: dealWithBrackets(string inputString){
             string calculatedValue = calcSimpleExpression(stringInsideTheBrackets);
             stringInsideTheBrackets = "("+stringInsideTheBrackets+")";
             replaceString(inputString,stringInsideTheBrackets,calculatedValue);
-            return inputString;
+            poss =  inputString.find('(');
+            if(poss != string::npos)
+                return dealWithBrackets(inputString);           // this is to deal with the brackets besides each other like (5+2)-(5/5)
+            else return inputString;
 
            }
  	}
@@ -398,7 +401,9 @@ int Matlab::findTheClosingBracket(string s,char openingBracket){
             closingBracket=')';
     else if (openingBracket == '[')
             closingBracket=']';
-    else throw ("accepted openingBracets are '(' or '[' only");
+   else {
+        throw ("accepted openingBracets are '(' or '[' only");
+    }
     bool foundFirstBracket = false;
     for(int i =0 ; i<s.size();i++) {
         if(s[i]==openingBracket){
