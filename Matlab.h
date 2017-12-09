@@ -31,7 +31,7 @@ class Matlab
         string getName(){return name;}
         string getString();
          string getInstructionWithoutConcatenation(string instruction);
-         string getInstructionWithoutMatlabNames(string instruction,vector<Matlab> savedMatrices);
+         string getInstructionWithoutMatlabNames(string instruction,vector<Matlab>& savedMatrices);
         virtual ~Matlab();
 
     protected:
