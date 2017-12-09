@@ -2,6 +2,7 @@
 #define MATLAB_H
 #include"CMatrix.h"
 #include<vector>
+#include<sstream>
 
 ///The object of this class consists of the matrix and it's name
 class Matlab
@@ -17,7 +18,8 @@ class Matlab
         bool checkStringForMatrix(string complexString);
         string getStringValue(string complexString);
         string getStringMatrix(string complexString);
-        string getReadyInstruction(string instruction,vector<Matlab> savedMatrices);
+        string getInstructionWithoutExpressions(string instruction);
+        string getReadyInstruction(string instruction,vector<Matlab>& savedMatrices);
     public:
         enum{};
         Matlab();
