@@ -17,9 +17,9 @@
 #include<math.h>
 #include <iomanip>
 #include <limits>
-
-
-void reverse(string & s)
+  
+  
+  void reverse(string & s)
 {   char temp;
 	for (int  i = 0 , j = s.length()-1 ; i < s.length()/2; i++ , j--)
 	{
@@ -29,23 +29,51 @@ void reverse(string & s)
 	}
 }
 
-/** @brief replace a substring in a string with another one .
+void Matlab:: trimAllSpaces(string & s)
+{   //	s.erase(s.begin(),std::find_if(s.begin(), s.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));//l. only
+    //	s.erase( std::find_if(s.rbegin(), s.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(),  s.end());//r. only
+	for (int i = 0; i < s.length(); i++){
+            if (s[i] == ' ') {
+            s.erase( i,1 );
+            i--;
+        }
+
+    }
+
+/** @brief replace a substring in a  string with another substring .
  *
  * @param mainString the string that will be changed;
  * @param replacedString ... this is a string which should be a substring of the mainString and that will be replaced
  *@param replacingString ... this is the string that will be a substring of the mainString
+ *@param int from  ... if u want to replace the string which found from a specific index i.e for not first concurrence
+ *        by default it is set to 0 i.e it will replace the first concurrence of the substring
  *@return False if couldn't find the replacedString in the mainString and True otherwise
  */
 
-bool replaceString(string& mainString , string& replacedString , string& replacingString){
+bool replaceString(string& mainString , string replacedString , string replacingString,int from = 0){
 
-    size_t start_pos = mainString.find(replacedString);
+    size_t start_pos = mainString.find(replacedString,from);
     if(start_pos == std::string::npos)
         return false;
     mainString.replace(start_pos, replacedString.length(), replacingString);
-        return true;
+    return true;
 
 }
+
+
+/*
+Matlab getMatlab(string name,vector<Matlab> & savedMatrices){
+
+     for(int i =0; i<savedMatrices.size(); i++) {
+       if(savedMatrices[i].getName()==name)
+        return savedMatrices[i];
+    }
+
+
+ }*/
+
+
+
 
 /** @brief remove any matlab names and replace them by their matrices
  *
@@ -54,8 +82,39 @@ bool replaceString(string& mainString , string& replacedString , string& replaci
  * @return the instruction as a string but with matrix instead of matlab names ex: A=[[2.0 3.0],[1.2 2.3]];
  */
 
-string Matlab::getInstructionWithoutMatlabNames(string instruction,vector<Matlab> savedMatrices)
+string Matlab::getInstructionWithoutMatlabNames(string instruction,vector<Matlab>& savedMatrices)
 {
+      string notMatlabNames = "0123456789 ,;[]";
+      string notVariableNames =" ;[],()+-%^*/.";
+    for(int i =0;i<savedMatrices.size(); i++){
+        int position = 1;
+        while(true){
+
+            string currentName = savedMatrices[i].name;
+            position = instruction.find(currentName,position);
+            if(position != std::string::npos){
+                char afterVariableName = instruction[position+currentName.length()];
+                char beforeVariableName = instruction[position-1];
+                if((notVariableNames.find(afterVariableName)!=string::npos
+                    || afterVariableName =='\0')&&  // ea3ny law el 7rf el abl wa b3d el name
+                   notVariableNames.find(beforeVariableName)!=string::npos){  // tl3o 7aga msh bt3'erle fe asm el variable
+                                                                            //eb2a dh aked hwa el variable el mtsgl 3ndy fe
+                                                                              //current name ... 3lshan mmkn ekon currentName = s
+                    replaceString(instruction,currentName,savedMatrices[i].matrix.getString2(),position)   ;
+                                                                              //wa ala2e el s dh gwa sin() bs dh msh variable bta3y
+                   }
+                position++;
+            }
+            else{
+                break;
+            }
+
+        }
+    }
+
+
+     return instruction;
+
 
 }
 /** @brief remove any specialMatrix in the input string and replace it with it's string
@@ -74,14 +133,45 @@ string Matlab::getInstructionWithoutSpecialMatrices(string instruction)
  * @return the instruction as a string without any concatenation ex: A=[1.2 3.2 2.2;2.0 2.0 2.0];
  * note: horizontal concatenation occurs when there is space or ','
  * note: vertical concatenation occurs when there is ';' or a new line
+ * note: this function throws a syntax error message
  * hint: there is a horizontalConcatenation and verticalConcatenation fns in Cmatrix so you can convert the string to matrix then send it to it.
  */
 
 string Matlab::getInstructionWithoutConcatenation(string instruction)
 {
 
-    CMatrix m(instruction);
-    return m.getString2();//returns the string with  concatinations removed.
+    CMatrix primary;
+    size_t Begin,End;
+    size_t start=0;
+    Begin =instruction.find("[",start);// first occurence of "[".
+    End =instruction.find("]",start+1);//first occurence of "]"
+    string s=instruction.substr(Begin,(End+1)-Begin);// string between "[ ]"
+    primary=(s);
+    start=End;// new starting point to search from the end of first matrix.
+    Begin =instruction.find("[",start);
+    if(Begin==std::string::npos)//to check if its only one matrix.
+           return s;
+    else
+    {
+        End =instruction.find("]",start+1);
+        s=instruction.substr(Begin,(End+1)-Begin);
+        CMatrix secondary(s);
+        string s1=instruction.substr((start+1),(Begin-(start+1)));// the substring between the two matrices that determines the type of concatination between them.
+            for(unsigned int i=0;i<s1.length();i++)// to check for syntax errors between matrices.
+            {
+                if ((s1[i])!=(' ')&&(s1[i])!=(',')&&(s1[i])!=(';')&&(s1[i])!=('\n')&&(s1.find("\r\n"))==std::string::npos)
+                 {throw ("Syntax error");}
+            }
+        if ((s1.find(";"))!=std::string::npos||(s1.find("\r\n"))!=std::string::npos||(s1.find("\n"))!=std::string::npos)//to check if its horizontal or vertical conc.
+        {primary=secondary.verticalConcatenation(primary,secondary);}
+        else if((s1.find(","))!=std::string::npos||(s1.find(" "))!=std::string::npos)
+            {primary=secondary.horizontalConcatenation(primary,secondary);}
+        else
+            {throw ("Syntax error");}//this condition checks if there's no spaces between matrices at all ([][]).
+        start=End;
+        instruction=(primary.getString2())+instruction.substr(start+1);
+        return getInstructionWithoutConcatenation(instruction);
+    }
 
 }
 /** @brief check if there are matrices in this string
@@ -95,6 +185,8 @@ bool Matlab::checkStringForMatrix(string complexString)
 {
 
 }
+
+ 
 /** @brief simplify the expression to the final matrix string
  *
  * @param complexString it is a string of matrix operations without any matlab names or special matrix ex: 1.2+[1.0 2.0]*2+sin([3.3 2.2])
@@ -106,7 +198,44 @@ string Matlab::getStringMatrix(string complexString)
 {
 
 }
+/** @brief this fn replace any expression in the instruction by it's equivalent value or matrix
+ *
+ * @param instruction the full instruction but without Matlab names or special matrix ex: A=[6+2 2+[1 2 3]];
+ * @return the instruction without any expressions ex: A=[8 [3 4 5]];
+ *
+ */
 
+string Matlab::getInstructionWithoutExpressions(string instruction)
+{
+    istringstream is;
+    is.str(instruction);
+    char c; //to loop each character in the instruction
+    string s;
+    string temp; //stores the equivalent value or matrix of the string
+    while(is.get(c))
+    {
+        if(c!='['&&c!=']'&&c!=','&&c!=';'&&c!=' ')
+        {
+            s+=string(1,c);
+        }
+        else
+        {
+            if(checkStringForMatrix(s))//the string contains a matrix
+            {
+                temp=getStringMatrix(s);
+                replaceString(instruction,s,temp);
+            }
+            else //the string contains no matrix
+            {
+                temp=getStringValue(s);
+                replaceString(instruction,s,temp);
+            }
+            s="";
+            temp="";
+        }
+    }
+    return instruction;
+}
 /**
 * this fn takes the full instruction as it is ex: B = [1.2 2.3 A;[1.3 2.4;4.6 1.3],[3.2;7.8]];
 * and returns it ready for cmatrix constructor ex: B= [1.2 2.3 3.0;1.3 2.4 3.2; 4.6 1.3 7.8];
@@ -115,9 +244,13 @@ string Matlab::getStringMatrix(string complexString)
 * @param savedMatrices the vector where all Matlab objects are stored
   @return a simple instruction without any Matlab names in between, concatenations or expressions.
 */
-string Matlab::getReadyInstruction(string instruction,vector<Matlab> savedMatrices)
+string Matlab::getReadyInstruction(string instruction,vector<Matlab>& savedMatrices)
 {
-
+    instruction=getInstructionWithoutMatlabNames(instruction,savedMatrices);
+    instruction=getInstructionWithoutSpecialMatrices(instruction);
+    instruction=getInstructionWithoutExpressions(instruction);
+    instruction=getInstructionWithoutConcatenation(instruction);
+    return instruction;
 }
 
 Matlab::Matlab(){
@@ -144,6 +277,7 @@ Matlab::Matlab(string instruction, vector<Matlab>& myVector)
 }
 
 
+
 Matlab::~Matlab()
 {
     //dtor
@@ -168,32 +302,20 @@ string Matlab::getString(){
 
     return name+" = "+matrix.getString2();
 }
-
-/**
-* @brief remove all white spaces from the parameter s
-* @param string s where all white spaces will be removed from
-*/
-void Matlab:: trimAllSpaces(string & s)
-{   //	s.erase(s.begin(),std::find_if(s.begin(), s.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));//l. only
-    //	s.erase( std::find_if(s.rbegin(), s.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(),  s.end());//r. only
-	for (int i = 0; i < s.length(); i++){
-            if (s[i] == ' ') {
-            s.erase( i,1 );
-            i--;
-        }
-
-    }
-}
-/** @brief simplify the expression to the final string value
+  
+ /** @brief simplify the expression to the final string value
  *
  * @param complexString it is a string of 1D expression, contains no matrices ex: 1+2/5*sin(2)
  * @return the final value of the expression as a string ex: 1.3637
  *
  */
 
+
 string Matlab::getStringValue(string complexString)
 {
-    trimAllSpaces(complexString);
+    
+  
+  trimAllSpaces(complexString);
     //make sure all operations are in the form expected
 	//transform(s.begin(), s.end(), s.begin(), ::tolower);
 
