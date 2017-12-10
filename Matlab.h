@@ -12,7 +12,7 @@ class Matlab
         string name;
 
         //bool checkIfSpecialMatrix(string instruction);
-        string getInstructionWithoutMatlabNames(string instruction,vector<Matlab>& savedMatrices);
+
         string getInstructionWithoutSpecialMatrices(string instruction);
 
         bool checkStringForMatrix(string complexString);
@@ -21,12 +21,17 @@ class Matlab
         string getInstructionWithoutExpressions(string instruction);
         string getReadyInstruction(string instruction,vector<Matlab>& savedMatrices);
     public:
+        enum{};
         Matlab();
         Matlab(const Matlab& x);
+        //static Matlab getMatlabFromVector(string name, vector<Matlab> & matlabObjects)
         Matlab(string name ,const CMatrix &matrix);
         Matlab(string instruction,vector<Matlab>& myVector);
+        CMatrix getMatrix(){return matrix;}
+        string getName(){return name;}
         string getString();
          string getInstructionWithoutConcatenation(string instruction);
+         string getInstructionWithoutMatlabNames(string instruction,vector<Matlab>& savedMatrices);
         virtual ~Matlab();
 
     protected:
