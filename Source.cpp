@@ -223,10 +223,9 @@ int main()
 
     Matlab x ;
     //error in : ((5+2)^((9+1)*3))-(5*(3-2)/3)/((5+6)^4)
-    cout<<x.getStringValue("((5+2)*((9+1)*3))+(5*(3-2)/3)*((5+6)^2) *(5*(2+6))")<<endl;
-    cout<<x.solvetrigno("5+4+3+sin(4+5)+6");
+   cout<<x.getStringValue("sin(1+0.1)+6+tan(0.1)-cos(2*((6+2)^2))+8")<<endl;
+   // cout<<x.solvetrignometry("");
 
 
     return 0;
 }
-

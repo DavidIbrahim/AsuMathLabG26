@@ -199,7 +199,7 @@ string Matlab::getStringValue(string complexString)
 
 
     // uncomment this to call the values of any sin or cos
-    //complexString = solvetrigno (   complexString);//
+    complexString = solvetrignometry (   complexString);//
 
 
     complexString=dealWithBrackets(complexString);
@@ -437,7 +437,7 @@ int Matlab::findTheClosingBracket(string s , char openingBracket)
 
 
 
-string Matlab::solvetrigno(string s)
+string Matlab::solvetrignometry(string s)
 {
 
 	string constants[3] = { "sin" , "cos" , "tan"  };
@@ -449,17 +449,23 @@ string Matlab::solvetrigno(string s)
 		if (pos != string::npos)
 		{
 //to get the function
+            char sign ;
+            if(pos>0) sign = s[pos-1];
+            else {
+                sign = '\0';
+            }
+
      		string strafter = s.substr(pos+3, s.length()-pos);//(4+5)+6
             string Sbefore = s.substr(  0 ,pos -1 );//5+4+3+
             // get the position of the in function
-			int poss = strafter.find('(');//0
-			int pos2 = findTheClosingBracket(strafter,'(');//4
+			int startingPosisition= strafter.find('(');//0
+			int endingPosition = findTheClosingBracket(strafter,'(');//4
 
 //to return it back later
-			string Safter = strafter.substr( pos2 , strafter.length()-pos2 );//+6
+			string Safter = strafter.substr( endingPosition+1 , strafter.length()-endingPosition );//+6
 // get the brackets alone and get their  value
-			string calc = s.substr( poss , pos2 );//(4+5)
-            calc = dealWithBrackets( calc );//9
+			string calc = strafter.substr( startingPosisition+1 , endingPosition-startingPosisition-1 );//(4+5)
+            calc = getStringValue( calc );//9
 
             // get the number in double
             stringstream SSafter, ssresult ;
@@ -477,7 +483,14 @@ switch (i) {
             ssresult << Dresult;//.1564
 			ssresult >>std::fixed >> Sresult;//.1564
         // put the string back together
-            s = Sbefore + Sresult + Safter;//5+4+3+.1564+6
+        if(sign == '-'||sign == '+'){
+            char newSign = ((Dresult >  0 && sign == '+')||(Dresult<0 && sign =='-') ) ? '+' : '-';
+            if(Dresult<0) Sresult.erase(0,1);                                   // to delete the negative sign
+            s = Sbefore + newSign +Sresult + Safter;//5+4+3+.1564+6
+        }
+        else {
+            s = Sresult+Safter;
+        }
         // search again
 			i--;
 		}
