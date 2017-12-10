@@ -1,5 +1,45 @@
-#include "Matlab.h"
+#include<stdio.h>
 #include <iostream>
+#include"CMatrix.h"
+#include <fstream>
+#include <string>
+#include <vector>
+#include <string.h>
+#include <stdlib.h>
+#include "Matlab.h"
+
+#include<string>
+#include<algorithm>
+#include<functional>
+#include<cctype>
+#include<locale>
+#include<sstream>
+#include<math.h>
+#include <iomanip>
+#include <limits>
+  
+  
+  void reverse(string & s)
+{   char temp;
+	for (int  i = 0 , j = s.length()-1 ; i < s.length()/2; i++ , j--)
+	{
+		temp = s[j];
+		s[j] = s[i];
+		s[i] = temp;
+	}
+}
+
+void Matlab:: trimAllSpaces(string & s)
+{   //	s.erase(s.begin(),std::find_if(s.begin(), s.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));//l. only
+    //	s.erase( std::find_if(s.rbegin(), s.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(),  s.end());//r. only
+	for (int i = 0; i < s.length(); i++){
+            if (s[i] == ' ') {
+            s.erase( i,1 );
+            i--;
+        }
+
+    }
+
 /** @brief replace a substring in a  string with another substring .
  *
  * @param mainString the string that will be changed;
@@ -145,17 +185,8 @@ bool Matlab::checkStringForMatrix(string complexString)
 {
 
 }
-/** @brief simplify the expression to the final string value
- *
- * @param complexString it is a string of 1D expression, contains no matrices ex: 1+2/5*sin(2)
- * @return the final value of the expression as a string ex: 1.3637
- *
- */
 
-string Matlab::getStringValue(string complexString)
-{
-
-}
+ 
 /** @brief simplify the expression to the final matrix string
  *
  * @param complexString it is a string of matrix operations without any matlab names or special matrix ex: 1.2+[1.0 2.0]*2+sin([3.3 2.2])
@@ -271,3 +302,325 @@ string Matlab::getString(){
 
     return name+" = "+matrix.getString2();
 }
+  
+ /** @brief simplify the expression to the final string value
+ *
+ * @param complexString it is a string of 1D expression, contains no matrices ex: 1+2/5*sin(2)
+ * @return the final value of the expression as a string ex: 1.3637
+ *
+ */
+
+
+string Matlab::getStringValue(string complexString)
+{
+    
+  
+  trimAllSpaces(complexString);
+    //make sure all operations are in the form expected
+	//transform(s.begin(), s.end(), s.begin(), ::tolower);
+
+
+    // uncomment this to call the values of any sin or cos
+    complexString = solvetrignometry (   complexString);//
+
+
+    complexString=dealWithBrackets(complexString);
+
+    complexString = calcSimpleExpression(complexString);
+    return complexString;
+}
+
+/**
+* @brief helper method for getStringValue
+*/
+
+string Matlab:: dealWithBrackets(string inputString){
+
+ int poss = inputString.find('(');
+
+	if (poss != string::npos)        //only enter if there's "(" else return input string
+	{
+		int pos2 = findTheClosingBracket(inputString,'(');
+
+		string stringInsideTheBrackets = inputString.substr(poss + 1, pos2-poss-1);
+
+        if(stringInsideTheBrackets.find('(')!=string::npos)
+            {            // this is to deal with brackets inside each others like ((5+2)(5*3)*4)
+                string temp = dealWithBrackets(stringInsideTheBrackets);
+                replaceString(inputString,stringInsideTheBrackets,temp);
+                inputString = dealWithBrackets(inputString);
+            }
+
+            else
+                {
+            string calculatedValue = calcSimpleExpression(stringInsideTheBrackets);
+            stringInsideTheBrackets = "("+stringInsideTheBrackets+")";
+            replaceString(inputString,stringInsideTheBrackets,calculatedValue);
+            poss =  inputString.find('(');
+            if(poss != string::npos)
+                return dealWithBrackets(inputString);           // this is to deal with the brackets besides each other like (5+2)-(5/5)
+            else
+                return inputString;
+
+                 }
+ 	}
+ 	//if there's no brackets return inputString
+ 	return inputString;
+
+}
+
+
+// TODO (Rizk#9#12/01/17): Fix Bugs ...
+//
+
+
+string Matlab::calcSimpleExpression(string s){
+
+
+	string operators[8] = { "^","*", "/","+","-" };
+	char numbers [11] = {'0','1','2','3','4','5','6','7','8','9','.'};
+    if((s[0]=='+'||s[0]=='-'))
+        s='0'+s;
+        for (int i = 0; i <5; i++)
+	{
+		int pos = s.find(operators[i]);
+		if (pos != string::npos)
+		{
+
+            s.erase(pos, 1);
+			double   Dafter , Dbefore, Dresult;
+			string   Safter , Sbefore, Sresult;
+			Safter =  s.substr(pos, s.length() - pos);
+			Sbefore = s.substr(0, pos);
+			// i need here to look at the - number problems call me i think i have a solution
+			int count =0,flag=0,end=12;
+			for(int j=0; // that is the for loop i told you about j<Safter.length()//there might be a +/- 1
+			         ;j++)
+                {
+                    for(int d=0;d<end;d++)
+                        {
+                            if(Safter[j]==numbers[d])
+                            {
+                                count++;
+                                if(d==10)
+                                    end=11;
+                                flag=1;
+                                break;
+                                }
+                                }
+                  if(flag==0)
+                        break;
+                  flag = 0 ;
+
+                }
+
+			stringstream SSbefore, SSafter, ssresult , temp;
+		  // for after
+		  //turn into double
+			SSafter << Safter;//puts after in ss form
+			SSafter >>Dafter;//takes double i want (after)
+//never mind the next line
+	//turn into string	//		ostringstream strss;      //      strss <<(Dafter);   //	string strr = strss.str();
+            //gets the after ready
+            Safter.erase( 0,count);
+/*
+
+            // for before
+            // turn into double
+			reverse(Sbefore);
+			SSbefore << Sbefore;
+			SSbefore >> fixed >> Dbefore;
+// turn into string
+			ostringstream strs;
+            strs << fixed<<Dbefore;
+            string str = strs.str();
+         // reverse back
+            reverse(str);
+// urn into actual double
+            temp << std::fixed<<str;
+            temp >> std::fixed>>Dbefore;
+
+			Sbefore.erase(0,str.length());
+			reverse(Sbefore);
+
+//reverse(Sbefore);
+*/
+//for number before
+count =0,flag=0,end=12;
+			for(int j=Sbefore.length(); // that is the for loop i told you about j>=0.length()//there might be a +/- 1
+			   ;j--)
+                {
+                    for(int d=0;d<end;d++)
+                {
+                    if(Sbefore[j]==numbers[d])
+                    { count++;
+                    if(j==10)end=11;
+                    flag=1;
+                    break;
+
+                                        }
+
+
+                }
+                  if(flag==0)
+                        break;
+                  flag = 0 ;
+
+                }
+count--;
+string copySbefore = Sbefore ;
+//to get before ready
+reverse(Sbefore);
+Sbefore.erase( 0,count);
+reverse(Sbefore);
+//to get the string of before
+string beforenumber = copySbefore.substr(copySbefore.length()-count,count);
+//to get the before as a number
+            SSbefore << beforenumber;
+			SSbefore >> fixed >> Dbefore;
+// to calc.
+			switch (i) {
+			case 0: Dresult = pow(Dbefore, Dafter); break;
+			case 1: Dresult = Dbefore * Dafter; break;
+			case 2: Dresult = Dbefore / Dafter; break;
+			case 3: Dresult = Dbefore + Dafter; break;
+			case 4: Dresult = Dbefore - Dafter; break;
+				//case 6: result = before % after; break;
+			}
+			// to turn answer into double
+			ssresult << Dresult;
+			ssresult >>std::fixed >> Sresult;
+			//to get all back together
+			s = Sbefore + Sresult + Safter;
+			pos = string::npos;
+			i--;
+		}
+
+	}
+
+    return s;
+
+
+
+}
+
+/**
+* @brief : private Helper function for dealing with brackets (2+5)/(5-2)
+*
+*/
+int Matlab::findTheClosingBracket(string s , char openingBracket)
+{
+
+    int count =0;
+    char closingBracket;
+
+    if (openingBracket == '(')
+            closingBracket=')';
+
+    else if (openingBracket == '[')
+            closingBracket=']';
+
+   else {
+        throw ("accepted openingBracets are '(' or '[' only");
+        }
+
+    bool foundFirstBracket = false;
+
+    for(int i =0 ; i<s.size();i++)
+        {
+        if(s[i]==openingBracket){
+             count++;
+             foundFirstBracket = true;
+                                }
+        if(s[i]==closingBracket)
+             count--;
+        if(count == 0 && foundFirstBracket)
+             return i;
+    }
+    return string::npos;
+}
+
+
+
+
+
+
+
+
+			// here you need to use your function of find the bracket then get its value by my function then you need to
+			// send its  value back here to me to get its sin or cos
+			// the string temp is the string that you search for its first "(" and till the ")"
+			// and solve it like a normal function then send the value here as a string in  temp3
+
+
+
+
+//            s =	 NormalOperationsAndBrackets(s);
+
+
+
+string Matlab::solvetrignometry(string s)
+{
+
+	string constants[3] = { "sin" , "cos" , "tan"  };
+
+	for (int i = 0; i < 3 ; i++)
+	{
+	    //ex: s= "5+4+3+sin(4+5)+6"
+	    int pos = s.find(constants[i]);//finds the first letter s here pos = 6
+		if (pos != string::npos)
+		{
+//to get the function
+            char sign ;
+            if(pos>0) sign = s[pos-1];
+            else {
+                sign = '\0';
+            }
+
+     		string strafter = s.substr(pos+3, s.length()-pos);//(4+5)+6
+            string Sbefore = s.substr(  0 ,pos -1 );//5+4+3+
+            // get the position of the in function
+			int startingPosisition= strafter.find('(');//0
+			int endingPosition = findTheClosingBracket(strafter,'(');//4
+
+//to return it back later
+			string Safter = strafter.substr( endingPosition+1 , strafter.length()-endingPosition );//+6
+// get the brackets alone and get their  value
+			string calc = strafter.substr( startingPosisition+1 , endingPosition-startingPosisition-1 );//(4+5)
+            calc = getStringValue( calc );//9
+
+            // get the number in double
+            stringstream SSafter, ssresult ;
+            string Sresult;
+            double number ,Dresult  ;
+            SSafter << calc;//9
+			SSafter >> number;//9
+        // get the trig of it
+switch (i) {
+			case 0: Dresult = sin(number); break;//sin(9) = .1564....
+			case 1: Dresult = cos(number); break;
+			case 2: Dresult = tan(number); break;
+            }
+        // return the answer to string
+            ssresult << Dresult;//.1564
+			ssresult >>std::fixed >> Sresult;//.1564
+        // put the string back together
+        if(sign == '-'||sign == '+'){
+            char newSign = ((Dresult >  0 && sign == '+')||(Dresult<0 && sign =='-') ) ? '+' : '-';
+            if(Dresult<0) Sresult.erase(0,1);                                   // to delete the negative sign
+            s = Sbefore + newSign +Sresult + Safter;//5+4+3+.1564+6
+        }
+        else {
+            s = Sresult+Safter;
+        }
+        // search again
+			i--;
+		}
+
+
+	}
+
+
+	return  s;
+}
+

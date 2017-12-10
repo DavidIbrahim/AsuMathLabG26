@@ -1,3 +1,4 @@
+
 #ifndef MATLAB_H
 #define MATLAB_H
 #include"CMatrix.h"
@@ -16,10 +17,12 @@ class Matlab
         string getInstructionWithoutSpecialMatrices(string instruction);
 
         bool checkStringForMatrix(string complexString);
-        string getStringValue(string complexString);
         string getStringMatrix(string complexString);
         string getInstructionWithoutExpressions(string instruction);
         string getReadyInstruction(string instruction,vector<Matlab>& savedMatrices);
+        void trimAllSpaces(string &s);
+        string dealWithBrackets(string complexString);
+        int findTheClosingBracket(string s,char openingBracket);
     public:
         enum{};
         Matlab();
@@ -33,10 +36,15 @@ class Matlab
          string getInstructionWithoutConcatenation(string instruction);
          string getInstructionWithoutMatlabNames(string instruction,vector<Matlab>& savedMatrices);
         virtual ~Matlab();
+        string solvetrignometry(string s) ;
+        string calcSimpleExpression(string s);
+       string getStringValue(string complexString);
 
+      
     protected:
 
 
 };
 
 #endif // MATLAB_H
+
