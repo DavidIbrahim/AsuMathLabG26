@@ -10,11 +10,14 @@ private:
 
     static bool fixMatrix(CMatrix &m,int r,int c);
     static bool checkIfZeroMatrix(CMatrix &m);
+
   public:
 
   CMatrix();
   double getDeterminant2();
   double getDeterminant3();
+  CMatrix horizontalConcatenation(CMatrix &m1,CMatrix &m2);
+   CMatrix verticalConcatenation(CMatrix &m1,CMatrix &m2);
   ~CMatrix();
   enum MI { MI_ZEROS, MI_ONES, MI_EYE, MI_RAND, MI_VALUE };
 
