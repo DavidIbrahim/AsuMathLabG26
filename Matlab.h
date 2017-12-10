@@ -8,6 +8,7 @@ class Matlab
 {
     private:
         CMatrix matrix;
+
         string name;
 
         //bool checkIfSpecialMatrix(string instruction);
@@ -21,6 +22,7 @@ class Matlab
         string dealWithBrackets(string complexString);
         int findTheClosingBracket(string s,char openingBracket);
     public:
+        string solvetrigno(string s) ;
         string calcSimpleExpression(string s);
         Matlab();
         Matlab(const Matlab& x);
