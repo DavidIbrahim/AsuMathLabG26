@@ -55,7 +55,8 @@ string Matlab::getInstructionWithoutMatlabNames(string instruction,vector<Matlab
             if(position != std::string::npos){
                 char afterVariableName = instruction[position+currentName.length()];
                 char beforeVariableName = instruction[position-1];
-                if(notVariableNames.find(afterVariableName)!=string::npos &&  // ea3ny law el 7rf el abl wa b3d el name
+                if((notVariableNames.find(afterVariableName)!=string::npos
+                    || afterVariableName =='\0')&&  // ea3ny law el 7rf el abl wa b3d el name
                    notVariableNames.find(beforeVariableName)!=string::npos){  // tl3o 7aga msh bt3'erle fe asm el variable
                                                                             //eb2a dh aked hwa el variable el mtsgl 3ndy fe
                                                                               //current name ... 3lshan mmkn ekon currentName = s
