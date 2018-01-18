@@ -41,6 +41,13 @@ void printVector( vector<Matlab>& myVector){
 
 int main(int argc, char*argv[])
 {
+
+    Matlab x ;
+    string e = "     not here";
+    cout<<x.checkStringForMatrix(e)<<endl;
+
+
+
     /*  a brief example on how to use vectors  */
 
     vector<Matlab> myVector;   //initialized a vector  for matlab objects

@@ -7,7 +7,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include "Matlab.h"
-
 #include<string>
 #include<algorithm>
 #include<functional>
@@ -17,8 +16,19 @@
 #include<math.h>
 #include <iomanip>
 #include <limits>
-  
-  
+
+
+/**
+ *  @brief: it reverses the string
+ *
+ *  @brief helper method for getStringValue
+ *
+ *  @return: it takes the string by refrence so return is void
+ */
+
+
+
+
   void reverse(string & s)
 {   char temp;
 	for (int  i = 0 , j = s.length()-1 ; i < s.length()/2; i++ , j--)
@@ -28,6 +38,17 @@
 		s[i] = temp;
 	}
 }
+
+
+/** @brief: it trims all the spaces of a given string .
+ *
+ *  @brief helper method for getStringValue
+ *
+ *  @return: it takes the string by refrence so return is void
+ */
+
+
+
 
 void Matlab:: trimAllSpaces(string & s)
 {   //	s.erase(s.begin(),std::find_if(s.begin(), s.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));//l. only
@@ -39,6 +60,8 @@ void Matlab:: trimAllSpaces(string & s)
         }
 
     }
+}
+
 
 /** @brief replace a substring in a  string with another substring .
  *
@@ -183,10 +206,18 @@ string Matlab::getInstructionWithoutConcatenation(string instruction)
 
 bool Matlab::checkStringForMatrix(string complexString)
 {
+    int position=-1 ;
+    //position can never return with a negative sign
+    position = complexString.find("[");
+    //getting the position of [ which indicates a matrix is in that string
+    if(position>=0)
+        return 1;
+    return 0;
+
+
 
 }
 
- 
 /** @brief simplify the expression to the final matrix string
  *
  * @param complexString it is a string of matrix operations without any matlab names or special matrix ex: 1.2+[1.0 2.0]*2+sin([3.3 2.2])
@@ -302,7 +333,7 @@ string Matlab::getString(){
 
     return name+" = "+matrix.getString2();
 }
-  
+
  /** @brief simplify the expression to the final string value
  *
  * @param complexString it is a string of 1D expression, contains no matrices ex: 1+2/5*sin(2)
@@ -313,8 +344,8 @@ string Matlab::getString(){
 
 string Matlab::getStringValue(string complexString)
 {
-    
-  
+
+
   trimAllSpaces(complexString);
     //make sure all operations are in the form expected
 	//transform(s.begin(), s.end(), s.begin(), ::tolower);
@@ -331,7 +362,10 @@ string Matlab::getStringValue(string complexString)
 }
 
 /**
+*
 * @brief helper method for getStringValue
+* @brief it extracts what is inside the () and deals with the fact that their can be brackets inside a bracket
+*
 */
 
 string Matlab:: dealWithBrackets(string inputString){
@@ -372,6 +406,14 @@ string Matlab:: dealWithBrackets(string inputString){
 
 // TODO (Rizk#9#12/01/17): Fix Bugs ...
 //
+/**
+*
+* @brief helper method for getStringValue
+* @brief it calculates the value of a give string that has no any other thing than +-*^/
+* @return the value as a string
+*
+*/
+
 
 
 string Matlab::calcSimpleExpression(string s){
@@ -504,10 +546,12 @@ string beforenumber = copySbefore.substr(copySbefore.length()-count,count);
 
 }
 
+
 /**
 * @brief : private Helper function for dealing with brackets (2+5)/(5-2)
 *
-*/
+* @brief helper method for getStringValue
+**/
 int Matlab::findTheClosingBracket(string s , char openingBracket)
 {
 
@@ -557,6 +601,13 @@ int Matlab::findTheClosingBracket(string s , char openingBracket)
 
 //            s =	 NormalOperationsAndBrackets(s);
 
+
+/**
+* @brief : it takes the string with sin , cos & tan and cal. them
+* @breif : with the helper of getstringvalue helpers
+*
+* @brief helper method for getStringValue
+*/
 
 
 string Matlab::solvetrignometry(string s)

@@ -16,7 +16,7 @@ class Matlab
 
         string getInstructionWithoutSpecialMatrices(string instruction);
 
-        bool checkStringForMatrix(string complexString);
+
         string getStringMatrix(string complexString);
         string getInstructionWithoutExpressions(string instruction);
         string getReadyInstruction(string instruction,vector<Matlab>& savedMatrices);
@@ -25,6 +25,7 @@ class Matlab
         int findTheClosingBracket(string s,char openingBracket);
     public:
         enum{};
+         bool checkStringForMatrix(string complexString);
         Matlab();
         Matlab(const Matlab& x);
         //static Matlab getMatlabFromVector(string name, vector<Matlab> & matlabObjects)
@@ -40,7 +41,7 @@ class Matlab
         string calcSimpleExpression(string s);
        string getStringValue(string complexString);
 
-      
+
     protected:
 
 
