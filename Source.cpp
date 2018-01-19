@@ -7,6 +7,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "Matlab.h"
+#include<conio.h>
 
 using namespace std;
 
@@ -43,8 +44,12 @@ int main(int argc, char*argv[])
 {
 
     Matlab x ;
-    string e = "     not here";
-    cout<<x.checkStringForMatrix(e)<<endl;
+    string e = "10/8+8*99+8.2+2.8-.8+.4-.2-2^2+4*-5";
+    cout<<x.checkStringForMatrix(e)<<"here"<<endl;
+    cout<<x.calcSimpleExpression(e)<<endl;
+
+
+    getch();
 
 
 

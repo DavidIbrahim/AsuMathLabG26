@@ -418,127 +418,265 @@ string Matlab:: dealWithBrackets(string inputString){
 
 string Matlab::calcSimpleExpression(string s){
 
+string operators[5] = { "^","*", "/","+","-" };
+	char numbers[11] = { '0','1','2','3','4','5','6','7','8','9','.' };
+	if ((s[0] == '+' || s[0] == '-'))
+		s = '0' + s;
 
-	string operators[8] = { "^","*", "/","+","-" };
-	char numbers [11] = {'0','1','2','3','4','5','6','7','8','9','.'};
-    if((s[0]=='+'||s[0]=='-'))
-        s='0'+s;
-        for (int i = 0; i <5; i++)
+
+
+	for (int i = 0; i <5; i++)
 	{
 		int pos = s.find(operators[i]);
+
 		if (pos != string::npos)
 		{
 
-            s.erase(pos, 1);
-			double   Dafter , Dbefore, Dresult;
-			string   Safter , Sbefore, Sresult;
-			Safter =  s.substr(pos, s.length() - pos);
+
+
+			//for neg at beginning special case
+			if (pos == 0 && i == 4)
+			{
+				pos = s.find(operators[i], 1);
+				if (pos == string::npos)
+					break;
+
+
+			}
+			if (pos == 0 && i == 3)
+			{
+				s.erase(0, 1);
+				pos = s.find(operators[i]);
+
+				if (pos == string::npos)
+					break;
+
+
+			}
+
+			s.erase(pos, 1);
+			double   Dafter, Dbefore, Dresult;
+			string   Safter, Sbefore, Sresult;
+			string   nmafter, nmbefore;
+			int sign_after = 1, sign_before = 1;
+
+
+			Safter = s.substr(pos, s.length() - pos);
 			Sbefore = s.substr(0, pos);
-			// i need here to look at the - number problems call me i think i have a solution
-			int count =0,flag=0,end=12;
-			for(int j=0; // that is the for loop i told you about j<Safter.length()//there might be a +/- 1
-			         ;j++)
-                {
-                    for(int d=0;d<end;d++)
-                        {
-                            if(Safter[j]==numbers[d])
-                            {
-                                count++;
-                                if(d==10)
-                                    end=11;
-                                flag=1;
-                                break;
-                                }
-                                }
-                  if(flag==0)
-                        break;
-                  flag = 0 ;
+			int count = 0, flag = 0, end = 12;
 
-                }
 
-			stringstream SSbefore, SSafter, ssresult , temp;
-		  // for after
-		  //turn into double
-			SSafter << Safter;//puts after in ss form
-			SSafter >>Dafter;//takes double i want (after)
-//never mind the next line
-	//turn into string	//		ostringstream strss;      //      strss <<(Dafter);   //	string strr = strss.str();
-            //gets the after ready
-            Safter.erase( 0,count);
-/*
+			//for the number after
 
-            // for before
-            // turn into double
+			if (Safter[0] == '-')
+			{
+				sign_after = -1;
+				Safter.erase(0, 1);
+			}
+
+
+			if (Safter[0] == '+')
+			{
+				sign_after = 1;
+				Safter.erase(0, 1);
+			}
+
+			for (int j = 0; j<Safter.length(); j++)
+			{
+				for (int d = 0; d<end; d++)
+				{
+					if (Safter[j] == numbers[d])
+					{
+						count++;
+						if (d == 10)
+						{
+							end = 11;
+						}
+						flag = 1;
+
+						break;
+					}
+				}
+				if (flag == 0)
+					break;
+				flag = 0;
+
+			}
+
+			nmafter = Safter.substr(0, count);
+			Dafter = atof(nmafter.c_str());
+			Safter.erase(0, count);
+			Dafter *= sign_after;
+			//now the after number have been taken with its sign
+			//after string is also ready
+
+
+			/********************using sstream a waste of a day at least **************************/
+			// for after
+			//turn into double
+			//			SSafter << Safter;//puts after in ss form
+			//		SSafter >> Dafter;//takes double i want (after)
+			//never mind the next line
+			//turn into string	 //		ostringstream strss;      //      strss <<(Dafter);   //	string strr = strss.str();
+			//gets the after ready
+			//	Safter.erase(0, count);
+			/*
+			// for before
+			// turn into double
 			reverse(Sbefore);
 			SSbefore << Sbefore;
 			SSbefore >> fixed >> Dbefore;
-// turn into string
+			// turn into string
 			ostringstream strs;
-            strs << fixed<<Dbefore;
-            string str = strs.str();
-         // reverse back
-            reverse(str);
-// urn into actual double
-            temp << std::fixed<<str;
-            temp >> std::fixed>>Dbefore;
+			strs << fixed<<Dbefore;
+			string str = strs.str();
+			// reverse back
+			reverse(str);
+			// urn into actual double
+			temp << std::fixed<<str;
+			temp >> std::fixed>>Dbefore;
 
 			Sbefore.erase(0,str.length());
 			reverse(Sbefore);
 
-//reverse(Sbefore);
-*/
-//for number before
-count =0,flag=0,end=12;
-			for(int j=Sbefore.length(); // that is the for loop i told you about j>=0.length()//there might be a +/- 1
-			   ;j--)
-                {
-                    for(int d=0;d<end;d++)
-                {
-                    if(Sbefore[j]==numbers[d])
-                    { count++;
-                    if(j==10)end=11;
-                    flag=1;
-                    break;
+			//reverse(Sbefore);
+			*/
 
-                                        }
+			/*****************************************************************************/
+			//for number before
 
 
-                }
-                  if(flag==0)
-                        break;
-                  flag = 0 ;
+			count = 0, flag = 0, end = 12;
+			//		cout << Sbefore.length();
+			for (int j = Sbefore.length() - 1; j >= 0; j--)
+			{
+				for (int d = 0; d<end; d++)
+				{
+					if (Sbefore[j] == numbers[d])
+					{
+						count++;
+						if (j == 10)end = 11;
+						flag = 1;
+						break;
 
-                }
-count--;
-string copySbefore = Sbefore ;
-//to get before ready
-reverse(Sbefore);
-Sbefore.erase( 0,count);
-reverse(Sbefore);
-//to get the string of before
-string beforenumber = copySbefore.substr(copySbefore.length()-count,count);
-//to get the before as a number
-            SSbefore << beforenumber;
+					}
+
+
+				}
+				if (flag == 0)
+					break;
+				flag = 0;
+
+			}
+
+			//	count--;
+			//to get before ready
+			reverse(Sbefore);
+			string copySbefore = Sbefore;
+			Sbefore.erase(0, count);
+			reverse(Sbefore);
+			copySbefore.erase(count, copySbefore.length() - count);
+			reverse(copySbefore);
+			Dbefore = atof(copySbefore.c_str());
+			//now for the sign of the sbefore
+
+
+			if (Sbefore.length()>2)
+				if ((Sbefore[Sbefore.length() - 1] == '+')
+					|| (Sbefore[Sbefore.length() - 1] == '-')
+					)
+					if ((Sbefore[Sbefore.length() - 2] == '+')
+						|| (Sbefore[Sbefore.length() - 2] == '-')
+						|| (Sbefore[Sbefore.length() - 2] == '*')
+						|| (Sbefore[Sbefore.length() - 2] == '/')
+						|| (Sbefore[Sbefore.length() - 2] == '^')
+						)
+					{
+						if ((Sbefore[Sbefore.length() - 1] == '+'))
+							sign_before = 1;
+
+						if ((Sbefore[Sbefore.length() - 1] == '-'))
+							sign_before = -1;
+
+						Sbefore.erase(Sbefore.length() - 1, 1);
+					}
+
+
+			//		cout << (Sbefore.length() - copySbefore.length()) ;
+			if ((Sbefore.length() - copySbefore.length())>0
+				&& Sbefore.length()>0
+				)
+			{
+				if (i == 3 || i == 4)
+				{
+					if ((Sbefore[Sbefore.length() - 1] == '+'))
+						sign_before = 1;
+
+					if ((Sbefore[Sbefore.length() - 1] == '-'))
+					{
+						sign_before = -1;
+						Sbefore.erase(Sbefore.length() - 1, 1);
+					}
+				}
+
+			}
+			Dbefore *= sign_before;
+
+			stringstream SSbefore, SSafter, ssresult, temp;
+			/*************************using stringstream***********************************************/
+			/*
+			//to get the string of before
+
+			stringstream SSbefore, SSafter, ssresult, temp;
+			string beforenumber = copySbefore.substr
+			(copySbefore.length() - count, count);
+			//to get the before as a number
+			SSbefore << beforenumber;
 			SSbefore >> fixed >> Dbefore;
-// to calc.
-			switch (i) {
+			// to calc.
+
+			*/
+			/*****************************************************************************/
+
+			//now for the real calculations
+			switch (i)
+			{
 			case 0: Dresult = pow(Dbefore, Dafter); break;
 			case 1: Dresult = Dbefore * Dafter; break;
 			case 2: Dresult = Dbefore / Dafter; break;
 			case 3: Dresult = Dbefore + Dafter; break;
 			case 4: Dresult = Dbefore - Dafter; break;
-				//case 6: result = before % after; break;
+				//case 5: result = before % after; break;
 			}
-			// to turn answer into double
+			char text[1000] = "";
+			sprintf(text, "%f", Dresult);
+
+// _s  , sizeof(text)
+
+			// to turn answer into string
 			ssresult << Dresult;
-			ssresult >>std::fixed >> Sresult;
+			ssresult >> std::fixed >> Sresult;
 			//to get all back together
-			s = Sbefore + Sresult + Safter;
+
+
+
+			if ((i == 3 || i == 4) && Dresult>0 && Sbefore.length() != 0)
+			{
+				s = Sbefore + '+' + text + Safter;
+			}
+			else
+				//getting ready for next calc.
+				s = Sbefore + text + Safter;
+
+
+
+
 			pos = string::npos;
 			i--;
 		}
 
 	}
+
 
     return s;
 

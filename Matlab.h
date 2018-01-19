@@ -25,7 +25,7 @@ class Matlab
         int findTheClosingBracket(string s,char openingBracket);
     public:
         enum{};
-         bool checkStringForMatrix(string complexString);
+        bool checkStringForMatrix(string complexString);
         Matlab();
         Matlab(const Matlab& x);
         //static Matlab getMatlabFromVector(string name, vector<Matlab> & matlabObjects)
@@ -34,12 +34,12 @@ class Matlab
         CMatrix getMatrix(){return matrix;}
         string getName(){return name;}
         string getString();
-         string getInstructionWithoutConcatenation(string instruction);
-         string getInstructionWithoutMatlabNames(string instruction,vector<Matlab>& savedMatrices);
+        string getInstructionWithoutConcatenation(string instruction);
+        string getInstructionWithoutMatlabNames(string instruction,vector<Matlab>& savedMatrices);
         virtual ~Matlab();
         string solvetrignometry(string s) ;
         string calcSimpleExpression(string s);
-       string getStringValue(string complexString);
+        string getStringValue(string complexString);
 
 
     protected:
