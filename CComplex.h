@@ -18,12 +18,16 @@ class CComplex
         void negative();
         double real();
         double imaginary();
-        static CComplex addComplex(CComplex& A, CComplex& B);
-        void add(CComplex& C);
 
-        static CComplex subComplex(CComplex& A, CComplex& B);
+        void add(CComplex& C);
         void sub(CComplex& C);
 
+        CComplex operator=(CComplex& C);
+        CComplex operator=(double D);
+        void operator+=(CComplex& C);
+        void operator+=(double D);
+        CComplex operator+(CComplex& C);
+        CComplex operator+(double D);
 
     protected:
 

@@ -62,28 +62,43 @@ double CComplex::imaginary()
     return I;
 }
 
-CComplex CComplex::addComplex(CComplex& A, CComplex& B)
-{
-    CComplex C;
-    C.R = A.R + B.R;
-    C.I = A.I + B.I;
-    return C;
-}
-
 void CComplex::add(CComplex& C)
 {
     R += C.R;I += C.I;
 }
 
-CComplex CComplex::subComplex(CComplex& A, CComplex& B)
-{
-    CComplex C;
-    C.R = A.R - B.R;
-    C.I = A.I - B.I;
-    return C;
-}
-
 void CComplex::sub(CComplex& C)
 {
     R -= C.R;I -= C.I;
+}
+
+CComplex CComplex::operator=(CComplex& C)
+{
+    copy(C);
+    return *this;
+}
+CComplex CComplex::operator=(double D)
+{
+    R = D;I = 0;
+    return *this;
+}
+void CComplex::operator+=(CComplex& C)
+{
+    add(C);
+}
+void CComplex::operator+=(double D)
+{
+    R += D;
+}
+CComplex CComplex::operator+(CComplex& C)
+{
+    CComplex X=*this;
+    X+=C;
+    return X;
+}
+CComplex CComplex::operator+(double D)
+{
+    CComplex X=*this;
+    X+=D;
+    return X;
 }
