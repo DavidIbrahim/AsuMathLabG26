@@ -20,7 +20,6 @@ private:
    CMatrix verticalConcatenation(CMatrix &m1,CMatrix &m2);
   ~CMatrix();
   enum MI { MI_ZEROS, MI_ONES, MI_EYE, MI_RAND, MI_VALUE };
-
   CMatrix(int nR, int nC, int initialization = MI_ZEROS,
           double initializationValue = 0.0);
   CMatrix(int nR, int nC, double first, ...);
@@ -37,6 +36,15 @@ private:
   CMatrix operator=(const CMatrix &m);
   CMatrix operator=(double d);
   CMatrix operator=(string s);
+
+
+
+
+  enum calc { MSin , MCos , MTan , MExp  ,MLog      };
+  static CMatrix  operations_on_matrix (  CMatrix &m , int operation    );
+
+
+
 
   void add(const CMatrix &m);
   void operator+=(CMatrix &m);

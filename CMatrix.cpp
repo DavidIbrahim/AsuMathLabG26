@@ -5,11 +5,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include<math.h>
 
 CMatrix::CMatrix() {
   nR = nC = 0;
   values = NULL;
 }
+
+
 
 CMatrix::CMatrix(int nR, int nC, int initialization,
                  double initializationValue) {
@@ -790,3 +793,27 @@ CMatrix CMatrix::verticalConcatenation(CMatrix &m1,CMatrix &m2)
             m.values[iR+m1.nR][iC]= m2.values[iR][iC];
     return m;
 }
+
+
+
+
+  CMatrix  CMatrix::operations_on_matrix (  CMatrix &m , int operation   )
+  {
+      CMatrix result( m.nR ,m.nC );
+    for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+        {
+            switch(operation)
+        case 1 :
+            result.values[iR][iC] = sin(m.values[iR][iC]); break;
+
+
+        }
+
+        return result;
+
+
+
+  }
+
+
