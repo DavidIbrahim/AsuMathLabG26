@@ -72,7 +72,7 @@ void CComplex::sub(CComplex& C)
     R -= C.R;I -= C.I;
 }
 
-CComplex CComplex::operator=(CComplex& C)
+CComplex CComplex::operator=(const CComplex& C)
 {
     copy(C);
     return *this;
