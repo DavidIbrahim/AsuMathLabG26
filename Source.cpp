@@ -43,10 +43,20 @@ void printVector( vector<Matlab>& myVector){
 int main(int argc, char*argv[])
 {
 
-    Matlab x ;
-    string e = "10/8+8*99+8.2+2.8-.8+.4-.2-2^2+4*-5";
-    cout<<x.checkStringForMatrix(e)<<"here"<<endl;
+    Matlab x ;//-33333+5656+99+999-565-565-5656
+    string e = "99-356+985-8996+5632-965+545+51562-5566-3333-33333+5656+99+999-565-565-5656+5-55-55+100+3000-4000+200+200+200+200+200-200-200-200+2000+200-20000-2*-2+2-2-4000+200+200+200+200+200-200-200-200+2000+200-20000";
+    //cout<<x.checkStringForMatrix(e)<<"here"<<endl;
     cout<<x.calcSimpleExpression(e)<<endl;
+e = "8+2";
+cout<<x.calcSimpleExpression(e)<<endl;
+e = "8-2";
+cout<<x.calcSimpleExpression(e)<<endl;
+e = "-8+2";
+cout<<x.calcSimpleExpression(e)<<endl;
+e = "-8-2";
+cout<<x.calcSimpleExpression(e)<<endl;
+e = "-8-2+2*2";
+cout<<x.calcSimpleExpression(e)<<endl;
 
 
     getch();

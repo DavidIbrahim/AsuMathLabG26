@@ -404,7 +404,6 @@ string Matlab:: dealWithBrackets(string inputString){
 }
 
 
-// TODO (Rizk#9#12/01/17): Fix Bugs ...
 //
 /**
 *
@@ -418,9 +417,9 @@ string Matlab:: dealWithBrackets(string inputString){
 
 string Matlab::calcSimpleExpression(string s){
 
-string operators[5] = { "^","*", "/","+","-" };
+	string operators[5] = { "^","*", "/","+","-" };
 	char numbers[11] = { '0','1','2','3','4','5','6','7','8','9','.' };
-	if ((s[0] == '+' || s[0] == '-'))
+	if (( s[0] == '-'))
 		s = '0' + s;
 
 
@@ -443,13 +442,13 @@ string operators[5] = { "^","*", "/","+","-" };
 
 
 			}
+
 			if (pos == 0 && i == 3)
 			{
 				s.erase(0, 1);
-				pos = s.find(operators[i]);
 
-				if (pos == string::npos)
-					break;
+				continue;
+
 
 
 			}
@@ -458,7 +457,7 @@ string operators[5] = { "^","*", "/","+","-" };
 			double   Dafter, Dbefore, Dresult;
 			string   Safter, Sbefore, Sresult;
 			string   nmafter, nmbefore;
-			int sign_after = 1, sign_before = 1;
+			int      sign_after = 1, sign_before = 1;
 
 
 			Safter = s.substr(pos, s.length() - pos);
@@ -467,23 +466,25 @@ string operators[5] = { "^","*", "/","+","-" };
 
 
 			//for the number after
-
-			if (Safter[0] == '-')
+			if (i != 3 && i != 4)
 			{
-				sign_after = -1;
-				Safter.erase(0, 1);
+				if (Safter[0] == '-')
+				{
+					sign_after = -1;
+					Safter.erase(0, 1);
+				}
+
+
+			//	if (Safter[0] == '+')
+				//{
+					//sign_after = 1;
+				//	Safter.erase(0, 1);
+				//}
 			}
 
-
-			if (Safter[0] == '+')
+			for (int j = 0; j < Safter.length(); j++)
 			{
-				sign_after = 1;
-				Safter.erase(0, 1);
-			}
-
-			for (int j = 0; j<Safter.length(); j++)
-			{
-				for (int d = 0; d<end; d++)
+				for (int d = 0; d < end; d++)
 				{
 					if (Safter[j] == numbers[d])
 					{
@@ -550,7 +551,7 @@ string operators[5] = { "^","*", "/","+","-" };
 			//		cout << Sbefore.length();
 			for (int j = Sbefore.length() - 1; j >= 0; j--)
 			{
-				for (int d = 0; d<end; d++)
+				for (int d = 0; d < end; d++)
 				{
 					if (Sbefore[j] == numbers[d])
 					{
@@ -579,19 +580,21 @@ string operators[5] = { "^","*", "/","+","-" };
 			reverse(copySbefore);
 			Dbefore = atof(copySbefore.c_str());
 			//now for the sign of the sbefore
+			int entered = 0;
 
-
-			if (Sbefore.length()>2)
-				if ((Sbefore[Sbefore.length() - 1] == '+')
+			if (Sbefore.length() > 2)
+				if (
+					(Sbefore[Sbefore.length() - 1] == '+')
 					|| (Sbefore[Sbefore.length() - 1] == '-')
 					)
-					if ((Sbefore[Sbefore.length() - 2] == '+')
+					if ( (Sbefore[Sbefore.length() - 2] == '+')
 						|| (Sbefore[Sbefore.length() - 2] == '-')
 						|| (Sbefore[Sbefore.length() - 2] == '*')
 						|| (Sbefore[Sbefore.length() - 2] == '/')
 						|| (Sbefore[Sbefore.length() - 2] == '^')
 						)
 					{
+						entered = 1;
 						if ((Sbefore[Sbefore.length() - 1] == '+'))
 							sign_before = 1;
 
@@ -603,12 +606,15 @@ string operators[5] = { "^","*", "/","+","-" };
 
 
 			//		cout << (Sbefore.length() - copySbefore.length()) ;
-			if ((Sbefore.length() - copySbefore.length())>0
-				&& Sbefore.length()>0
+			if (
+				//	(Sbefore.length() - copySbefore.length()) > 0			&&
+				Sbefore.length() > 0
+				&& entered != 1
+				&& i!=0
 				)
 			{
-				if (i == 3 || i == 4)
-				{
+			//	if (i == 3 || i == 4)
+				//{
 					if ((Sbefore[Sbefore.length() - 1] == '+'))
 						sign_before = 1;
 
@@ -617,9 +623,10 @@ string operators[5] = { "^","*", "/","+","-" };
 						sign_before = -1;
 						Sbefore.erase(Sbefore.length() - 1, 1);
 					}
-				}
+			//	}
 
 			}
+			entered = 0;
 			Dbefore *= sign_before;
 
 			stringstream SSbefore, SSafter, ssresult, temp;
@@ -649,9 +656,8 @@ string operators[5] = { "^","*", "/","+","-" };
 				//case 5: result = before % after; break;
 			}
 			char text[1000] = "";
-			sprintf(text, "%f", Dresult);
-
-// _s  , sizeof(text)
+			sprintf(text , "%f", Dresult);
+// _s , sizeof(text)
 
 			// to turn answer into string
 			ssresult << Dresult;
@@ -659,8 +665,8 @@ string operators[5] = { "^","*", "/","+","-" };
 			//to get all back together
 
 
-
-			if ((i == 3 || i == 4) && Dresult>0 && Sbefore.length() != 0)
+			//(i == 3 || i == 4) &&
+			if ( Dresult > 0 && Sbefore.length() != 0 && sign_before==-1 )
 			{
 				s = Sbefore + '+' + text + Safter;
 			}
@@ -676,6 +682,7 @@ string operators[5] = { "^","*", "/","+","-" };
 		}
 
 	}
+
 
 
     return s;
