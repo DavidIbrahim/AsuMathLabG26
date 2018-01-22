@@ -97,6 +97,28 @@ CComplex CComplex::operator+(double D)
     X+=D;
     return X;
 }
+
+void CComplex::operator-=(CComplex& C)
+{
+    sub(C);
+}
+void CComplex::operator-=(double D)
+{
+    R -= D;
+}
+CComplex CComplex::operator-(CComplex& C)
+{
+    CComplex X=*this;
+    X-=C;
+    return X;
+}
+CComplex CComplex::operator-(double D)
+{
+    CComplex X=*this;
+    X-=D;
+    return X;
+}
+
 CComplex CComplex::operator-()
 {
     return CComplex(-R, -I);
