@@ -97,6 +97,12 @@ CComplex CComplex::operator+(double D)
     X+=D;
     return X;
 }
+CComplex operator+(double D, const CComplex& C)
+{
+    CComplex X=C;
+    X+=D;
+    return X;
+}
 
 void CComplex::operator-=(CComplex& C)
 {
@@ -118,6 +124,12 @@ CComplex CComplex::operator-(double D)
     X-=D;
     return X;
 }
+CComplex operator-(double D, const CComplex& C)
+{
+    CComplex X=C;
+    X-=D;
+    return X;
+}
 
 CComplex CComplex::operator-()
 {
@@ -135,7 +147,8 @@ CComplex::operator const string()
 }*/
 ostream& operator << (ostream& os, CComplex& C)
 {
-    os<<C.getString();return os;
+    os<<C.getString();
+    return os;
 }
 CComplex CComplex::operator++()
 {

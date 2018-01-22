@@ -27,11 +27,13 @@ class CComplex
         void operator+=(double D);
         CComplex operator+(CComplex& C);
         CComplex operator+(double D);
+        friend CComplex operator+(double D, const CComplex& C); //For double + complex
 
         void operator-=(CComplex& C);
         void operator-=(double D);
         CComplex operator-(CComplex& C);
         CComplex operator-(double D);
+        friend CComplex operator-(double D, const CComplex& C); //For double - complex
 
         CComplex operator-();
         operator const string();
