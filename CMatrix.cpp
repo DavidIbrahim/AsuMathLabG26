@@ -757,6 +757,7 @@ CMatrix CMatrix::horizontalConcatenation(CMatrix &m1,CMatrix &m2)
 {
     if(m1.nR!=m2.nR)throw("invalid matrix dimension");
     CMatrix m(m1.nR,(m2.nC +m1.nC));
+
     for(int iR=0;iR<m1.nR;iR++)
     {
         for(int iC=0;iC<m1.nC;iC++)
@@ -797,22 +798,839 @@ CMatrix CMatrix::verticalConcatenation(CMatrix &m1,CMatrix &m2)
 
 
 
-  CMatrix  CMatrix::operations_on_matrix (  CMatrix &m , int operation   )
-  {
-      CMatrix result( m.nR ,m.nC );
-    for(int iR=0;iR<result.nR;iR++)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/***********************************************************************************************************/
+
+
+/** @brief this fn makes the sin dot for each element in the matrix
+ *
+ *  @param  the matrix that does the call ex: [30 30;60 60]//but practically the parameters are void
+ *
+ *  @return a matrix where each element with sin made for it ex:
+ *
+ */
+//this is according to oct.
+CMatrix  CMatrix::sin_element (void )
+   {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
         for(int iC=0;iC<result.nC;iC++)
-        {
-            switch(operation)
-        case 1 :
-            result.values[iR][iC] = sin(m.values[iR][iC]); break;
+            {result.values[iR][iC] = sin(values[iR][iC]);}
+        return result;
+   }
+
+/** @brief this fn makes the cos dot for each element in the matrix
+ *
+ *  @param  the matrix that does the call ex: [30 30;60 60]//but practically the parameters are void
+ *
+ *  @return a matrix where each element with cos made for it ex:
+ *
+ */
+//this is according to oct.
+CMatrix  CMatrix::cos_element (void )
+   {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = cos(values[iR][iC]);}
+        return result;
+   }
 
 
-        }
+/** @brief this fn makes the tan dot for each element in the matrix
+ *
+ *  @param  the matrix that does the call ex: [30 30;60 60]//but practically the parameters are void
+ *
+ *  @return a matrix where each element with tan made for it ex:
+ *
+ */
+//this is according to oct.
+CMatrix  CMatrix::tan_element (void )
+   {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = tan(values[iR][iC]);}
+        return result;
+   }
 
+
+/** @brief this fn makes the sinh dot for each element in the matrix (the hypred functions)
+ *
+ *  @param  the matrix that does the call ex: [30 30;60 60]//but practically the parameters are void
+ *
+ *  @return a matrix where each element with sinh made for it ex:
+ *
+ */
+//this is according to oct.
+CMatrix  CMatrix::sinh_element (void )
+   {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = sinh(values[iR][iC]);}
+        return result;
+   }
+
+
+/** @brief this fn makes the cosh dot for each element in the matrix (the hypred functions)
+ *
+ *  @param  the matrix that does the call ex: [30 30;60 60]//but practically the parameters are void
+ *
+ *  @return a matrix where each element with cosh made for it ex:
+ *
+ */
+//this is according to oct.
+CMatrix  CMatrix::cosh_element (void )
+   {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = cosh(values[iR][iC]);}
+        return result;
+   }
+
+
+/** @brief this fn makes the tanh dot for each element in the matrix (the hypred functions)
+ *
+ *  @param  the matrix that does the call ex: [30 30;60 60]//but practically the parameters are void
+ *
+ *  @return a matrix where each element with tanh made for it ex:
+ *
+ */
+//this is according to oct.
+CMatrix  CMatrix::tanh_element (void )
+   {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = tanh(values[iR][iC]);}
+        return result;
+   }
+
+
+/** @brief this fn makes the sin-1 dot for each element in the matrix
+ *
+ *  @param  the matrix that does the call ex: [30 30;60 60] //but practically the parameters are void
+ *
+ *  @return a matrix where each element with sin-1 made for it ex:
+ *
+ */
+//this is according to oct.
+CMatrix  CMatrix::asin_element (void )
+   {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = asin(values[iR][iC]);}
+        return result;
+   }
+
+
+/** @brief this fn makes the cos-1 dot for each element in the matrix
+ *
+ *  @param  the matrix that does the call ex: [30 30;60 60] //but practically the parameters are void
+ *
+ *  @return a matrix where each element with cos-1 made for it ex:
+ *
+ */
+//this is according to oct.
+CMatrix  CMatrix::acos_element (void )
+   {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = acos(values[iR][iC]);}
+        return result;
+   }
+
+/** @brief this fn makes the tan-1 dot for each element in the matrix
+ *
+ *  @param  the matrix that does the call ex: [30 30;60 60] //but practically the parameters are void
+ *
+ *  @return a matrix where each element with tan-1 made for it ex:
+ *
+ */
+//this is according to oct.
+CMatrix  CMatrix::atan_element (void )
+   {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = atan(values[iR][iC]);}
+        return result;
+   }
+
+
+/** @brief this fn makes the sinh-1 dot for each element in the matrix (the hypred functions)
+ *
+ *  @param  the matrix that does the call ex: [30 30;60 60]//but practically the parameters are void
+ *
+ *  @return a matrix where each element with sinh-1 made for it ex:
+ *
+ */
+//this is according to oct.
+CMatrix  CMatrix::asinh_element (void )
+   {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = asinh(values[iR][iC]);}
+        return result;
+   }
+
+
+/** @brief this fn makes the cosh-1 dot for each element in the matrix (the hypred functions)
+ *
+ *  @param  the matrix that does the call ex: [30 30;60 60]//but practically the parameters are void
+ *
+ *  @return a matrix where each element with cosh-1 made for it ex:
+ *
+ */
+//this is according to oct.
+CMatrix  CMatrix::acosh_element (void )
+   {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = acosh(values[iR][iC]);}
+        return result;
+   }
+
+
+/** @brief this fn makes the tanh-1 dot for each element in the matrix (the hypred functions)
+ *
+ *  @param  the matrix that does the call ex: [30 30;60 60]//but practically the parameters are void
+ *
+ *  @return a matrix where each element with tanh-1 made for it ex:
+ *
+ */
+//this is according to oct.
+CMatrix  CMatrix::atanh_element (void )
+   {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = atanh(values[iR][iC]);}
+        return result;
+   }
+
+
+/***********************************************************************************************************/
+
+/** @brief this fn makes the abs dot for each element in the matrix
+ *
+ *  @param  the matrix that does the call ex: [-30 -30;-60 -60]//but practically the parameters are void
+ *
+ *  @return a matrix where each element with abs made for it ex: [30 30;60 60]
+ *
+ */
+//this is according to oct.
+CMatrix CMatrix::abs_element   (void )
+  {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = abs(values[iR][iC]);}
+        return result;
+  }
+
+
+
+/** @brief
+The ceil fn
+Round up value
+Rounds x upward, returning the smallest integral value that is not less than x in each element of matrix.
+
+ *  @param  the matrix that does the call ex: [3.40 30.6;-60.4 -60.6]//but practically the parameters are void
+ *
+ *  @return a matrix where each element with abs made for it ex: [30 30;60 60]
+ *
+ */
+//this is according to oct.
+CMatrix CMatrix::ceil_element   (void )
+ {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = ceil(values[iR][iC]);}
         return result;
 
 
+
+ }
+
+
+
+/** @brief
+The floor fn
+
+Round down value
+Rounds x downward, returning the largest integral value that is not greater than x in each element of matrix.
+ *  @param  the matrix that does the call ex: [3.40 30.6;-60.4 -60.6]//but practically the parameters are void
+ *
+ *  @return a matrix where each element with abs made for it ex: [30 30;60 60]
+ *
+ */
+//this is according to oct.
+CMatrix CMatrix::floor_element  (void )
+  {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = floor(values[iR][iC]);}
+        return result;
+
+
+  }
+
+
+
+/** @brief
+The square root fn
+
+Compute square root
+Returns the square root of x in each element of matrix.
+ *  @param  the matrix that does the call ex: [3.40 30.6;-60.4 -60.6]//but practically the parameters are void
+ *
+ *  @return a matrix where each element with abs made for it ex: [30 30;60 60]
+ *
+ */
+//this is according to oct.
+CMatrix CMatrix::sqrt_element  (void )
+  {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = sqrt(values[iR][iC]);}
+        return result;
+
+
+  }
+
+
+/***********************************************************************************************************/
+
+
+
+
+
+
+
+
+
+
+
+/** @brief this fn makes the exp dot for each element in the matrix
+ *
+ *  @param  the matrix that does the call ex: [30 30;60 60]//but practically the parameters are void
+ *
+ *  @return a matrix where each element with exp made for it ex:
+ *
+ */
+//this is according to oct.
+CMatrix  CMatrix::exp_element (void )
+   {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = exp(values[iR][iC]);}
+        return result;
+   }
+
+
+
+/** @brief this fn makes the log10 dot for each element in the matrix
+ *
+ *  @param  the matrix that does the call ex: [30 30;60 60]//but practically the parameters are void
+ *
+ *  @return a matrix where each element with log10 made for it ex:
+ *
+ */
+//this is according to oct.
+CMatrix  CMatrix::log10_element (void )
+   {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = log10(values[iR][iC]);}
+        return result;
+   }
+
+
+/** @brief this fn makes the log dot for each element in the matrix
+ *
+ *  @param  the matrix that does the call ex: [30 30;60 60]//but practically the parameters are void
+ *
+ *  @return a matrix where each element with log made for it ex:
+ *
+ */
+//this is according to oct.
+CMatrix  CMatrix::log_element (void )
+   {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = log(values[iR][iC]);}
+        return result;
+   }
+
+/** @brief Compute exponential minus one
+Returns e raised to the power x minus one: ex-1.
+For small magnitude values of x, expm1 may be more accurate than exp(x)-1.
+
+ *  @param  the matrix that does the call ex: [30 30;60 60]//but practically the parameters are void
+ *
+ *  @return a matrix where each element with expm1 made for it ex:
+ *
+ */
+//this is according to oct.
+CMatrix CMatrix::expm1_element (void)
+   {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = expm1(values[iR][iC]);}
+        return result;
+
+   }
+
+
+
+/** @brief Compute logarithm plus one
+Returns the natural logarithm of one plus x.
+
+For small magnitude values of x, logp1 may be more accurate than log(1+x).
+
+ *  @param  the matrix that does the call ex: [30 30;60 60]//but practically the parameters are void
+ *
+ *  @return a matrix where each element with log1p made for it ex:
+ *
+ */
+//this is according to oct.
+CMatrix CMatrix::log1p_element(void)
+   {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = log1p(values[iR][iC]);}
+        return result;
+
+
+
+   }
+
+
+
+
+/** @brief
+Compute binary logarithm
+Returns the binary (base-2) logarithm of x.
+
+
+ *  @param  the matrix that does the call ex: [30 30;60 60]//but practically the parameters are void
+ *
+ *  @return a matrix where each element with log1p made for it ex:
+ *
+ */
+//this is according to oct.
+CMatrix CMatrix::log2_element(void)
+   {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = log2(values[iR][iC]);}
+        return result;
+
+
+
+   }
+
+
+/***********************************************************************************************************/
+
+
+/** @brief
+round
+Round to nearest
+Returns the integral value that is nearest to x, with halfway cases rounded away from zero.
+
+
+ *  @param  the matrix that does the call //but practically the parameters are void
+ *
+ *  @return a matrix where each element with log1p made for it
+ *
+ */
+//this is according to oct.
+CMatrix CMatrix::round_element(void)
+  {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = round(values[iR][iC]);}
+        return result;
+
+
+  }
+
+
+/** @brief
+erfc
+Compute complementary error function
+complementary error function Returns the complementary error function value for x.
+
+The complementary error function is equivalent to:
+erfc(x) = 1-erf(x)
+
+ *  @param  the matrix that does the call //but practically the parameters are void
+ *
+ *  @return a matrix where each element with log1p made for it
+ *
+ */
+//this is according to oct.
+CMatrix CMatrix::erfc_element(void)
+  {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = erfc(values[iR][iC]);}
+        return result;
+
+
+  }
+
+
+/** @brief
+erf
+Compute error function
+error function Returns the error function value for x.
+
+
+ *  @param  the matrix that does the call //but practically the parameters are void
+ *
+ *  @return a matrix where each element with log1p made for it
+ *
+ */
+//this is according to oct.
+CMatrix CMatrix::erf_element(void)
+  {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = erf(values[iR][iC]);}
+        return result;
+
+
+  }
+
+
+/** @brief
+lgamma
+Compute log-gamma function
+log-gamma function Returns the natural logarithm of the absolute value of the gamma function of x.
+
+
+
+
+ *  @param  the matrix that does the call //but practically the parameters are void
+ *
+ *  @return a matrix where each element with log1p made for it
+ *
+ */
+//this is according to oct.
+CMatrix CMatrix::lgamma_element(void)
+  {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = lgamma(values[iR][iC]);}
+        return result;
+
+
+  }
+
+
+/** @brief
+cbrt
+
+Compute cubic root
+Returns the cubic root of x.
+
+
+
+ *  @param  the matrix that does the call //but practically the parameters are void
+ *
+ *  @return a matrix where each element with log1p made for it
+ *
+ */
+//this is according to oct.
+CMatrix CMatrix::cbrt_element(void)
+  {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = cbrt(values[iR][iC]);}
+        return result;
+
+
+  }
+
+
+/** @brief
+
+isfinite
+Is finite value
+Returns whether x is a finite value.
+
+ *  @param  the matrix that does the call //but practically the parameters are void
+ *
+ *  @return a matrix where each element with log1p made for it
+ *
+ */
+//this is according to oct.
+CMatrix CMatrix::isfinite_element(void)
+  {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = isfinite(values[iR][iC]);}
+        return result;
+
+
+  }
+
+
+/** @brief
+isinf
+
+Is infinity
+Returns whether x is an infinity value (either positive infinity or negative infinity).
+
+ *  @param  the matrix that does the call //but practically the parameters are void
+ *
+ *  @return a matrix where each element with log1p made for it
+ *
+ */
+//this is according to oct.
+CMatrix CMatrix::isinf_element(void)
+  {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = isinf(values[iR][iC]);}
+        return result;
+
+
+  }
+
+
+/** @brief
+isnan
+Is Not-A-Number
+Returns whether x is a NaN (Not-A-Number) value.
+
+The NaN values are used to identify undefined or non-representable values for floating-point elements, such as the square root of negative numbers or the result of 0/0.
+
+ *  @param  the matrix that does the call //but practically the parameters are void
+ *
+ *  @return a matrix where each element with log1p made for it
+ *
+ */
+//this is according to oct.
+CMatrix CMatrix::isnan_element(void)
+  {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = isnan(values[iR][iC]);}
+        return result;
+
+
+  }
+
+
+/** @brief
+signbit
+Returns whether the sign of x is negative.
+
+This can be also applied to infinites, NaNs and zeroes (if zero is unsigned, it is considered positive).
+
+
+ *  @param  the matrix that does the call //but practically the parameters are void
+ *
+ *  @return a matrix where each element with log1p made for it
+ *
+ */
+//this is according to oct.
+CMatrix CMatrix::signbit_element(void)
+  {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = signbit(values[iR][iC]);}
+        return result;
+
+
+  }
+
+
+/*****************noteeeeeeeeeeeeeeeeeeeeeeeeee when call this functions but catch for throw and remove
+the comment from the throw*******************************************************************************************************************/
+
+/** @brief it mul each element with its equiv. element
+ *  @param1  the matrix that does the call
+ *  @param2  another matrix as i/p
+ *  @return a matrix where each element is mul with its equiv element
+ *
+ */
+//this is according to oct.
+
+  CMatrix CMatrix::dot_mult(const CMatrix &m )
+  {
+
+    if(m.nR!=nR || m.nC!=nC )
+        {
+       printf("error: quotient: nonconformant arguments (op1 is %dx%d, op2 is %dx%d)\n",nR,nC,m.nR,m.nC);
+       // throw("error");
+        CMatrix v (1,1,0) ;
+        return v;
+        }
+
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = values[iR][iC] * m.values[iR][iC];}
+
+  return result ;
+  }
+
+/** @brief it div each element with its equiv. element
+ *  @param1  the matrix that does the call
+ *  @param2  another matrix as i/p
+ *  @return a matrix where each element is div with its equiv element @param2 / @param1
+ *
+ */
+//this is according to oct.
+
+  CMatrix CMatrix::dot_div1(const CMatrix &m )   /*   \    */
+  {
+
+    if(m.nR!=nR || m.nC!=nC )
+        {
+       printf("error: quotient: nonconformant arguments (op1 is %dx%d, op2 is %dx%d)\n",nR,nC,m.nR,m.nC);
+       // throw("error");
+        CMatrix v (1,1,0) ;
+        return v;
+        }
+
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] =  m.values[iR][iC]/ values[iR][iC];}
+
+  return result ;
+  }
+/** @brief it div each element with its equiv. element
+ *  @param1  the matrix that does the call
+ *  @param2  another matrix as i/p
+ *  @return a matrix where each element is div with its equiv element @param1 / @param2
+ *
+ */
+//this is according to oct.
+
+  CMatrix CMatrix::dot_div2(const CMatrix &m )   /*   /    */
+  {
+
+    if(m.nR!=nR || m.nC!=nC )
+        {
+       printf("error: quotient: nonconformant arguments (op1 is %dx%d, op2 is %dx%d)\n",nR,nC,m.nR,m.nC);
+     //   throw("error");
+
+        CMatrix v (1,1,0) ;
+        return v;
+         }
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = values[iR][iC] / m.values[iR][iC];}
+
+  return result ;
+  }
+
+
+
+
+
+
+
+
+
+
+
+/***************************************************************************************************************/
+
+
+   CMatrix CMatrix::dot_pow(double number_double )
+  {
+
+      CMatrix result( nR ,nC ,MI_EYE  );
+      int number_int=number_double;
+      if(number_double-number_int>0)
+      {//then num contains fraction so
+
+    if(nR!=1 || nC!=1 )
+        {
+       printf("error: according to  the specs if the pow of the value was fraction then the matrix must be 1x1 \n");
+     //   throw("error");
+
+        CMatrix v (1,1) ;
+        return v;
+         }
+
+            result.values[0][0] = pow(values[0][0],number_double);
+      }
+      else
+      {
+
+          while (number_int)
+
+    {
+        if (number_int & 1)
+            result *= *this;
+        number_int >>= 1;
+        *this *= *this;
+    }
+
+
+
+
+
+      }
+
+return result ;
+
+  }
+
+
+  CMatrix CMatrix::pow_element (double num )
+  {
 
   }
 
