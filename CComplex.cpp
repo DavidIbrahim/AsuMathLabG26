@@ -27,9 +27,9 @@ string CComplex::getString()
 {
     char text[100];
     if(I==0)sprintf(text, "%g", R);
-    else if(R==0)sprintf(text, "%g * i", I);
-    else if(I>0)sprintf(text, "%g + %g * i", R, I);
-    else if(I<0)sprintf(text, "%g - %g * i", R, -I);
+    else if(R==0)sprintf(text, "%gi", I);
+    else if(I>0)sprintf(text, "%g + %gi", R, I);
+    else if(I<0)sprintf(text, "%g - %gi", R, -I);
     return string(text);
 }
 
