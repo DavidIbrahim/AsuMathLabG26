@@ -190,7 +190,13 @@ void CComplex::div(CComplex& C)
     R/=(C.R*C.R + C.I*C.I);
     I/=(C.R*C.R + C.I*C.I);
 }
-/*CComplex operator/(CComplex& A, CComplex& B)
+void CComplex::operator /=(CComplex& C)
 {
-    CComplex C(A),D(B);
-}*/
+    div(C);
+}
+CComplex operator/(CComplex& A, CComplex& B)
+{
+    CComplex X=A;
+    X.div(B);
+    return X;
+}
