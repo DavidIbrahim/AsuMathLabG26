@@ -18,12 +18,7 @@ CComplex::CComplex(double R, double I)
     this->R = R; this->I = I;
 }
 
-CComplex::CComplex(CComplex& C)
-{
-    copy(C);
-}
-
-void CComplex::copy(CComplex& C)
+CComplex::CComplex(const CComplex& C)
 {
     R = C.R; I = C.I;
 }
@@ -74,7 +69,7 @@ void CComplex::sub(CComplex& C)
 
 CComplex CComplex::operator=(const CComplex& C)
 {
-    copy(C);
+    R = C.R; I = C.I;
     return *this;
 }
 CComplex CComplex::operator=(double D)

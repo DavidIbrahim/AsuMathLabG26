@@ -10,8 +10,7 @@ class CComplex
         CComplex();
         virtual ~CComplex();
         CComplex(double R, double I);
-        CComplex(CComplex& C);
-        void copy(CComplex& C);
+        CComplex(const CComplex& C);
         string getString();
         double magnitude();
         double angle();
