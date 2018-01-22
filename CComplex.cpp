@@ -67,6 +67,11 @@ void CComplex::sub(CComplex& C)
     R -= C.R;I -= C.I;
 }
 
+CComplex CComplex::conjugate()
+{
+    return CComplex(R,-I);
+}
+
 CComplex CComplex::operator=(const CComplex& C)
 {
     R = C.R; I = C.I;
@@ -118,6 +123,7 @@ CComplex CComplex::operator-(double D)
     X-=D;
     return X;
 }
+
 CComplex CComplex::operator-()
 {
     return CComplex(-R, -I);
@@ -137,6 +143,7 @@ ostream& operator << (ostream& os, CComplex& C)
     os<<C.getString();
     return os;
 }
+
 CComplex CComplex::operator++()
 {
     R++;
@@ -148,6 +155,7 @@ CComplex CComplex::operator++(int)
     R+=1;
     return C;
 }
+
 CComplex operator+(double D, const CComplex& C)
 {
     CComplex X=C;
@@ -160,15 +168,19 @@ CComplex operator-(double D, const CComplex& C)
     X-=D;
     return X;
 }
+void CComplex::mul(const CComplex& C)
+{
+    double R = this->R*C.R - this->I*C.I;
+    double I = this->R*C.I + this->I*C.R;
+    this->R=R;this->I=I;
+}
+void CComplex::operator *=(CComplex& C)
+{
+    mul(C);
+}
 CComplex operator*(CComplex& A, CComplex& B)
 {
-    double R = A.real()*B.real() - A.imaginary()*B.imaginary();
-    double I = A.real()*B.imaginary() + A.imaginary()*B.real();
-    return CComplex(R, I);
-}
-
-void CComplex::conjugate(CComplex& C)
-{
-    this->R=C.R;
-    this->I=-C.I;
+    CComplex X=A;
+    X*=B;
+    return X;
 }

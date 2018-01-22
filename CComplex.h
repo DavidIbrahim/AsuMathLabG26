@@ -17,10 +17,10 @@ class CComplex
         void negative();
         double real();
         double imaginary();
+        CComplex conjugate();
 
         void add(CComplex& C);
         void sub(CComplex& C);
-
 
         CComplex operator=(const CComplex& C);
         CComplex operator=(double D);
@@ -45,10 +45,15 @@ class CComplex
 
         friend CComplex operator+(double D, const CComplex& C); //For double + complex
         friend CComplex operator-(double D, const CComplex& C); //For double - complex
-        friend CComplex operator*(CComplex& A, CComplex& B);
-        //friend CComplex operator/(CComplex& A, CComplex& B);
 
-        void conjugate(CComplex& C);
+        void mul(const CComplex& C);
+        void operator *=(CComplex& C);
+        friend CComplex operator*(CComplex& A, CComplex& B);
+
+        void div(CComplex& C);
+        friend CComplex operator/(CComplex& A, CComplex& B);
+
+
     protected:
 
     private:
