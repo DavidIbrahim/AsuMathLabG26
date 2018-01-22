@@ -184,3 +184,13 @@ CComplex operator*(CComplex& A, CComplex& B)
     X*=B;
     return X;
 }
+void CComplex::div(CComplex& C)
+{
+    mul(C.conjugate());
+    R/=(C.R*C.R + C.I*C.I);
+    I/=(C.R*C.R + C.I*C.I);
+}
+/*CComplex operator/(CComplex& A, CComplex& B)
+{
+    CComplex C(A),D(B);
+}*/
