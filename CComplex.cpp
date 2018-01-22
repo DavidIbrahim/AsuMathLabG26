@@ -97,3 +97,32 @@ CComplex CComplex::operator+(double D)
     X+=D;
     return X;
 }
+CComplex CComplex::operator-()
+{
+    return CComplex(-R, -I);
+}
+CComplex::operator const string()
+{
+    return getString();
+}
+/*istream& operator >> (istream& is, CComplex& C)
+{
+    is>>C.R;
+    is>>C.I;
+    return is;
+}*/
+ostream& operator << (ostream& os, CComplex& C)
+{
+    os<<C.getString();return os;
+}
+CComplex CComplex::operator++()
+{
+    R++;
+    return *this;
+}
+CComplex CComplex::operator++(int)
+{
+    CComplex C = *this;
+    R+=1;
+    return C;
+}

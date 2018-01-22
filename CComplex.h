@@ -28,6 +28,16 @@ class CComplex
         CComplex operator+(CComplex& C);
         CComplex operator+(double D);
 
+        CComplex operator-();
+        operator const string();
+        //friend istream& operator >> (istream &is, CComplex& C);
+        friend ostream& operator << (ostream &os, CComplex& C);
+
+        CComplex operator++(); //Pre Increment
+        CComplex operator++(int); //Post Increment, int is not used
+        //double operator[](string name); //Index
+        //double operator()(string name, string info = ""); //Argument
+
     protected:
 
     private:
