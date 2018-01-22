@@ -166,3 +166,9 @@ CComplex operator*(CComplex& A, CComplex& B)
     double I = A.real()*B.imaginary() + A.imaginary()*B.real();
     return CComplex(R, I);
 }
+
+void CComplex::conjugate(CComplex& C)
+{
+    this->R=C.R;
+    this->I=-C.I;
+}

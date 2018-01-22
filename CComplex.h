@@ -46,7 +46,9 @@ class CComplex
         friend CComplex operator+(double D, const CComplex& C); //For double + complex
         friend CComplex operator-(double D, const CComplex& C); //For double - complex
         friend CComplex operator*(CComplex& A, CComplex& B);
+        //friend CComplex operator/(CComplex& A, CComplex& B);
 
+        void conjugate(CComplex& C);
     protected:
 
     private:
