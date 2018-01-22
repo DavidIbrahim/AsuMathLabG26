@@ -97,12 +97,6 @@ CComplex CComplex::operator+(double D)
     X+=D;
     return X;
 }
-CComplex operator+(double D, const CComplex& C)
-{
-    CComplex X=C;
-    X+=D;
-    return X;
-}
 
 void CComplex::operator-=(CComplex& C)
 {
@@ -124,13 +118,6 @@ CComplex CComplex::operator-(double D)
     X-=D;
     return X;
 }
-CComplex operator-(double D, const CComplex& C)
-{
-    CComplex X=C;
-    X-=D;
-    return X;
-}
-
 CComplex CComplex::operator-()
 {
     return CComplex(-R, -I);
@@ -160,4 +147,22 @@ CComplex CComplex::operator++(int)
     CComplex C = *this;
     R+=1;
     return C;
+}
+CComplex operator+(double D, const CComplex& C)
+{
+    CComplex X=C;
+    X+=D;
+    return X;
+}
+CComplex operator-(double D, const CComplex& C)
+{
+    CComplex X=C;
+    X-=D;
+    return X;
+}
+CComplex operator*(CComplex& A, CComplex& B)
+{
+    double R = A.real()*B.real() - A.imaginary()*B.imaginary();
+    double I = A.real()*B.imaginary() + A.imaginary()*B.real();
+    return CComplex(R, I);
 }

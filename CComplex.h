@@ -21,19 +21,19 @@ class CComplex
         void add(CComplex& C);
         void sub(CComplex& C);
 
+
         CComplex operator=(const CComplex& C);
         CComplex operator=(double D);
         void operator+=(CComplex& C);
         void operator+=(double D);
         CComplex operator+(CComplex& C);
         CComplex operator+(double D);
-        friend CComplex operator+(double D, const CComplex& C); //For double + complex
 
         void operator-=(CComplex& C);
         void operator-=(double D);
         CComplex operator-(CComplex& C);
         CComplex operator-(double D);
-        friend CComplex operator-(double D, const CComplex& C); //For double - complex
+
 
         CComplex operator-();
         operator const string();
@@ -43,6 +43,9 @@ class CComplex
         CComplex operator++(); //Pre Increment
         CComplex operator++(int); //Post Increment, int is not used
 
+        friend CComplex operator+(double D, const CComplex& C); //For double + complex
+        friend CComplex operator-(double D, const CComplex& C); //For double - complex
+        friend CComplex operator*(CComplex& A, CComplex& B);
 
     protected:
 
