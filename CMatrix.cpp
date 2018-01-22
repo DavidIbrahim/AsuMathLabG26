@@ -1587,51 +1587,38 @@ the comment from the throw******************************************************
 /***************************************************************************************************************/
 
 
-   CMatrix CMatrix::dot_pow(double number_double )
+   CMatrix CMatrix::power(double number_double )
   {
+      if(number_double==-1)
+      {
+          CMatrix x( nR ,nC );
+         x  = getInverse();
+         return x;
+      }
 
       CMatrix result( nR ,nC ,MI_EYE  );
       int number_int=number_double;
       if(number_double-number_int>0)
-      {//then num contains fraction so
-
-    if(nR!=1 || nC!=1 )
-        {
-       printf("error: according to  the specs if the pow of the value was fraction then the matrix must be 1x1 \n");
-     //   throw("error");
-
-        CMatrix v (1,1) ;
-        return v;
-         }
-
+        {//then num contains fraction so
+            if(nR!=1 || nC!=1 )
+            {
+                printf("error: according to  the specs if the pow of the value was fraction then the matrix must be 1x1 \n");
+           //   throw("error");
+                CMatrix v (1,1) ;
+                return v;
+            }
             result.values[0][0] = pow(values[0][0],number_double);
-      }
+        }
       else
       {
-
           while (number_int)
-
-    {
+            {
         if (number_int & 1)
             result *= *this;
         number_int >>= 1;
         *this *= *this;
     }
-
-
-
-
-
+    }
+      return result ;
       }
-
-return result ;
-
-  }
-
-
-  CMatrix CMatrix::pow_element (double num )
-  {
-
-  }
-
 

@@ -174,17 +174,22 @@ cout<<"for dot_div2 "<<y.getString()<<endl;
 /*************************************************************************************************************/
 
 
-x = ("[2]");
+x = ("[2 2;2 2]");
+
+//case0
+y = x.power(-1);
+cout<<"for power-1 "<<y.getString()<<endl;
+
 
 //case1
-y = x.dot_pow(5.5);
-cout<<"for dot_mul "<<y.getString()<<endl;
+y = x.power(5.5);
+cout<<"for power double "<<y.getString()<<endl;
 
 
 
 //case2
-y = x.dot_pow(55);
-cout<<"for dot_mul "<<y.getString()<<endl;
+y = x.power(55);
+cout<<"for power int "<<y.getString()<<endl;
 
 /*************************************************************************************************************/
 

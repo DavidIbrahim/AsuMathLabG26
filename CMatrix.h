@@ -4,20 +4,21 @@
 #define CMatrix_H
 using namespace std;
 class CMatrix {
+
 private:
-    int nR, nC;
-    double **values;
+  int nR, nC;
+  double **values;
 
-    static bool fixMatrix(CMatrix &m,int r,int c);
-    static bool checkIfZeroMatrix(CMatrix &m);
+  static bool fixMatrix(CMatrix &m,int r,int c);
+  static bool checkIfZeroMatrix(CMatrix &m);
 
-  public:
+public:
 
   CMatrix();
   double getDeterminant2();
   double getDeterminant3();
   CMatrix horizontalConcatenation(CMatrix &m1,CMatrix &m2);
-   CMatrix verticalConcatenation(CMatrix &m1,CMatrix &m2);
+  CMatrix verticalConcatenation(CMatrix &m1,CMatrix &m2);
   ~CMatrix();
   enum MI { MI_ZEROS, MI_ONES, MI_EYE, MI_RAND, MI_VALUE   };
   CMatrix(int nR, int nC, int initialization = MI_ZEROS,
@@ -76,14 +77,13 @@ private:
   CMatrix dot_div1(const CMatrix &m );/*   \    */
   CMatrix dot_div2(const CMatrix &m );/*   /    */
 /************************************************************************************************************************/
-  CMatrix dot_pow(double num );
-  CMatrix pow_element(double num );
+  CMatrix power(double num );
 /*******************************    till here           *************************************************************************/
   void add(const CMatrix &m);
   void operator+=(CMatrix &m);
   void operator+=(double d);
-   CMatrix operator+(CMatrix &m);
-   CMatrix operator+(double d);
+  CMatrix operator+(CMatrix &m);
+  CMatrix operator+(double d);
 
   void sub(CMatrix &m);
   void operator-=(CMatrix &m);
@@ -110,9 +110,9 @@ private:
   CMatrix operator-();
   CMatrix operator+();
 
-  	friend istream& operator >> (istream &is, CMatrix& C);  //Stream
+  friend istream& operator >> (istream &is, CMatrix& C);  //Stream
   friend ostream& operator << (ostream &os, CMatrix& C); //Stream
-friend CMatrix operator /(double d ,CMatrix &m);
+  friend CMatrix operator /(double d ,CMatrix &m);
   void setSubMatrix(int iR, int iC, CMatrix &m);
   CMatrix getSubMatrix(int r, int c, int nr, int nc);
   CMatrix getCofactor(int r, int c);

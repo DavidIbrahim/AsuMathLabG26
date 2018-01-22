@@ -1,4 +1,3 @@
-
 #ifndef MATLAB_H
 #define MATLAB_H
 #include"CMatrix.h"
@@ -31,12 +30,16 @@ class Matlab
         //static Matlab getMatlabFromVector(string name, vector<Matlab> & matlabObjects)
         Matlab(string name ,const CMatrix &matrix);
         Matlab(string instruction,vector<Matlab>& myVector);
+
         CMatrix getMatrix(){return matrix;}
         string getName(){return name;}
+
         string getString();
         string getInstructionWithoutConcatenation(string instruction);
         string getInstructionWithoutMatlabNames(string instruction,vector<Matlab>& savedMatrices);
+
         virtual ~Matlab();
+
         string solvetrignometry(string s) ;
         string calcSimpleExpression(string s);
         string getStringValue(string complexString);
