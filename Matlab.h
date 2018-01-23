@@ -41,8 +41,7 @@ class Matlab
         string getInstructionWithoutMatlabNames(string instruction,vector<Matlab>& savedMatrices);
 
         string getInstructionWithoutFunctions(string instruction);
-        int checkInstructionForFunctions(string instruction);
-        string extractStringInsideFunction(string instruction);
+
 
 
         virtual ~Matlab();

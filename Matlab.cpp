@@ -30,14 +30,15 @@
 
 
 
-  void reverse(string & s)
-{   char temp;
-	for (int  i = 0 , j = s.length()-1 ; i < s.length()/2; i++ , j--)
-	{
-		temp = s[j];
-		s[j] = s[i];
-		s[i] = temp;
-	}
+void reverse(string & s)
+{
+    char temp;
+    for (int  i = 0, j = s.length()-1 ; i < s.length()/2; i++, j--)
+    {
+        temp = s[j];
+        s[j] = s[i];
+        s[i] = temp;
+    }
 }
 
 
@@ -52,10 +53,13 @@
 
 
 void Matlab:: trimAllSpaces(string & s)
-{   //	s.erase(s.begin(),std::find_if(s.begin(), s.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));//l. only
+{
+    //	s.erase(s.begin(),std::find_if(s.begin(), s.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));//l. only
     //	s.erase( std::find_if(s.rbegin(), s.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(),  s.end());//r. only
-	for (int i = 0; i < s.length(); i++){
-            if (s[i] == ' ') {
+    for (int i = 0; i < s.length(); i++)
+    {
+        if (s[i] == ' ')
+        {
             s.erase( i,1 );
             i--;
         }
@@ -73,7 +77,8 @@ void Matlab:: trimAllSpaces(string & s)
  *@return False if couldn't find the replacedString in the mainString and True otherwise
  */
 
-bool replaceString(string& mainString , string replacedString , string replacingString,int from = 0){
+bool replaceString(string& mainString, string replacedString, string replacingString,int from = 0)
+{
 
     size_t start_pos = mainString.find(replacedString,from);
     if(start_pos == std::string::npos)
@@ -107,28 +112,33 @@ Matlab getMatlab(string name,vector<Matlab> & savedMatrices){
 
 string Matlab::getInstructionWithoutMatlabNames(string instruction,vector<Matlab>& savedMatrices)
 {
-      string notMatlabNames = "0123456789 ,;[]";
-      string notVariableNames =" ;[],()+-%^*/.";
-    for(int i =0;i<savedMatrices.size(); i++){
+    string notMatlabNames = "0123456789 ,;[]";
+    string notVariableNames =" ;[],()+-%^*/.";
+    for(int i =0; i<savedMatrices.size(); i++)
+    {
         int position = 1;
-        while(true){
+        while(true)
+        {
 
             string currentName = savedMatrices[i].name;
             position = instruction.find(currentName,position);
-            if(position != std::string::npos){
+            if(position != std::string::npos)
+            {
                 char afterVariableName = instruction[position+currentName.length()];
                 char beforeVariableName = instruction[position-1];
                 if((notVariableNames.find(afterVariableName)!=string::npos
-                    || afterVariableName =='\0')&&  // ea3ny law el 7rf el abl wa b3d el name
-                   notVariableNames.find(beforeVariableName)!=string::npos){  // tl3o 7aga msh bt3'erle fe asm el variable
-                                                                            //eb2a dh aked hwa el variable el mtsgl 3ndy fe
-                                                                              //current name ... 3lshan mmkn ekon currentName = s
+                        || afterVariableName =='\0')&&  // ea3ny law el 7rf el abl wa b3d el name
+                        notVariableNames.find(beforeVariableName)!=string::npos)   // tl3o 7aga msh bt3'erle fe asm el variable
+                {
+                    //eb2a dh aked hwa el variable el mtsgl 3ndy fe
+                    //current name ... 3lshan mmkn ekon currentName = s
                     replaceString(instruction,currentName,savedMatrices[i].matrix.getString2(),position)   ;
-                                                                              //wa ala2e el s dh gwa sin() bs dh msh variable bta3y
-                   }
+                    //wa ala2e el s dh gwa sin() bs dh msh variable bta3y
+                }
                 position++;
             }
-            else{
+            else
+            {
                 break;
             }
 
@@ -136,7 +146,7 @@ string Matlab::getInstructionWithoutMatlabNames(string instruction,vector<Matlab
     }
 
 
-     return instruction;
+    return instruction;
 
 
 }
@@ -152,7 +162,7 @@ string Matlab::getInstructionWithoutSpecialMatrices(string instruction)
     size_t found_eye= instruction.find(eye);
     while (found_eye!=std::string::npos)
     {
-        string Srows ,Scolumns ;
+        string Srows,Scolumns ;
         size_t rowBegin = instruction.find("(",found_eye+1);
         size_t rowEnd =instruction.find(",",rowBegin);
         size_t columnEnd=instruction.find(")",rowEnd);
@@ -169,7 +179,7 @@ string Matlab::getInstructionWithoutSpecialMatrices(string instruction)
     size_t found_rand= instruction.find(rand);
     while (found_rand!=std::string::npos)
     {
-        string Srows ,Scolumns ;
+        string Srows,Scolumns ;
         size_t rowBegin = instruction.find("(",found_rand+1);
         size_t rowEnd =instruction.find(",",rowBegin);
         size_t columnEnd=instruction.find(")",rowEnd);
@@ -186,7 +196,7 @@ string Matlab::getInstructionWithoutSpecialMatrices(string instruction)
     size_t found_ones= instruction.find(ones);
     while (found_ones!=std::string::npos)
     {
-        string Srows ,Scolumns ;
+        string Srows,Scolumns ;
         size_t rowBegin = instruction.find("(",found_ones+1);
         size_t rowEnd =instruction.find(",",rowBegin);
         size_t columnEnd=instruction.find(")",rowEnd);
@@ -203,7 +213,7 @@ string Matlab::getInstructionWithoutSpecialMatrices(string instruction)
     size_t found_zeros= instruction.find(zeros);
     while (found_zeros!=std::string::npos)
     {
-        string Srows ,Scolumns ;
+        string Srows,Scolumns ;
         size_t rowBegin = instruction.find("(",found_zeros+1);
         size_t rowEnd =instruction.find(",",rowBegin);
         size_t columnEnd=instruction.find(")",rowEnd);
@@ -241,24 +251,32 @@ string Matlab::getInstructionWithoutConcatenation(string instruction)
     start=End;// new starting point to search from the end of first matrix.
     Begin =instruction.find("[",start);
     if(Begin==std::string::npos)//to check if its only one matrix.
-           return s;
+        return s;
     else
     {
         End =instruction.find("]",start+1);
         s=instruction.substr(Begin,(End+1)-Begin);
         CMatrix secondary(s);
         string s1=instruction.substr((start+1),(Begin-(start+1)));// the substring between the two matrices that determines the type of concatination between them.
-            for(unsigned int i=0;i<s1.length();i++)// to check for syntax errors between matrices.
+        for(unsigned int i=0; i<s1.length(); i++) // to check for syntax errors between matrices.
+        {
+            if ((s1[i])!=(' ')&&(s1[i])!=(',')&&(s1[i])!=(';')&&(s1[i])!=('\n')&&(s1.find("\r\n"))==std::string::npos)
             {
-                if ((s1[i])!=(' ')&&(s1[i])!=(',')&&(s1[i])!=(';')&&(s1[i])!=('\n')&&(s1.find("\r\n"))==std::string::npos)
-                 {throw ("Syntax error");}
+                throw ("Syntax error");
             }
+        }
         if ((s1.find(";"))!=std::string::npos||(s1.find("\r\n"))!=std::string::npos||(s1.find("\n"))!=std::string::npos)//to check if its horizontal or vertical conc.
-        {primary=secondary.verticalConcatenation(primary,secondary);}
+        {
+            primary=secondary.verticalConcatenation(primary,secondary);
+        }
         else if((s1.find(","))!=std::string::npos||(s1.find(" "))!=std::string::npos)
-            {primary=secondary.horizontalConcatenation(primary,secondary);}
+        {
+            primary=secondary.horizontalConcatenation(primary,secondary);
+        }
         else
-            {throw ("Syntax error");}//this condition checks if there's no spaces between matrices at all ([][]).
+        {
+            throw ("Syntax error");   //this condition checks if there's no spaces between matrices at all ([][]).
+        }
         start=End;
         instruction=(primary.getString2())+instruction.substr(start+1);
         return getInstructionWithoutConcatenation(instruction);
@@ -354,18 +372,21 @@ string Matlab::getReadyInstruction(string instruction,vector<Matlab>& savedMatri
     return instruction;
 }
 
-Matlab::Matlab(){
+Matlab::Matlab()
+{
 
 
 }
-Matlab::Matlab(const Matlab& x){
+Matlab::Matlab(const Matlab& x)
+{
     *this = x;
 
 }
 /**
 *   @brief this constructor used only for debugging ....
 */
-Matlab::Matlab(string name,const CMatrix &matrix){
+Matlab::Matlab(string name,const CMatrix &matrix)
+{
     this->name = name;
     this->matrix = matrix;
 
@@ -399,26 +420,27 @@ bool Matlab::checkIfSpecialMatrix(string instruction){
 *           eg A = [ 1 2 ; 3 4]      where A is the name of matrix
 */
 
-string Matlab::getString(){
+string Matlab::getString()
+{
 
     return name+" = "+matrix.getString2();
 }
 
- /** @brief simplify the expression to the final string value
- *
- * @param complexString it is a string of 1D expression, contains no matrices ex: 1+2/5*sin(2)
- * @return the final value of the expression as a string ex: 1.3637
- *
- */
+/** @brief simplify the expression to the final string value
+*
+* @param complexString it is a string of 1D expression, contains no matrices ex: 1+2/5*sin(2)
+* @return the final value of the expression as a string ex: 1.3637
+*
+*/
 
 
 string Matlab::getStringValue(string complexString)
 {
 
 
-  trimAllSpaces(complexString);
+    trimAllSpaces(complexString);
     //make sure all operations are in the form expected
-	//transform(s.begin(), s.end(), s.begin(), ::tolower);
+    //transform(s.begin(), s.end(), s.begin(), ::tolower);
 
 
     // uncomment this to call the values of any sin or cos
@@ -438,25 +460,27 @@ string Matlab::getStringValue(string complexString)
 *
 */
 
-string Matlab:: dealWithBrackets(string inputString){
+string Matlab:: dealWithBrackets(string inputString)
+{
 
- int poss = inputString.find('(');
+    int poss = inputString.find('(');
 
-	if (poss != string::npos)        //only enter if there's "(" else return input string
-	{
-		int pos2 = findTheClosingBracket(inputString,'(');
+    if (poss != string::npos)        //only enter if there's "(" else return input string
+    {
+        int pos2 = findTheClosingBracket(inputString,'(');
 
-		string stringInsideTheBrackets = inputString.substr(poss + 1, pos2-poss-1);
+        string stringInsideTheBrackets = inputString.substr(poss + 1, pos2-poss-1);
 
         if(stringInsideTheBrackets.find('(')!=string::npos)
-            {            // this is to deal with brackets inside each others like ((5+2)(5*3)*4)
-                string temp = dealWithBrackets(stringInsideTheBrackets);
-                replaceString(inputString,stringInsideTheBrackets,temp);
-                inputString = dealWithBrackets(inputString);
-            }
+        {
+            // this is to deal with brackets inside each others like ((5+2)(5*3)*4)
+            string temp = dealWithBrackets(stringInsideTheBrackets);
+            replaceString(inputString,stringInsideTheBrackets,temp);
+            inputString = dealWithBrackets(inputString);
+        }
 
-            else
-                {
+        else
+        {
             string calculatedValue = calcSimpleExpression(stringInsideTheBrackets);
             stringInsideTheBrackets = "("+stringInsideTheBrackets+")";
             replaceString(inputString,stringInsideTheBrackets,calculatedValue);
@@ -466,10 +490,10 @@ string Matlab:: dealWithBrackets(string inputString){
             else
                 return inputString;
 
-                 }
- 	}
- 	//if there's no brackets return inputString
- 	return inputString;
+        }
+    }
+    //if there's no brackets return inputString
+    return inputString;
 
 }
 
@@ -485,273 +509,284 @@ string Matlab:: dealWithBrackets(string inputString){
 
 
 
-string Matlab::calcSimpleExpression(string s){
+string Matlab::calcSimpleExpression(string s)
+{
 
-	string operators[5] = { "^","*", "/","+","-" };
-	char numbers[11] = { '0','1','2','3','4','5','6','7','8','9','.' };
-	if (( s[0] == '-'))
-		s = '0' + s;
-
-
-
-	for (int i = 0; i <5; i++)
-	{
-		int pos = s.find(operators[i]);
-
-		if (pos != string::npos)
-		{
+    string operators[5] = { "^","*", "/","+","-" };
+    char numbers[11] = { '0','1','2','3','4','5','6','7','8','9','.' };
+    if (( s[0] == '-'))
+        s = '0' + s;
 
 
 
-			//for neg at beginning special case
-			if (pos == 0 && i == 4)
-			{
-				pos = s.find(operators[i], 1);
-				if (pos == string::npos)
-					break;
+    for (int i = 0; i <5; i++)
+    {
+        int pos = s.find(operators[i]);
 
-
-			}
-
-			if (pos == 0 && i == 3)
-			{
-				s.erase(0, 1);
-
-				continue;
+        if (pos != string::npos)
+        {
 
 
 
-			}
-
-			s.erase(pos, 1);
-			double   Dafter, Dbefore, Dresult;
-			string   Safter, Sbefore, Sresult;
-			string   nmafter, nmbefore;
-			int      sign_after = 1, sign_before = 1;
-
-
-			Safter = s.substr(pos, s.length() - pos);
-			Sbefore = s.substr(0, pos);
-			int count = 0, flag = 0, end = 12;
+            //for neg at beginning special case
+            if (pos == 0 && i == 4)
+            {
+                pos = s.find(operators[i], 1);
+                if (pos == string::npos)
+                    break;
 
 
-			//for the number after
-			if (i != 3 && i != 4)
-			{
-				if (Safter[0] == '-')
-				{
-					sign_after = -1;
-					Safter.erase(0, 1);
-				}
+            }
+
+            if (pos == 0 && i == 3)
+            {
+                s.erase(0, 1);
+
+                continue;
 
 
-			//	if (Safter[0] == '+')
-				//{
-					//sign_after = 1;
-				//	Safter.erase(0, 1);
-				//}
-			}
 
-			for (int j = 0; j < Safter.length(); j++)
-			{
-				for (int d = 0; d < end; d++)
-				{
-					if (Safter[j] == numbers[d])
-					{
-						count++;
-						if (d == 10)
-						{
-							end = 11;
-						}
-						flag = 1;
+            }
 
-						break;
-					}
-				}
-				if (flag == 0)
-					break;
-				flag = 0;
-
-			}
-
-			nmafter = Safter.substr(0, count);
-			Dafter = atof(nmafter.c_str());
-			Safter.erase(0, count);
-			Dafter *= sign_after;
-			//now the after number have been taken with its sign
-			//after string is also ready
+            s.erase(pos, 1);
+            double   Dafter, Dbefore, Dresult;
+            string   Safter, Sbefore, Sresult;
+            string   nmafter, nmbefore;
+            int      sign_after = 1, sign_before = 1;
 
 
-			/********************using sstream a waste of a day at least **************************/
-			// for after
-			//turn into double
-			//			SSafter << Safter;//puts after in ss form
-			//		SSafter >> Dafter;//takes double i want (after)
-			//never mind the next line
-			//turn into string	 //		ostringstream strss;      //      strss <<(Dafter);   //	string strr = strss.str();
-			//gets the after ready
-			//	Safter.erase(0, count);
-			/*
-			// for before
-			// turn into double
-			reverse(Sbefore);
-			SSbefore << Sbefore;
-			SSbefore >> fixed >> Dbefore;
-			// turn into string
-			ostringstream strs;
-			strs << fixed<<Dbefore;
-			string str = strs.str();
-			// reverse back
-			reverse(str);
-			// urn into actual double
-			temp << std::fixed<<str;
-			temp >> std::fixed>>Dbefore;
-
-			Sbefore.erase(0,str.length());
-			reverse(Sbefore);
-
-			//reverse(Sbefore);
-			*/
-
-			/*****************************************************************************/
-			//for number before
+            Safter = s.substr(pos, s.length() - pos);
+            Sbefore = s.substr(0, pos);
+            int count = 0, flag = 0, end = 12;
 
 
-			count = 0, flag = 0, end = 12;
-			//		cout << Sbefore.length();
-			for (int j = Sbefore.length() - 1; j >= 0; j--)
-			{
-				for (int d = 0; d < end; d++)
-				{
-					if (Sbefore[j] == numbers[d])
-					{
-						count++;
-						if (j == 10)end = 11;
-						flag = 1;
-						break;
-
-					}
+            //for the number after
+            if (i != 3 && i != 4)
+            {
+                if (Safter[0] == '-')
+                {
+                    sign_after = -1;
+                    Safter.erase(0, 1);
+                }
 
 
-				}
-				if (flag == 0)
-					break;
-				flag = 0;
+                //	if (Safter[0] == '+')
+                //{
+                //sign_after = 1;
+                //	Safter.erase(0, 1);
+                //}
+            }
 
-			}
+            for (int j = 0; j < Safter.length(); j++)
+            {
+                for (int d = 0; d < end; d++)
+                {
+                    if (Safter[j] == numbers[d])
+                    {
+                        count++;
+                        if (d == 10)
+                        {
+                            end = 11;
+                        }
+                        flag = 1;
 
-			//	count--;
-			//to get before ready
-			reverse(Sbefore);
-			string copySbefore = Sbefore;
-			Sbefore.erase(0, count);
-			reverse(Sbefore);
-			copySbefore.erase(count, copySbefore.length() - count);
-			reverse(copySbefore);
-			Dbefore = atof(copySbefore.c_str());
-			//now for the sign of the sbefore
-			int entered = 0;
+                        break;
+                    }
+                }
+                if (flag == 0)
+                    break;
+                flag = 0;
 
-			if (Sbefore.length() > 2)
-				if (
-					(Sbefore[Sbefore.length() - 1] == '+')
-					|| (Sbefore[Sbefore.length() - 1] == '-')
-					)
-					if ( (Sbefore[Sbefore.length() - 2] == '+')
-						|| (Sbefore[Sbefore.length() - 2] == '-')
-						|| (Sbefore[Sbefore.length() - 2] == '*')
-						|| (Sbefore[Sbefore.length() - 2] == '/')
-						|| (Sbefore[Sbefore.length() - 2] == '^')
-						)
-					{
-						entered = 1;
-						if ((Sbefore[Sbefore.length() - 1] == '+'))
-							sign_before = 1;
+            }
 
-						if ((Sbefore[Sbefore.length() - 1] == '-'))
-							sign_before = -1;
-
-						Sbefore.erase(Sbefore.length() - 1, 1);
-					}
+            nmafter = Safter.substr(0, count);
+            Dafter = atof(nmafter.c_str());
+            Safter.erase(0, count);
+            Dafter *= sign_after;
+            //now the after number have been taken with its sign
+            //after string is also ready
 
 
-			//		cout << (Sbefore.length() - copySbefore.length()) ;
-			if (
-				//	(Sbefore.length() - copySbefore.length()) > 0			&&
-				Sbefore.length() > 0
-				&& entered != 1
-				&& i!=0
-				)
-			{
-			//	if (i == 3 || i == 4)
-				//{
-					if ((Sbefore[Sbefore.length() - 1] == '+'))
-						sign_before = 1;
+            /********************using sstream a waste of a day at least **************************/
+            // for after
+            //turn into double
+            //			SSafter << Safter;//puts after in ss form
+            //		SSafter >> Dafter;//takes double i want (after)
+            //never mind the next line
+            //turn into string	 //		ostringstream strss;      //      strss <<(Dafter);   //	string strr = strss.str();
+            //gets the after ready
+            //	Safter.erase(0, count);
+            /*
+            // for before
+            // turn into double
+            reverse(Sbefore);
+            SSbefore << Sbefore;
+            SSbefore >> fixed >> Dbefore;
+            // turn into string
+            ostringstream strs;
+            strs << fixed<<Dbefore;
+            string str = strs.str();
+            // reverse back
+            reverse(str);
+            // urn into actual double
+            temp << std::fixed<<str;
+            temp >> std::fixed>>Dbefore;
 
-					if ((Sbefore[Sbefore.length() - 1] == '-'))
-					{
-						sign_before = -1;
-						Sbefore.erase(Sbefore.length() - 1, 1);
-					}
-			//	}
+            Sbefore.erase(0,str.length());
+            reverse(Sbefore);
 
-			}
-			entered = 0;
-			Dbefore *= sign_before;
+            //reverse(Sbefore);
+            */
 
-			stringstream SSbefore, SSafter, ssresult, temp;
-			/*************************using stringstream***********************************************/
-			/*
-			//to get the string of before
+            /*****************************************************************************/
+            //for number before
 
-			stringstream SSbefore, SSafter, ssresult, temp;
-			string beforenumber = copySbefore.substr
-			(copySbefore.length() - count, count);
-			//to get the before as a number
-			SSbefore << beforenumber;
-			SSbefore >> fixed >> Dbefore;
-			// to calc.
 
-			*/
-			/*****************************************************************************/
+            count = 0, flag = 0, end = 12;
+            //		cout << Sbefore.length();
+            for (int j = Sbefore.length() - 1; j >= 0; j--)
+            {
+                for (int d = 0; d < end; d++)
+                {
+                    if (Sbefore[j] == numbers[d])
+                    {
+                        count++;
+                        if (j == 10)end = 11;
+                        flag = 1;
+                        break;
 
-			//now for the real calculations
-			switch (i)
-			{
-			case 0: Dresult = pow(Dbefore, Dafter); break;
-			case 1: Dresult = Dbefore * Dafter; break;
-			case 2: Dresult = Dbefore / Dafter; break;
-			case 3: Dresult = Dbefore + Dafter; break;
-			case 4: Dresult = Dbefore - Dafter; break;
-				//case 5: result = before % after; break;
-			}
-			char text[1000] = "";
-			sprintf(text , "%f", Dresult);
+                    }
+
+
+                }
+                if (flag == 0)
+                    break;
+                flag = 0;
+
+            }
+
+            //	count--;
+            //to get before ready
+            reverse(Sbefore);
+            string copySbefore = Sbefore;
+            Sbefore.erase(0, count);
+            reverse(Sbefore);
+            copySbefore.erase(count, copySbefore.length() - count);
+            reverse(copySbefore);
+            Dbefore = atof(copySbefore.c_str());
+            //now for the sign of the sbefore
+            int entered = 0;
+
+            if (Sbefore.length() > 2)
+                if (
+                    (Sbefore[Sbefore.length() - 1] == '+')
+                    || (Sbefore[Sbefore.length() - 1] == '-')
+                )
+                    if ( (Sbefore[Sbefore.length() - 2] == '+')
+                            || (Sbefore[Sbefore.length() - 2] == '-')
+                            || (Sbefore[Sbefore.length() - 2] == '*')
+                            || (Sbefore[Sbefore.length() - 2] == '/')
+                            || (Sbefore[Sbefore.length() - 2] == '^')
+                       )
+                    {
+                        entered = 1;
+                        if ((Sbefore[Sbefore.length() - 1] == '+'))
+                            sign_before = 1;
+
+                        if ((Sbefore[Sbefore.length() - 1] == '-'))
+                            sign_before = -1;
+
+                        Sbefore.erase(Sbefore.length() - 1, 1);
+                    }
+
+
+            //		cout << (Sbefore.length() - copySbefore.length()) ;
+            if (
+                //	(Sbefore.length() - copySbefore.length()) > 0			&&
+                Sbefore.length() > 0
+                && entered != 1
+                && i!=0
+            )
+            {
+                //	if (i == 3 || i == 4)
+                //{
+                if ((Sbefore[Sbefore.length() - 1] == '+'))
+                    sign_before = 1;
+
+                if ((Sbefore[Sbefore.length() - 1] == '-'))
+                {
+                    sign_before = -1;
+                    Sbefore.erase(Sbefore.length() - 1, 1);
+                }
+                //	}
+
+            }
+            entered = 0;
+            Dbefore *= sign_before;
+
+            stringstream SSbefore, SSafter, ssresult, temp;
+            /*************************using stringstream***********************************************/
+            /*
+            //to get the string of before
+
+            stringstream SSbefore, SSafter, ssresult, temp;
+            string beforenumber = copySbefore.substr
+            (copySbefore.length() - count, count);
+            //to get the before as a number
+            SSbefore << beforenumber;
+            SSbefore >> fixed >> Dbefore;
+            // to calc.
+
+            */
+            /*****************************************************************************/
+
+            //now for the real calculations
+            switch (i)
+            {
+            case 0:
+                Dresult = pow(Dbefore, Dafter);
+                break;
+            case 1:
+                Dresult = Dbefore * Dafter;
+                break;
+            case 2:
+                Dresult = Dbefore / Dafter;
+                break;
+            case 3:
+                Dresult = Dbefore + Dafter;
+                break;
+            case 4:
+                Dresult = Dbefore - Dafter;
+                break;
+                //case 5: result = before % after; break;
+            }
+            char text[1000] = "";
+            sprintf(text, "%f", Dresult);
 // _s , sizeof(text)
 
-			// to turn answer into string
-			ssresult << Dresult;
-			ssresult >> std::fixed >> Sresult;
-			//to get all back together
+            // to turn answer into string
+            ssresult << Dresult;
+            ssresult >> std::fixed >> Sresult;
+            //to get all back together
 
 
-			//(i == 3 || i == 4) &&
-			if ( Dresult > 0 && Sbefore.length() != 0 && sign_before==-1 )
-			{
-				s = Sbefore + '+' + text + Safter;
-			}
-			else
-				//getting ready for next calc.
-				s = Sbefore + text + Safter;
+            //(i == 3 || i == 4) &&
+            if ( Dresult > 0 && Sbefore.length() != 0 && sign_before==-1 )
+            {
+                s = Sbefore + '+' + text + Safter;
+            }
+            else
+                //getting ready for next calc.
+                s = Sbefore + text + Safter;
 
 
 
 
-			pos = string::npos;
-			i--;
-		}
+            pos = string::npos;
+            i--;
+        }
 
-	}
+    }
 
 
 
@@ -767,34 +802,36 @@ string Matlab::calcSimpleExpression(string s){
 *
 * @brief helper method for getStringValue
 **/
-int Matlab::findTheClosingBracket(string s , char openingBracket)
+int Matlab::findTheClosingBracket(string s, char openingBracket)
 {
 
     int count =0;
     char closingBracket;
 
     if (openingBracket == '(')
-            closingBracket=')';
+        closingBracket=')';
 
     else if (openingBracket == '[')
-            closingBracket=']';
+        closingBracket=']';
 
-   else {
+    else
+    {
         throw ("accepted openingBracets are '(' or '[' only");
-        }
+    }
 
     bool foundFirstBracket = false;
 
-    for(int i =0 ; i<s.size();i++)
+    for(int i =0 ; i<s.size(); i++)
+    {
+        if(s[i]==openingBracket)
         {
-        if(s[i]==openingBracket){
-             count++;
-             foundFirstBracket = true;
-                                }
+            count++;
+            foundFirstBracket = true;
+        }
         if(s[i]==closingBracket)
-             count--;
+            count--;
         if(count == 0 && foundFirstBracket)
-             return i;
+            return i;
     }
     return string::npos;
 }
@@ -806,10 +843,10 @@ int Matlab::findTheClosingBracket(string s , char openingBracket)
 
 
 
-			// here you need to use your function of find the bracket then get its value by my function then you need to
-			// send its  value back here to me to get its sin or cos
-			// the string temp is the string that you search for its first "(" and till the ")"
-			// and solve it like a normal function then send the value here as a string in  temp3
+// here you need to use your function of find the bracket then get its value by my function then you need to
+// send its  value back here to me to get its sin or cos
+// the string temp is the string that you search for its first "(" and till the ")"
+// and solve it like a normal function then send the value here as a string in  temp3
 
 
 
@@ -828,66 +865,76 @@ int Matlab::findTheClosingBracket(string s , char openingBracket)
 string Matlab::solvetrignometry(string s)
 {
 
-	string constants[3] = { "sin" , "cos" , "tan"  };
+    string constants[3] = { "sin", "cos", "tan"  };
 
-	for (int i = 0; i < 3 ; i++)
-	{
-	    //ex: s= "5+4+3+sin(4+5)+6"
-	    int pos = s.find(constants[i]);//finds the first letter s here pos = 6
-		if (pos != string::npos)
-		{
+    for (int i = 0; i < 3 ; i++)
+    {
+        //ex: s= "5+4+3+sin(4+5)+6"
+        int pos = s.find(constants[i]);//finds the first letter s here pos = 6
+        if (pos != string::npos)
+        {
 //to get the function
             char sign ;
             if(pos>0) sign = s[pos-1];
-            else {
+            else
+            {
                 sign = '\0';
             }
 
-     		string strafter = s.substr(pos+3, s.length()-pos);//(4+5)+6
-            string Sbefore = s.substr(  0 ,pos -1 );//5+4+3+
+            string strafter = s.substr(pos+3, s.length()-pos);//(4+5)+6
+            string Sbefore = s.substr(  0,pos -1 ); //5+4+3+
             // get the position of the in function
-			int startingPosisition= strafter.find('(');//0
-			int endingPosition = findTheClosingBracket(strafter,'(');//4
+            int startingPosisition= strafter.find('(');//0
+            int endingPosition = findTheClosingBracket(strafter,'(');//4
 
 //to return it back later
-			string Safter = strafter.substr( endingPosition+1 , strafter.length()-endingPosition );//+6
+            string Safter = strafter.substr( endingPosition+1, strafter.length()-endingPosition ); //+6
 // get the brackets alone and get their  value
-			string calc = strafter.substr( startingPosisition+1 , endingPosition-startingPosisition-1 );//(4+5)
+            string calc = strafter.substr( startingPosisition+1, endingPosition-startingPosisition-1 ); //(4+5)
             calc = getStringValue( calc );//9
 
             // get the number in double
             stringstream SSafter, ssresult ;
             string Sresult;
-            double number ,Dresult  ;
+            double number,Dresult  ;
             SSafter << calc;//9
-			SSafter >> number;//9
-        // get the trig of it
-switch (i) {
-			case 0: Dresult = sin(number); break;//sin(9) = .1564....
-			case 1: Dresult = cos(number); break;
-			case 2: Dresult = tan(number); break;
+            SSafter >> number;//9
+            // get the trig of it
+            switch (i)
+            {
+            case 0:
+                Dresult = sin(number);
+                break;//sin(9) = .1564....
+            case 1:
+                Dresult = cos(number);
+                break;
+            case 2:
+                Dresult = tan(number);
+                break;
             }
-        // return the answer to string
+            // return the answer to string
             ssresult << Dresult;//.1564
-			ssresult >>std::fixed >> Sresult;//.1564
-        // put the string back together
-        if(sign == '-'||sign == '+'){
-            char newSign = ((Dresult >  0 && sign == '+')||(Dresult<0 && sign =='-') ) ? '+' : '-';
-            if(Dresult<0) Sresult.erase(0,1);                                   // to delete the negative sign
-            s = Sbefore + newSign +Sresult + Safter;//5+4+3+.1564+6
+            ssresult >>std::fixed >> Sresult;//.1564
+            // put the string back together
+            if(sign == '-'||sign == '+')
+            {
+                char newSign = ((Dresult >  0 && sign == '+')||(Dresult<0 && sign =='-') ) ? '+' : '-';
+                if(Dresult<0) Sresult.erase(0,1);                                   // to delete the negative sign
+                s = Sbefore + newSign +Sresult + Safter;//5+4+3+.1564+6
+            }
+            else
+            {
+                s = Sresult+Safter;
+            }
+            // search again
+            i--;
         }
-        else {
-            s = Sresult+Safter;
-        }
-        // search again
-			i--;
-		}
 
 
-	}
+    }
 
 
-	return  s;
+    return  s;
 }
 /** @brief returns the instruction without special functions like sin()
  *
@@ -916,27 +963,66 @@ string Matlab::getInstructionWithoutFunctions(string instruction)
             value=getStringValue(extractedString);
             switch(checkInstructionForFunctions(instruction))
             {
-                case 1: replacedString="sin("+extractedString+")"; break;
-                case 2: replacedString="cos("+extractedString+")"; break;
-                case 3: replacedString="tan("+extractedString+")"; break;
-                case 4:replacedString="asin("+extractedString+")"; break;
-                case 5:replacedString="acos("+extractedString+")"; break;
-                case 6:replacedString="atan("+extractedString+")"; break;
-                case 7:replacedString="sinh("+extractedString+")"; break;
-                case 8:replacedString="cosh("+extractedString+")"; break;
-                case 9:replacedString="tanh("+extractedString+")"; break;
-                case 10:replacedString="asinh("+extractedString+")"; break;
-                case 11:replacedString="acosh("+extractedString+")"; break;
-                case 12:replacedString="atanh("+extractedString+")"; break;
-                case 13:replacedString="abs("+extractedString+")"; break;
-                case 14:replacedString="ceil("+extractedString+")"; break;
-                case 15:replacedString="floor("+extractedString+")"; break;
-                case 16:replacedString="sqrt("+extractedString+")"; break;
-                case 17:replacedString="exp("+extractedString+")"; break;
-                case 18:replacedString="log("+extractedString+")"; break;
-                case 19:replacedString="log10("+extractedString+")"; break;
-                //case 20:replacedString="power("+extractedString+")"; break;
-                default: throw("not supported function");
+            case 1:
+                replacedString="sin("+extractedString+")";
+                break;
+            case 2:
+                replacedString="cos("+extractedString+")";
+                break;
+            case 3:
+                replacedString="tan("+extractedString+")";
+                break;
+            case 4:
+                replacedString="asin("+extractedString+")";
+                break;
+            case 5:
+                replacedString="acos("+extractedString+")";
+                break;
+            case 6:
+                replacedString="atan("+extractedString+")";
+                break;
+            case 7:
+                replacedString="sinh("+extractedString+")";
+                break;
+            case 8:
+                replacedString="cosh("+extractedString+")";
+                break;
+            case 9:
+                replacedString="tanh("+extractedString+")";
+                break;
+            case 10:
+                replacedString="asinh("+extractedString+")";
+                break;
+            case 11:
+                replacedString="acosh("+extractedString+")";
+                break;
+            case 12:
+                replacedString="atanh("+extractedString+")";
+                break;
+            case 13:
+                replacedString="abs("+extractedString+")";
+                break;
+            case 14:
+                replacedString="ceil("+extractedString+")";
+                break;
+            case 15:
+                replacedString="floor("+extractedString+")";
+                break;
+            case 16:
+                replacedString="sqrt("+extractedString+")";
+                break;
+            case 17:
+                replacedString="exp("+extractedString+")";
+                break;
+            case 18:
+                replacedString="log("+extractedString+")";
+                break;
+            case 19:
+                replacedString="log10("+extractedString+")";
+                break;
+            //case 20:replacedString="power("+extractedString+")"; break;
+            default:
+                throw("not supported function");
             }
             replaceString(instruction,replacedString,value);
         }
@@ -947,27 +1033,68 @@ string Matlab::getInstructionWithoutFunctions(string instruction)
             finalMatrix=getStringMatrix(extractedString);
             switch(checkInstructionForFunctions(instruction))
             {
-                case 1: replacedString="sin("+extractedString+")"; break;
-                case 2: replacedString="cos("+extractedString+")"; break;
-                case 3: replacedString="tan("+extractedString+")"; break;
-                case 4:replacedString="asin("+extractedString+")"; break;
-                case 5:replacedString="acos("+extractedString+")"; break;
-                case 6:replacedString="atan("+extractedString+")"; break;
-                case 7:replacedString="sinh("+extractedString+")"; break;
-                case 8:replacedString="cosh("+extractedString+")"; break;
-                case 9:replacedString="tanh("+extractedString+")"; break;
-                case 10:replacedString="asinh("+extractedString+")"; break;
-                case 11:replacedString="acosh("+extractedString+")"; break;
-                case 12:replacedString="atanh("+extractedString+")"; break;
-                case 13:replacedString="abs("+extractedString+")"; break;
-                case 14:replacedString="ceil("+extractedString+")"; break;
-                case 15:replacedString="floor("+extractedString+")"; break;
-                case 16:replacedString="sqrt("+extractedString+")"; break;
-                case 17:replacedString="exp("+extractedString+")"; break;
-                case 18:replacedString="log("+extractedString+")"; break;
-                case 19:replacedString="log10("+extractedString+")"; break;
-                case 20:replacedString="power("+extractedString+")"; break;
-                default: throw("not supported function");
+            case 1:
+                replacedString="sin("+extractedString+")";
+                break;
+            case 2:
+                replacedString="cos("+extractedString+")";
+                break;
+            case 3:
+                replacedString="tan("+extractedString+")";
+                break;
+            case 4:
+                replacedString="asin("+extractedString+")";
+                break;
+            case 5:
+                replacedString="acos("+extractedString+")";
+                break;
+            case 6:
+                replacedString="atan("+extractedString+")";
+                break;
+            case 7:
+                replacedString="sinh("+extractedString+")";
+                break;
+            case 8:
+                replacedString="cosh("+extractedString+")";
+                break;
+            case 9:
+                replacedString="tanh("+extractedString+")";
+                break;
+            case 10:
+                replacedString="asinh("+extractedString+")";
+                break;
+            case 11:
+                replacedString="acosh("+extractedString+")";
+                break;
+            case 12:
+                replacedString="atanh("+extractedString+")";
+                break;
+            case 13:
+                replacedString="abs("+extractedString+")";
+                break;
+            case 14:
+                replacedString="ceil("+extractedString+")";
+                break;
+            case 15:
+                replacedString="floor("+extractedString+")";
+                break;
+            case 16:
+                replacedString="sqrt("+extractedString+")";
+                break;
+            case 17:
+                replacedString="exp("+extractedString+")";
+                break;
+            case 18:
+                replacedString="log("+extractedString+")";
+                break;
+            case 19:
+                replacedString="log10("+extractedString+")";
+                break;
+            case 20:
+                replacedString="power("+extractedString+")";
+                break;
+            default:
+                throw("not supported function");
             }
             replaceString(instruction,replacedString,finalMatrix);
         }
@@ -983,10 +1110,63 @@ string Matlab::getInstructionWithoutFunctions(string instruction)
  * Note: the returned number corresponds to the first found function while searching
  */
 
+
 int Matlab::checkInstructionForFunctions(string instruction)
 {
+    string constants[20] =
+    {
+        "sin", "cos", "tan"
+        ,"asin", "acos", "atan"
+        ,"sinh", "cosh", "tanh"
+        ,"asinh", "acosh", "atanh"
+        ,"abs", "ceil", "floor"
+        ,"sqrt", "exp", "log"
+        ,"log10", "power"
+    };
+    for (int i = 0; i < 20 ; i++)
+    {
+        int pos = instruction.find(constants[i]);
+        if (pos != string::npos)
+        {
+            //for sin cos and tan
+            if( i<3)
+            {
+                if( instruction[pos+3]=='h'&& instruction[pos-1]!='a' )
+                {
+                    i=i+6;
+                }
 
+                if(  instruction[pos+3]!='h' && instruction[pos-1]=='a'   )
+                {
+                    i=i+3;
+                }
+                if(  instruction[pos+3]=='h' && instruction[pos-1]=='a'   )
+                {
+                    i=i+9;
+                }
+            }
+
+            //for log and log10
+            if(i==17)
+            {
+                if(  instruction[pos+1+2]=='1' && instruction[pos+2+2]=='0'   )
+                {
+                    i++;
+                }
+            }
+
+
+
+
+
+
+
+            return i+1;
+        }
+    }
+    return 0;
 }
+
 
 /** @brief extract the string inside the () of the first special function found in the instruction
  *
@@ -997,7 +1177,30 @@ int Matlab::checkInstructionForFunctions(string instruction)
 
 string Matlab::extractStringInsideFunction(string instruction)
 {
+    string constants[20] =
+    {
+        "sin", "cos", "tan"
+        ,"asin", "acos", "atan"
+        ,"sinh", "cosh", "tanh"
+        ,"asinh", "acosh", "atanh"
+        ,"abs", "ceil", "floor"
+        ,"sqrt", "exp", "log"
+        ,"log10", "power"
+    };
+    for (int i = 0; i < 20 ; i++)
+    {
+        int pos = instruction.find(constants[i]);
+        if (pos != string::npos)
+        {
 
+            int startingpostion= instruction.find('(',pos);
+            int endingPosition = findTheClosingBracket(instruction,'(');
+            return instruction.substr( startingpostion+1, endingPosition-startingpostion-1 );
+
+        }
+
+
+    }
+    return "invalid call for the function of extractStringInsideFunction";
 
 }
-
