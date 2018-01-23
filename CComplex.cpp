@@ -4,6 +4,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <iostream>
+
 CComplex::CComplex()
 {
     R = I = 0.0;
@@ -133,19 +134,14 @@ CComplex::operator const string()
 {
     return getString();
 }
-/*istream& operator >> (istream& is, CComplex& C)
-{
-    is>>C.R;
-    is>>C.I;
-    return is;
-}*/
-/*istream& operator >> (istream &is, CComplex& C)
+
+istream& operator >> (istream &is, CComplex& C)
 {
     string s;
     getline(is, s);
     C= CComplex(s);
     return is;
-}*/
+}
 ostream& operator << (ostream& os, CComplex& C)
 {
     os<<C.getString();
@@ -210,6 +206,10 @@ CComplex operator/(CComplex& A, CComplex& B)
 }
 CComplex::CComplex(string s)
 {
+    copy(s);
+}
+void CComplex::copy(string s)
+{
     int plusPos, minusPos, i_Pos;
     bool real, imag;
 
@@ -230,6 +230,11 @@ CComplex::CComplex(string s)
         string imagNum;
         imagNum=s.substr(0,i_Pos);
         I = atof(imagNum.c_str());
+        if (I == 0) // i, -i
+        {
+            I = 1;
+            if (s[0] == '-') I = -I;
+        }
     }
 
     else
@@ -247,9 +252,10 @@ CComplex::CComplex(string s)
             s=s.substr(plusPos);
         }
         I = atof(s.c_str());
-        if (I == 0) I = 1; // 1 + i, 1 - i
-
-        if (s[0] == '-')
-            I = -I;
+        if (I == 0) // 1 + i, 1 - i
+        {
+            I = 1;
+            if (s[0] == '-') I = -I;
+        }
     }
 }

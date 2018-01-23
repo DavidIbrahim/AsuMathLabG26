@@ -12,6 +12,7 @@ class CComplex
         CComplex(double R, double I);
         CComplex(const CComplex& C);
         CComplex(string s);
+        void copy(string s);
         string getString();
         double magnitude();
         double angle();
@@ -38,7 +39,7 @@ class CComplex
 
         CComplex operator-();
         operator const string();
-        //friend istream& operator >> (istream &is, CComplex& C);
+        friend istream& operator >> (istream &is, CComplex& C);
         friend ostream& operator << (ostream &os, CComplex& C);
 
         CComplex operator++(); //Pre Increment
