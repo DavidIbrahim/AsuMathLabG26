@@ -1,8 +1,9 @@
 #include "CComplex.h"
-#include <string>
+#include <string.h>
+#include <stdlib.h>
 #include <math.h>
 #include <stdio.h>
-
+#include <iostream>
 CComplex::CComplex()
 {
     R = I = 0.0;
@@ -138,6 +139,13 @@ CComplex::operator const string()
     is>>C.I;
     return is;
 }*/
+/*istream& operator >> (istream &is, CComplex& C)
+{
+    string s;
+    getline(is, s);
+    C= CComplex(s);
+    return is;
+}*/
 ostream& operator << (ostream& os, CComplex& C)
 {
     os<<C.getString();
@@ -199,4 +207,49 @@ CComplex operator/(CComplex& A, CComplex& B)
     CComplex X=A;
     X.div(B);
     return X;
+}
+CComplex::CComplex(string s)
+{
+    int plusPos, minusPos, i_Pos;
+    bool real, imag;
+
+    plusPos = s.rfind('+');
+    minusPos = s.rfind('-');
+    i_Pos = s.find('i');
+
+    real = i_Pos < 0; // real number won't contain the character i
+    imag = i_Pos>=0 && ((minusPos < 0 && plusPos < 0)||(plusPos < 0 && minusPos==0)); // pure imag number if no + or -
+
+    if (real) {
+        R = atof(s.c_str());
+        I = 0.0;
+    }
+
+    else if (imag) {
+        R = 0.0;
+        string imagNum;
+        imagNum=s.substr(0,i_Pos);
+        I = atof(imagNum.c_str());
+    }
+
+    else
+    {
+        if(minusPos>0) //No spaces in the beg
+        {
+            string realNum=s.substr(0,minusPos);
+            R = atof(realNum.c_str());
+            s=s.substr(minusPos);
+        }
+        else if (plusPos>=0)
+        {
+            string realNum=s.substr(0,plusPos);
+            R = atof(realNum.c_str());
+            s=s.substr(plusPos);
+        }
+        I = atof(s.c_str());
+        if (I == 0) I = 1; // 1 + i, 1 - i
+
+        if (s[0] == '-')
+            I = -I;
+    }
 }
