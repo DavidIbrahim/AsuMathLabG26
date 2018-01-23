@@ -897,6 +897,11 @@ switch (i) {
  * special fns are sin,cos,tan,asin,acos,atan,sinh,cosh,tanh,asinh,acosh,atanh,abs,ceil,floor,sqrt,exp,log,log10,power
  */
 
+
+
+
+
+
 string Matlab::getInstructionWithoutFunctions(string instruction)
 {
     while(checkInstructionForFunctions(instruction))
@@ -995,3 +1000,4 @@ string Matlab::extractStringInsideFunction(string instruction)
 
 
 }
+
