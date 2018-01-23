@@ -899,7 +899,75 @@ switch (i) {
 
 string Matlab::getInstructionWithoutFunctions(string instruction)
 {
-
+    while(checkInstructionForFunctions(instruction))
+    {
+        string extractedString;
+        //power fn is missing
+        extractedString=extractStringInsideFunction(instruction);
+        if(!checkStringForMatrix(extractedString))//no matrix found inside the special function
+        {
+            string value;//the equivalent value of the string
+            string replacedString;
+            value=getStringValue(extractedString);
+            switch(checkInstructionForFunctions(instruction))
+            {
+                case 1: replacedString="sin("+extractedString+")"; break;
+                case 2: replacedString="cos("+extractedString+")"; break;
+                case 3: replacedString="tan("+extractedString+")"; break;
+                case 4:replacedString="asin("+extractedString+")"; break;
+                case 5:replacedString="acos("+extractedString+")"; break;
+                case 6:replacedString="atan("+extractedString+")"; break;
+                case 7:replacedString="sinh("+extractedString+")"; break;
+                case 8:replacedString="cosh("+extractedString+")"; break;
+                case 9:replacedString="tanh("+extractedString+")"; break;
+                case 10:replacedString="asinh("+extractedString+")"; break;
+                case 11:replacedString="acosh("+extractedString+")"; break;
+                case 12:replacedString="atanh("+extractedString+")"; break;
+                case 13:replacedString="abs("+extractedString+")"; break;
+                case 14:replacedString="ceil("+extractedString+")"; break;
+                case 15:replacedString="floor("+extractedString+")"; break;
+                case 16:replacedString="sqrt("+extractedString+")"; break;
+                case 17:replacedString="exp("+extractedString+")"; break;
+                case 18:replacedString="log("+extractedString+")"; break;
+                case 19:replacedString="log10("+extractedString+")"; break;
+                //case 20:replacedString="power("+extractedString+")"; break;
+                default: throw("not supported function");
+            }
+            replaceString(instruction,replacedString,value);
+        }
+        else//there is a matrix inside the special function
+        {
+            string finalMatrix;
+            string replacedString;
+            finalMatrix=getStringMatrix(extractedString);
+            switch(checkInstructionForFunctions(instruction))
+            {
+                case 1: replacedString="sin("+extractedString+")"; break;
+                case 2: replacedString="cos("+extractedString+")"; break;
+                case 3: replacedString="tan("+extractedString+")"; break;
+                case 4:replacedString="asin("+extractedString+")"; break;
+                case 5:replacedString="acos("+extractedString+")"; break;
+                case 6:replacedString="atan("+extractedString+")"; break;
+                case 7:replacedString="sinh("+extractedString+")"; break;
+                case 8:replacedString="cosh("+extractedString+")"; break;
+                case 9:replacedString="tanh("+extractedString+")"; break;
+                case 10:replacedString="asinh("+extractedString+")"; break;
+                case 11:replacedString="acosh("+extractedString+")"; break;
+                case 12:replacedString="atanh("+extractedString+")"; break;
+                case 13:replacedString="abs("+extractedString+")"; break;
+                case 14:replacedString="ceil("+extractedString+")"; break;
+                case 15:replacedString="floor("+extractedString+")"; break;
+                case 16:replacedString="sqrt("+extractedString+")"; break;
+                case 17:replacedString="exp("+extractedString+")"; break;
+                case 18:replacedString="log("+extractedString+")"; break;
+                case 19:replacedString="log10("+extractedString+")"; break;
+                case 20:replacedString="power("+extractedString+")"; break;
+                default: throw("not supported function");
+            }
+            replaceString(instruction,replacedString,finalMatrix);
+        }
+    }
+    return instruction;
 }
 
 /** @brief search the instruction for special function and returns integer number corresponding to the function found
