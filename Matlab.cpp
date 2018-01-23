@@ -820,3 +820,100 @@ switch (i) {
 	return  s;
 }
 
+
+
+
+int Matlab::checkInstructionForFunctions(string instruction)
+{
+	string constants[20] =
+	{
+     "sin"   , "cos"  , "tan"
+	,"asin"  , "acos" , "atan"
+	,"sinh"  , "cosh" , "tanh"
+	,"asinh" , "acosh", "atanh"
+	,"abs"   , "ceil" , "floor"
+    ,"sqrt"  , "exp"  , "log"
+    ,"log10" , "power"
+    };
+	for (int i = 0; i < 20 ; i++)
+	{
+	    int pos = instruction.find(constants[i]);
+	    if (pos != string::npos)
+            {
+                //for sin cos and tan
+                if( i<3)
+                {
+                    if( instruction[pos+3]=='h'&& instruction[pos-1]!='a' )
+                    {
+                        i=i+6;
+                    }
+
+                    if(  instruction[pos+3]!='h' && instruction[pos-1]=='a'   )
+                    {
+                        i=i+3;
+                    }
+                    if(  instruction[pos+3]=='h' && instruction[pos-1]=='a'   )
+                    {
+                        i=i+9;
+                    }
+                }
+
+                //for log and log10
+                if(i==17)
+                {
+                    if(  instruction[pos+1+2]=='1' && instruction[pos+2+2]=='0'   )
+                    {
+                        i++;
+                    }
+                }
+
+
+
+
+
+
+
+                return i+1;
+            }
+	}
+return 0;
+}
+
+
+
+
+
+
+
+string Matlab::extractStringInsideFunction(string instruction)
+{
+	string constants[20] =
+	{
+     "sin"   , "cos"  , "tan"
+	,"asin"  , "acos" , "atan"
+	,"sinh"  , "cosh" , "tanh"
+	,"asinh" , "acosh", "atanh"
+	,"abs"   , "ceil" , "floor"
+    ,"sqrt"  , "exp"  , "log"
+    ,"log10" , "power"
+    };
+	for (int i = 0; i < 20 ; i++)
+	{
+	    int pos = instruction.find(constants[i]);
+	    if (pos != string::npos)
+            {
+
+            int startingpostion= instruction.find('(',pos);
+			int endingPosition = findTheClosingBracket(instruction,'(');
+			return instruction.substr( startingpostion+1 , endingPosition-startingpostion-1 );
+
+            }
+
+
+    }
+return "invalid call for the function of extractStringInsideFunction";
+
+}
+
+
+

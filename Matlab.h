@@ -23,6 +23,8 @@ class Matlab
         string dealWithBrackets(string complexString);
         int findTheClosingBracket(string s,char openingBracket);
     public:
+        int checkInstructionForFunctions(string instruction);
+        string extractStringInsideFunction(string instruction);
         enum{};
         bool checkStringForMatrix(string complexString);
         Matlab();
