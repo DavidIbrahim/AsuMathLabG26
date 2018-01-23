@@ -194,6 +194,12 @@ cout<<"for power int "<<y.getString()<<endl;
 /*************************************************************************************************************/
 Matlab ttt;
 
+
+
+
+
+
+
 cout<<"for checkInstructionForFunctions test "<<endl<<endl;
 cout<<ttt.checkInstructionForFunctions("vdsbihbidb")<<endl;//0
 cout<<ttt.checkInstructionForFunctions("sinbihbcosidb")<<endl;//1
@@ -242,6 +248,7 @@ cout<<ttt.extractStringInsideFunction("vdsbipower(end test+1)db")<<endl;//20
 cout<<ttt.extractStringInsideFunction("vdsbidb")<<endl;//0
 cout<<"both functions had there first test you can add your own test"<<endl;//0
 
+/*************************************************************************************************************/
 
 
 

@@ -25,6 +25,7 @@
  *
  *  @return: it takes the string by refrence so return is void
  */
+ 
 
 
 
@@ -61,7 +62,6 @@ void Matlab:: trimAllSpaces(string & s)
 
     }
 }
-
 
 /** @brief replace a substring in a  string with another substring .
  *
@@ -148,7 +148,75 @@ string Matlab::getInstructionWithoutMatlabNames(string instruction,vector<Matlab
  */
 string Matlab::getInstructionWithoutSpecialMatrices(string instruction)
 {
-
+    string eye="eye";
+    size_t found_eye= instruction.find(eye);
+    while (found_eye!=std::string::npos)
+    {
+        string Srows ,Scolumns ;
+        size_t rowBegin = instruction.find("(",found_eye+1);
+        size_t rowEnd =instruction.find(",",rowBegin);
+        size_t columnEnd=instruction.find(")",rowEnd);
+        Srows=instruction.substr(rowBegin+1,rowEnd-(rowBegin+1));
+        Scolumns=instruction.substr(rowEnd+1,columnEnd-(rowEnd+1));
+        int nrows = atoi (Srows.c_str());
+        int ncolumns = atoi (Scolumns.c_str());
+        CMatrix eye_matrix (nrows,ncolumns,CMatrix::MI_EYE);
+        size_t length_eye=(columnEnd-found_eye+1);//length of eye matrix in the original string .
+        instruction.replace(found_eye,length_eye,eye_matrix.getString2());
+        found_eye=instruction.find("eye",found_eye+1);
+    }
+    string rand="rand";
+    size_t found_rand= instruction.find(rand);
+    while (found_rand!=std::string::npos)
+    {
+        string Srows ,Scolumns ;
+        size_t rowBegin = instruction.find("(",found_rand+1);
+        size_t rowEnd =instruction.find(",",rowBegin);
+        size_t columnEnd=instruction.find(")",rowEnd);
+        Srows=instruction.substr(rowBegin+1,rowEnd-(rowBegin+1));
+        Scolumns=instruction.substr(rowEnd+1,columnEnd-(rowEnd+1));
+        int nrows = atoi (Srows.c_str());
+        int ncolumns = atoi (Scolumns.c_str());
+        CMatrix rand_matrix (nrows,ncolumns,CMatrix::MI_RAND);
+        size_t length_rand=(columnEnd-found_rand+1);//length of rand matrix in the original string .
+        instruction.replace(found_rand,length_rand,rand_matrix.getString2());
+        found_rand=instruction.find("rand",found_rand+1);
+    }
+    string ones="ones";
+    size_t found_ones= instruction.find(ones);
+    while (found_ones!=std::string::npos)
+    {
+        string Srows ,Scolumns ;
+        size_t rowBegin = instruction.find("(",found_ones+1);
+        size_t rowEnd =instruction.find(",",rowBegin);
+        size_t columnEnd=instruction.find(")",rowEnd);
+        Srows=instruction.substr(rowBegin+1,rowEnd-(rowBegin+1));
+        Scolumns=instruction.substr(rowEnd+1,columnEnd-(rowEnd+1));
+        int nrows = atoi (Srows.c_str());
+        int ncolumns = atoi (Scolumns.c_str());
+        CMatrix ones_matrix (nrows,ncolumns,CMatrix::MI_ONES);
+        size_t length_ones=(columnEnd-found_ones+1);//length of eye matrix in the original string .
+        instruction.replace(found_ones,length_ones,ones_matrix.getString2());
+        found_ones=instruction.find("ones",found_ones+1);
+    }
+    string zeros="zeros";
+    size_t found_zeros= instruction.find(zeros);
+    while (found_zeros!=std::string::npos)
+    {
+        string Srows ,Scolumns ;
+        size_t rowBegin = instruction.find("(",found_zeros+1);
+        size_t rowEnd =instruction.find(",",rowBegin);
+        size_t columnEnd=instruction.find(")",rowEnd);
+        Srows=instruction.substr(rowBegin+1,rowEnd-(rowBegin+1));
+        Scolumns=instruction.substr(rowEnd+1,columnEnd-(rowEnd+1));
+        int nrows = atoi (Srows.c_str());
+        int ncolumns = atoi (Scolumns.c_str());
+        CMatrix zeros_matrix (nrows,ncolumns,CMatrix::MI_ZEROS);
+        size_t length_zeros=(columnEnd-found_zeros+1);//length of eye matrix in the original string .
+        instruction.replace(found_zeros,length_zeros,zeros_matrix.getString2());
+        found_zeros=instruction.find("zeros",found_zeros+1);
+    }
+    return instruction;
 }
 /** @brief search the whole instruction and remove the concatenation from it then returns it back
  *
@@ -217,7 +285,6 @@ bool Matlab::checkStringForMatrix(string complexString)
 
 
 }
-
 /** @brief simplify the expression to the final matrix string
  *
  * @param complexString it is a string of matrix operations without any matlab names or special matrix ex: 1.2+[1.0 2.0]*2+sin([3.3 2.2])
