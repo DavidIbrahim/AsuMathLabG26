@@ -25,7 +25,7 @@
  *
  *  @return: it takes the string by refrence so return is void
  */
- 
+
 
 
 
@@ -285,26 +285,28 @@ bool Matlab::checkStringForMatrix(string complexString)
 
 
 }
-/** @brief simplify the expression to the final matrix string
+/** @brief simplify the String to the final matrix string
  *
- * @param complexString it is a string of matrix operations without any matlab names or special matrix ex: 1.2+[1.0 2.0]*2+sin([3.3 2.2])
- * @return the resultant matrix as a string ex: [3.0423 6.0085]
+ * @param complexString it is a string of matrix operations without any matlab names or special matrix or special functions ex: 1.2+[[1.0 2.0; 3.0 3.0]*[[2.0 4.0];[4.0 4.0]]]/[6.0 5.0; 4.0 3.0]
+ * @return the resultant matrix as a string ex:    [10.2000 -9.8000;22.2000 -25.8000]
  * search for all operations including dot operations
+ * take care of the priority between concatenation and operations
  */
 
 string Matlab::getStringMatrix(string complexString)
 {
 
 }
-/** @brief this fn replace any expression in the instruction by it's equivalent value or matrix
+/** @brief this fn replace any expression(in a single element) in the instruction by it's equivalent value
  *
- * @param instruction the full instruction but without Matlab names or special matrix ex: A=[6+2 2+[1 2 3]];
- * @return the instruction without any expressions ex: A=[8 [3 4 5]];
- *
+ * @param instruction the full instruction but without Matlab names or special matrix ex: A=[6.0+2.0 2.0+[1.0 2.0 3.0] sin([2.0 3.0+3.0])];
+ * @return the instruction without any expressions ex: A=[8.0 2.0+[1.0 2.0 3.0] sin([2.0 6.0])];
+ * Hint: extract every single element and call getStringValue() function
  */
 
 string Matlab::getInstructionWithoutExpressions(string instruction)
 {
+    /* this code is incorrect
     istringstream is;
     is.str(instruction);
     char c; //to loop each character in the instruction
@@ -333,6 +335,7 @@ string Matlab::getInstructionWithoutExpressions(string instruction)
         }
     }
     return instruction;
+    */
 }
 /**
 * this fn takes the full instruction as it is ex: B = [1.2 2.3 A;[1.3 2.4;4.6 1.3],[3.2;7.8]];
@@ -886,101 +889,115 @@ switch (i) {
 
 	return  s;
 }
+/** @brief returns the instruction without special functions like sin()
+ *
+ * @param instruction it is the instruction without matlab names or special matrix ex: 1.2+sqrt([4.0 16.0],[16.0 4.0])+[6.0 pow(2,2) 3.0 4.0]
+ * @return the instruction without fns like:sin-cos-tan-sqrt-pow-exp ,replace them by their equivalent value or matrix ex: 1.2+[2.0 4.0 4.0 2.0]+[6.0 4.0 3.0 4.0]
+ * notes: it can be a single value or a matrix inside the function
+ * special fns are sin,cos,tan,asin,acos,atan,sinh,cosh,tanh,asinh,acosh,atanh,abs,ceil,floor,sqrt,exp,log,log10,power
+ */
 
 
 
+
+
+
+string Matlab::getInstructionWithoutFunctions(string instruction)
+{
+    while(checkInstructionForFunctions(instruction))
+    {
+        string extractedString;
+        //power fn is missing
+        extractedString=extractStringInsideFunction(instruction);
+        if(!checkStringForMatrix(extractedString))//no matrix found inside the special function
+        {
+            string value;//the equivalent value of the string
+            string replacedString;
+            value=getStringValue(extractedString);
+            switch(checkInstructionForFunctions(instruction))
+            {
+                case 1: replacedString="sin("+extractedString+")"; break;
+                case 2: replacedString="cos("+extractedString+")"; break;
+                case 3: replacedString="tan("+extractedString+")"; break;
+                case 4:replacedString="asin("+extractedString+")"; break;
+                case 5:replacedString="acos("+extractedString+")"; break;
+                case 6:replacedString="atan("+extractedString+")"; break;
+                case 7:replacedString="sinh("+extractedString+")"; break;
+                case 8:replacedString="cosh("+extractedString+")"; break;
+                case 9:replacedString="tanh("+extractedString+")"; break;
+                case 10:replacedString="asinh("+extractedString+")"; break;
+                case 11:replacedString="acosh("+extractedString+")"; break;
+                case 12:replacedString="atanh("+extractedString+")"; break;
+                case 13:replacedString="abs("+extractedString+")"; break;
+                case 14:replacedString="ceil("+extractedString+")"; break;
+                case 15:replacedString="floor("+extractedString+")"; break;
+                case 16:replacedString="sqrt("+extractedString+")"; break;
+                case 17:replacedString="exp("+extractedString+")"; break;
+                case 18:replacedString="log("+extractedString+")"; break;
+                case 19:replacedString="log10("+extractedString+")"; break;
+                //case 20:replacedString="power("+extractedString+")"; break;
+                default: throw("not supported function");
+            }
+            replaceString(instruction,replacedString,value);
+        }
+        else//there is a matrix inside the special function
+        {
+            string finalMatrix;
+            string replacedString;
+            finalMatrix=getStringMatrix(extractedString);
+            switch(checkInstructionForFunctions(instruction))
+            {
+                case 1: replacedString="sin("+extractedString+")"; break;
+                case 2: replacedString="cos("+extractedString+")"; break;
+                case 3: replacedString="tan("+extractedString+")"; break;
+                case 4:replacedString="asin("+extractedString+")"; break;
+                case 5:replacedString="acos("+extractedString+")"; break;
+                case 6:replacedString="atan("+extractedString+")"; break;
+                case 7:replacedString="sinh("+extractedString+")"; break;
+                case 8:replacedString="cosh("+extractedString+")"; break;
+                case 9:replacedString="tanh("+extractedString+")"; break;
+                case 10:replacedString="asinh("+extractedString+")"; break;
+                case 11:replacedString="acosh("+extractedString+")"; break;
+                case 12:replacedString="atanh("+extractedString+")"; break;
+                case 13:replacedString="abs("+extractedString+")"; break;
+                case 14:replacedString="ceil("+extractedString+")"; break;
+                case 15:replacedString="floor("+extractedString+")"; break;
+                case 16:replacedString="sqrt("+extractedString+")"; break;
+                case 17:replacedString="exp("+extractedString+")"; break;
+                case 18:replacedString="log("+extractedString+")"; break;
+                case 19:replacedString="log10("+extractedString+")"; break;
+                case 20:replacedString="power("+extractedString+")"; break;
+                default: throw("not supported function");
+            }
+            replaceString(instruction,replacedString,finalMatrix);
+        }
+    }
+    return instruction;
+}
+
+/** @brief search the instruction for special function and returns integer number corresponding to the function found
+ *
+ * @param instruction the instruction without matlab names or special matrices ex: 1.2+sqrt([4.0 16.0],[16.0 4.0])+[6.0 power(2,2) 3.0 4.0]
+ * @return returns 0 if no special function found. 1 for sin,2 for cos,...:respectively by the order of the following line
+ * special fns are sin,cos,tan,asin,acos,atan,sinh,cosh,tanh,asinh,acosh,atanh,abs,ceil,floor,sqrt,exp,log,log10,power
+ * Note: the returned number corresponds to the first found function while searching
+ */
 
 int Matlab::checkInstructionForFunctions(string instruction)
 {
-	string constants[20] =
-	{
-     "sin"   , "cos"  , "tan"
-	,"asin"  , "acos" , "atan"
-	,"sinh"  , "cosh" , "tanh"
-	,"asinh" , "acosh", "atanh"
-	,"abs"   , "ceil" , "floor"
-    ,"sqrt"  , "exp"  , "log"
-    ,"log10" , "power"
-    };
-	for (int i = 0; i < 20 ; i++)
-	{
-	    int pos = instruction.find(constants[i]);
-	    if (pos != string::npos)
-            {
-                //for sin cos and tan
-                if( i<3)
-                {
-                    if( instruction[pos+3]=='h'&& instruction[pos-1]!='a' )
-                    {
-                        i=i+6;
-                    }
 
-                    if(  instruction[pos+3]!='h' && instruction[pos-1]=='a'   )
-                    {
-                        i=i+3;
-                    }
-                    if(  instruction[pos+3]=='h' && instruction[pos-1]=='a'   )
-                    {
-                        i=i+9;
-                    }
-                }
-
-                //for log and log10
-                if(i==17)
-                {
-                    if(  instruction[pos+1+2]=='1' && instruction[pos+2+2]=='0'   )
-                    {
-                        i++;
-                    }
-                }
-
-
-
-
-
-
-
-                return i+1;
-            }
-	}
-return 0;
 }
 
-
-
-
-
-
+/** @brief extract the string inside the () of the first special function found in the instruction
+ *
+ * @param instruction the instruction without matlab names or special matrices   ex: 1.2+sqrt([4.0 16.0],[16.0 4.0])+[6.0 power(2,2) 3.0 4.0]
+ * @return the string inside the () of the first special function found in the instruction ex: [4.0 16.0],[16.0 4.0]
+ *
+ */
 
 string Matlab::extractStringInsideFunction(string instruction)
 {
-	string constants[20] =
-	{
-     "sin"   , "cos"  , "tan"
-	,"asin"  , "acos" , "atan"
-	,"sinh"  , "cosh" , "tanh"
-	,"asinh" , "acosh", "atanh"
-	,"abs"   , "ceil" , "floor"
-    ,"sqrt"  , "exp"  , "log"
-    ,"log10" , "power"
-    };
-	for (int i = 0; i < 20 ; i++)
-	{
-	    int pos = instruction.find(constants[i]);
-	    if (pos != string::npos)
-            {
 
-            int startingpostion= instruction.find('(',pos);
-			int endingPosition = findTheClosingBracket(instruction,'(');
-			return instruction.substr( startingpostion+1 , endingPosition-startingpostion-1 );
-
-            }
-
-
-    }
-return "invalid call for the function of extractStringInsideFunction";
 
 }
-
-
 
