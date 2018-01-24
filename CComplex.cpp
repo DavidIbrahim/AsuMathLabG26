@@ -63,7 +63,7 @@ double CComplex::imaginary()
     return I;
 }
 
-void CComplex::add(CComplex& C)
+void CComplex::add(const CComplex& C)
 {
     R += C.R;I += C.I;
 }
@@ -88,7 +88,7 @@ CComplex CComplex::operator=(double D)
     R = D;I = 0;
     return *this;
 }
-void CComplex::operator+=(CComplex& C)
+void CComplex::operator+=(const CComplex& C)
 {
     add(C);
 }

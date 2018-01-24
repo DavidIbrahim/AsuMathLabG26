@@ -22,12 +22,12 @@ class CComplex
         double imaginary();
         CComplex conjugate();
 
-        void add(CComplex& C);
+        void add(const CComplex& C);
         void sub(CComplex& C);
 
         CComplex operator=(const CComplex& C);
         CComplex operator=(double D);
-        void operator+=(CComplex& C);
+        void operator+=(const CComplex& C);
         void operator+=(double D);
         CComplex operator+(CComplex& C);
         CComplex operator+(double D);
