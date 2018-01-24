@@ -23,7 +23,7 @@ private:
   CMatrix(int nR, int nC, int initialization = MI_ZEROS,
           CComplex initializationValue = CComplex(0.0));
   //CMatrix(int nR, int nC, double first, ...);
-  CMatrix(CMatrix &m);
+  CMatrix(const CMatrix &m);
   CMatrix(double d);
   //CMatrix(string s);
   void copy(const CMatrix &m);

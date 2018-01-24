@@ -109,7 +109,7 @@ void CMatrix::addRow(CMatrix &m) {
   n.setSubMatrix(nR, 0, m);
   *this = n;
 }*/
-CMatrix::CMatrix(CMatrix &m) { //draft 113
+CMatrix::CMatrix(const CMatrix &m) { //draft 113
   nR = nC = 0;
   values = NULL;
   copy(m);
@@ -329,11 +329,11 @@ void CMatrix::operator-=(double d){ //tested and works - tuna
     sub(x);
     }
 */
-/*CMatrix CMatrix::operator+(double d){ //tested and works - tuna //draft 320
+CMatrix CMatrix::operator+(double d){ //tested and works - tuna //draft 320
     CMatrix r = *this;
     r+=d;
     return r;
-}*/
+}
 //CMatrix CMatrix::operator-(double d){ //tested and works - tuna
 //    CMatrix r = *this;
 //    r-=d;
