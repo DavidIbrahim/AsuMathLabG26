@@ -48,7 +48,7 @@ CMatrix::CMatrix(int nR, int nC, int initialization,
     }
   }
 }
-/*
+
 void CMatrix::setSubMatrix(int r, int c, CMatrix &m) {/////////////////////////////////////////
   if ((r + m.nR) > nR || (c + m.nC) > nC)
     throw("Invalid matrix dimension");
@@ -56,7 +56,7 @@ void CMatrix::setSubMatrix(int r, int c, CMatrix &m) {//////////////////////////
     for (int iC = 0; iC < m.nC; iC++)
       values[r + iR][c + iC] = m.values[iR][iC];
 }
-
+/*
 CMatrix::CMatrix(string s) {
   nR = nC = 0;
   values = NULL;
@@ -96,7 +96,7 @@ CMatrix::CMatrix(double d) {//draft 94
   values = NULL;
   copy(d);
 }
-/*void CMatrix::addColumn(CMatrix &m) {
+void CMatrix::addColumn(CMatrix &m) {
   CMatrix n(max(nR, m.nR), nC + m.nC);
   n.setSubMatrix(0, 0, *this);
   n.setSubMatrix(0, nC, m);
@@ -108,7 +108,8 @@ void CMatrix::addRow(CMatrix &m) {
   n.setSubMatrix(0, 0, *this);
   n.setSubMatrix(nR, 0, m);
   *this = n;
-}*/
+}
+
 CMatrix::CMatrix(const CMatrix &m) { //draft 113
   nR = nC = 0;
   values = NULL;
@@ -390,7 +391,7 @@ CMatrix CMatrix::operator-(double d){ //tested and works - tuna
 //
 //
 //}
-void CMatrix::mul(CMatrix& m)
+/*void CMatrix::mul(CMatrix& m)
 {
         if (nC != m.nR)
                 throw("Invalid matrix dimension");
@@ -404,7 +405,7 @@ void CMatrix::mul(CMatrix& m)
                                 r.values[iR][iC] += values[iR][k] *m.values[k][iC];
                 }
         copy(r);
-}
+}*/
 //void CMatrix::operator*=(CMatrix& m)
 //{
 //        mul(m);
