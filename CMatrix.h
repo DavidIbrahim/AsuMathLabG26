@@ -43,19 +43,19 @@ private:
   CMatrix operator+(CMatrix &m);
   CMatrix operator+(double d);
 
-  void sub(CMatrix &m);
+  void sub(const CMatrix &m);
   void operator-=(CMatrix &m);
   void operator-=(double d);
   CMatrix operator-(CMatrix &m);
   CMatrix operator-(double d);
 
-  void mul(CMatrix &m);
-  /*void operator*=(CMatrix &m);
+  void mul(const CMatrix &m);
+  void operator*=(CMatrix &m);
   void operator*=(double d);
   CMatrix operator*(CMatrix &m);
   CMatrix operator*(double d);
 
-  void div(CMatrix &m);
+  /*void div(CMatrix &m);
   void operator/=(CMatrix &m);
   void operator/=(double d);
   CMatrix operator/(CMatrix &m);

@@ -50,7 +50,7 @@ class CComplex
         friend CComplex operator-(double D, const CComplex& C); //For double - complex
 
         void mul(const CComplex& C);
-        void operator *=(CComplex& C);
+        void operator *=(const CComplex& C);
         friend CComplex operator*(CComplex& A, CComplex& B);
 
         void div(CComplex& C);

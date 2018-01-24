@@ -316,7 +316,7 @@ CMatrix CMatrix::getCofactor(int r,
   return m;
 }
 */
-void CMatrix::sub(CMatrix& m){ //tested and works - tuna
+void CMatrix::sub(const CMatrix& m){ //tested and works - tuna
     if(nR!=m.nR||nC!=m.nC)
         throw("Invalid matrix dimension");
     for(int iR=0;iR<nR;iR++)
@@ -389,7 +389,7 @@ CMatrix CMatrix::operator-(double d){ //tested and works - tuna
 //
 //
 //}
-void CMatrix::mul(CMatrix& m)
+void CMatrix::mul(const CMatrix& m)
 {
         if (nC != m.nR)
                 throw("Invalid matrix dimension");
@@ -401,37 +401,36 @@ void CMatrix::mul(CMatrix& m)
                         r.values[iR][iC] = 0;
                         for (int k = 0; k<m.nR; k++)
                         {
-                            CComplex Z;
-                            Z =values[iR][k] *m.values[k][iC];
-                            r.values[iR][iC] += Z;
+                            r.values[iR][iC] += values[iR][k] *m.values[k][iC];
                         }
 
                 }
         copy(r);
 }
-//void CMatrix::operator*=(CMatrix& m)
-//{
-//        mul(m);
-//}
-//void CMatrix::operator*=(double d)
-//{
-//        for (int iR = 0; iR<nR; iR++)
-//                for (int iC = 0; iC<nC; iC++)
-//                        values[iR][iC] *= d;
-//}
-//CMatrix CMatrix::operator*(CMatrix& m)
-//{
-//        CMatrix r = *this;
-//        r *= m;
-//        return r;
-//}
-//CMatrix CMatrix::operator*(double d)
-//{
-//        CMatrix r = *this;
-//        r *= d;
-//        return r;
-//}
-//
+void CMatrix::operator*=(CMatrix& m)
+{
+        mul(m);
+}
+void CMatrix::operator*=(double d)
+{
+        for (int iR = 0; iR<nR; iR++)
+                for (int iC = 0; iC<nC; iC++)
+                        values[iR][iC] *= CComplex(d);
+}
+
+CMatrix CMatrix::operator*(CMatrix& m)
+{
+        CMatrix r = *this;
+        r *= m;
+        return r;
+}
+CMatrix CMatrix::operator*(double d)
+{
+        CMatrix r = *this;
+        r *= d;
+        return r;
+}
+
 //void CMatrix::div(CMatrix& m)
 //{
 //    CMatrix t;

@@ -182,7 +182,7 @@ void CComplex::mul(const CComplex& C)
     double I = this->R*C.I + this->I*C.R;
     this->R=R;this->I=I;
 }
-void CComplex::operator *=(CComplex& C)
+void CComplex::operator *=(const CComplex& C)
 {
     mul(C);
 }
