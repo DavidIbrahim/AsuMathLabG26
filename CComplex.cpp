@@ -14,6 +14,10 @@ CComplex::~CComplex()
 {
     //dtor
 }
+CComplex::CComplex(double R)
+{
+    this->R = R; this->I = 0.0;
+}
 
 CComplex::CComplex(double R, double I)
 {
@@ -30,7 +34,7 @@ string CComplex::getString()
     char text[100];
     if(I==0)sprintf(text, "%g", R);
     else if(R==0)sprintf(text, "%gi", I);
-    else if(I>0)sprintf(text, "%g + %gi", R, I);
+    else if(I>=0)sprintf(text, "%g + %gi", R, I);
     else if(I<0)sprintf(text, "%g - %gi", R, -I);
     return string(text);
 }
@@ -210,6 +214,7 @@ CComplex::CComplex(string s)
 }
 void CComplex::copy(string s)
 {
+    //s.erase(remove(s.begin(), s.end(), ' '), s.end());
     int plusPos, minusPos, i_Pos;
     bool real, imag;
 
@@ -237,7 +242,7 @@ void CComplex::copy(string s)
         }
     }
 
-    else
+    else //real+imag
     {
         if(minusPos>0) //No spaces in the beg
         {
@@ -259,3 +264,17 @@ void CComplex::copy(string s)
         }
     }
 }
+/*void trim(string s)
+{
+    char* text = new char[s.length()+1];
+    int count=s.length();
+    strcpy(text, s.c_str());
+    if(strlen(text)==0)return;
+    char* p = text + strlen(text) - 1;
+    while(*p == ' ')*p--=0;
+    p = text;
+    while(*p == ' ')p++;
+    strcpy(text, p);
+    s="0";
+    for
+}*/

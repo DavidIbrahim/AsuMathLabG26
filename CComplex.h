@@ -9,6 +9,7 @@ class CComplex
     public:
         CComplex();
         virtual ~CComplex();
+        CComplex(double R);
         CComplex(double R, double I);
         CComplex(const CComplex& C);
         CComplex(string s);
