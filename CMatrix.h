@@ -25,7 +25,7 @@ private:
   //CMatrix(int nR, int nC, double first, ...);
   CMatrix(const CMatrix &m);
   CMatrix(double d);
-  //CMatrix(string s);
+  CMatrix(string s);
   void copy(const CMatrix &m);
   void copy(double d);
   void copy(string s);
@@ -35,7 +35,7 @@ private:
 
   CMatrix operator=(const CMatrix &m);
   CMatrix operator=(double d);
-  //CMatrix operator=(string s);
+  CMatrix operator=(string s);
 
   void add(const CMatrix &m);
   void operator+=(CMatrix &m);

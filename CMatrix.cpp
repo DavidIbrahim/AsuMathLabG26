@@ -56,7 +56,7 @@ void CMatrix::setSubMatrix(int r, int c, CMatrix &m) {//////////////////////////
     for (int iC = 0; iC < m.nC; iC++)
       values[r + iR][c + iC] = m.values[iR][iC];
 }
-/*
+
 CMatrix::CMatrix(string s) {
   nR = nC = 0;
   values = NULL;
@@ -66,7 +66,7 @@ CMatrix CMatrix::operator=(string s) {//////////////////////////////////////////
   copy(s);
   return *this;
 }
-*/
+
 void CMatrix::copy(string s) {
   reset();
   char *buffer = new char[s.length() + 1];
