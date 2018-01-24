@@ -14,15 +14,21 @@ class Matlab
         //bool checkIfSpecialMatrix(string instruction);
 
         string getInstructionWithoutSpecialMatrices(string instruction);
+void dealWithConcatenationHelperFn(string &instruction ,string s);
 
 
-        string getStringMatrix(string complexString);
+
         string getInstructionWithoutExpressions(string instruction);
         string getReadyInstruction(string instruction,vector<Matlab>& savedMatrices);
         void trimAllSpaces(string &s);
         string dealWithBrackets(string complexString);
-        int findTheClosingBracket(string s,char openingBracket);
+        int findTheClosingBracket(string s,char openingBracket,int start=0);
+        int findTheOpeningBracket(string s, char openingBracket,int start);
+        string dealWithConcatenation(string instruction);
     public:
+        string dealwithOperators(string instruction);
+        string findTheMatrix(string instruction,bool openingBracket,int pos);
+        string getStringMatrix(string complexString);
         int checkInstructionForFunctions(string instruction);
         string extractStringInsideFunction(string instruction);
         enum{};

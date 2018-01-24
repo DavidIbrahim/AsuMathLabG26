@@ -245,15 +245,16 @@ string Matlab::getInstructionWithoutConcatenation(string instruction)
     size_t Begin,End;
     size_t start=0;
     Begin =instruction.find("[",start);// first occurence of "[".
-    End =instruction.find("]",start+1);//first occurence of "]"
+    End =findTheClosingBracket(instruction,'[');//first occurence of "]"
     string s=instruction.substr(Begin,(End+1)-Begin);// string between "[ ]"
-    primary=(s);
+
     start=End;// new starting point to search from the end of first matrix.
     Begin =instruction.find("[",start);
     if(Begin==std::string::npos)//to check if its only one matrix.
         return s;
     else
     {
+        primary=(s);
         End =instruction.find("]",start+1);
         s=instruction.substr(Begin,(End+1)-Begin);
         CMatrix secondary(s);
@@ -273,10 +274,10 @@ string Matlab::getInstructionWithoutConcatenation(string instruction)
         {
             primary=secondary.horizontalConcatenation(primary,secondary);
         }
-        else
-        {
-            throw ("Syntax error");   //this condition checks if there's no spaces between matrices at all ([][]).
-        }
+//        else
+//        {
+//            throw ("Syntax error");   //this condition checks if there's no spaces between matrices at all ([][]).
+//        }
         start=End;
         instruction=(primary.getString2())+instruction.substr(start+1);
         return getInstructionWithoutConcatenation(instruction);
@@ -285,7 +286,7 @@ string Matlab::getInstructionWithoutConcatenation(string instruction)
 }
 /** @brief check if there are matrices in this string
  *
- * @param complexString the string to be checked
+ * @param complexString the s[[2.0 4.0];[4.0 4.0]]tring to be checked
  * @return 0 if there is no matrices and 1 if there is matrices
  * hint: check for [] only
  */
@@ -303,18 +304,8 @@ bool Matlab::checkStringForMatrix(string complexString)
 
 
 }
-/** @brief simplify the String to the final matrix string
- *
- * @param complexString it is a string of matrix operations without any matlab names or special matrix or special functions ex: 1.2+[[1.0 2.0; 3.0 3.0]*[[2.0 4.0];[4.0 4.0]]]/[6.0 5.0; 4.0 3.0]
- * @return the resultant matrix as a string ex:    [10.2000 -9.8000;22.2000 -25.8000]
- * search for all operations including dot operations
- * take care of the priority between concatenation and operations
- */
 
-string Matlab::getStringMatrix(string complexString)
-{
 
-}
 /** @brief this fn replace any expression(in a single element) in the instruction by it's equivalent value
  *
  * @param instruction the full instruction but without Matlab names or special matrix ex: A=[6.0+2.0 2.0+[1.0 2.0 3.0] sin([2.0 3.0+3.0])];
@@ -797,49 +788,6 @@ string Matlab::calcSimpleExpression(string s)
 }
 
 
-/**
-* @brief : private Helper function for dealing with brackets (2+5)/(5-2)
-*
-* @brief helper method for getStringValue
-**/
-int Matlab::findTheClosingBracket(string s, char openingBracket)
-{
-
-    int count =0;
-    char closingBracket;
-
-    if (openingBracket == '(')
-        closingBracket=')';
-
-    else if (openingBracket == '[')
-        closingBracket=']';
-
-    else
-    {
-        throw ("accepted openingBracets are '(' or '[' only");
-    }
-
-    bool foundFirstBracket = false;
-
-    for(int i =0 ; i<s.size(); i++)
-    {
-        if(s[i]==openingBracket)
-        {
-            count++;
-            foundFirstBracket = true;
-        }
-        if(s[i]==closingBracket)
-            count--;
-        if(count == 0 && foundFirstBracket)
-            return i;
-    }
-    return string::npos;
-}
-
-
-
-
-
 
 
 
@@ -1204,3 +1152,229 @@ string Matlab::extractStringInsideFunction(string instruction)
     return "invalid call for the function of extractStringInsideFunction";
 
 }
+/** @brief simplify the String to the final matrix string
+ *
+ * @param complexString it is a string of matrix operations without any matlab names or special matrix or special functions
+ ex: 1.2+[[1.0 2.0; 3.0 3.0]*[[2.0 4.0];[4.0 4.0]]]/[6.0 5.0; 4.0 3.0]
+ * @return the resultant matrix as a string ex:    [10.2000 -9.8000;22.2000 -25.8000]
+ * search for all operations including dot operations
+ * take care of the priority between concatenation and operations
+ */
+
+string Matlab::getStringMatrix(string complexString)
+{
+    complexString = dealWithConcatenation(complexString);
+    complexString = dealwithOperators(complexString);
+
+
+    return complexString;
+
+}
+string extractTheNumber( string const &mainString,int positionOfFirstDigit)
+{
+    int positionOfLastDigit = positionOfFirstDigit;
+    bool  stillWhiteSpace = true;
+    while((mainString[positionOfLastDigit]>="0" && mainString[positionOfLastDigit]<="9")||stillWhiteSpace)
+    {
+        if(stillWhiteSpace)
+            if(mainString[positionOfLastDigit]!=' ') stillWhiteSpace = false;
+        positionOfLastDigit++;
+    }
+
+    string answer = mainString.substr(positionOfFirstDigit, positionOfLastDigit -positionOfFirstDigit +1 );
+    return answer;
+
+
+}
+
+string Matlab::dealwithOperators(string instruction)
+{
+
+    // first dealing with power
+
+
+    int pos = instruction.find("^");
+    while(pos!=string::npos)
+    {
+
+        string powerDegree = extractTheNumber(instruction,pos+1) ;
+        int positionOftheMatrixEnd = instruction.rfind(']',pos);
+        string matrixString = findTheMatrix(instruction,false,positionOftheMatrixEnd-1)
+
+
+    }
+
+    return instruction;
+
+
+}
+
+
+void Matlab::dealWithConcatenationHelperFn(string &instruction,string s)
+{
+
+    int pos = instruction.find(s);
+    while(pos!=string::npos)
+    {
+        int beginning = instruction.rfind("[",pos);
+
+        int ending = instruction.find("]",pos+2);
+
+        string matrixConcatenated = instruction.substr(beginning,ending-beginning+1 );
+        string matrixConcatenatedSolved = getInstructionWithoutConcatenation(matrixConcatenated );
+        if(instruction.at(beginning-1)=='['   && instruction.at(ending+1)==']')
+        {
+            matrixConcatenated = '[' + matrixConcatenated +']';
+        }
+
+
+        replaceString(instruction,matrixConcatenated,matrixConcatenatedSolved);
+        pos = instruction.find(s);
+
+
+    }
+
+
+}
+
+string Matlab::dealWithConcatenation(string instruction)
+{
+
+
+    dealWithConcatenationHelperFn(instruction,"];[");
+    dealWithConcatenationHelperFn(instruction,"] [");
+    dealWithConcatenationHelperFn(instruction,"],[");
+    return instruction;
+
+}
+
+
+
+
+string Matlab::findTheMatrix(string instruction,bool openingBracket,int pos)
+{
+    if(openingBracket)
+    {
+        if(instruction[pos]!='[') throw ("not an opening bracket");
+
+        else
+        {
+            int ending = findTheClosingBracket(instruction,'[',pos);
+            string answer = instruction.substr(pos,ending-pos +1);
+            return answer;
+        }
+
+    }
+
+    else
+    {
+        if(instruction[pos]!=']') throw ("not a closing bracket");
+
+        else
+        {
+            int ending = findTheOpeningBracket(instruction,'[',pos);
+            string answer = instruction.substr(ending,pos-ending+1);
+            return answer;
+        }
+
+    }
+
+
+
+}
+
+
+
+/**
+* @brief : private Helper function for dealing with brackets (2+5)/(5-2)
+*
+* @brief helper method for getStringValue
+**/
+int Matlab::findTheClosingBracket(string s, char openingBracket, int start)
+{
+
+    int count =0;
+    char closingBracket;
+
+    if (openingBracket == '(')
+        closingBracket=')';
+
+    else if (openingBracket == '[')
+        closingBracket=']';
+
+    else
+    {
+        throw ("accepted openingBracets are '(' or '[' only");
+    }
+
+    bool foundFirstBracket = false;
+
+    for(int i =start ; i<s.size(); i++)
+    {
+        if(s[i]==openingBracket)
+        {
+            count++;
+            foundFirstBracket = true;
+        }
+        if(s[i]==closingBracket)
+            count--;
+        if(count == 0 && foundFirstBracket)
+            return i;
+    }
+    return string::npos;
+}
+
+
+int Matlab::findTheOpeningBracket(string s, char openingBracket,int start)
+{
+
+    int count =0;
+    char closingBracket;
+
+    if (openingBracket == '(')
+        closingBracket=')';
+
+    else if (openingBracket == '[')
+        closingBracket=']';
+
+    else
+    {
+        throw ("accepted openingBracets are '(' or '[' only");
+    }
+
+    bool foundFirstBracket = false;
+
+    for(int i =start ; i<s.size(); i--)
+    {
+        if(s[i]==closingBracket)
+        {
+            count++;
+            foundFirstBracket = true;
+        }
+        if(s[i]==openingBracket)
+            count--;
+        if(count == 0 && foundFirstBracket)
+            return i;
+    }
+    return string::npos;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
