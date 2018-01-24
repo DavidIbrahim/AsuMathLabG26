@@ -123,10 +123,7 @@ void CMatrix::operator+=(double d) {
   CMatrix C(nR, nC, MI_VALUE, CComplex(d));
   add(C);
 }
-/*void CMatrix::operator+=(double d) {
-  CMatrix C(nR, nC, MI_VALUE, d);
-  add(C);
-}
+/*
 double CMatrix::getDeterminant2() //(waiting)
 {
   if(nR!=nC)
@@ -253,7 +250,7 @@ void CMatrix::operator/=(double d) {
     for (int iC = 0; iC < nC; iC++)
       values[iR][iC] /= d;
 }*/
-/*CMatrix CMatrix::operator--() {
+CMatrix CMatrix::operator--() {
   add(CMatrix(nR, nC, MI_VALUE, -1.0));
   return *this;
 }
@@ -279,7 +276,7 @@ CMatrix CMatrix::operator++() {
   return *this;
 }
 
-
+/*
 //r and c are the beginning of where you want ur subMatrix
 // nr and nc are the size of the subMatrix
 
@@ -297,11 +294,12 @@ void CMatrix::operator+=(CMatrix &m) //draft 281
 {
   add(m);
 }
-/*CMatrix CMatrix::operator++(int) {
+CMatrix CMatrix::operator++(int) {
   CMatrix C = *this;
   add(CMatrix(nR, nC, MI_VALUE, 1.0));
   return C;
 }
+/*
 CMatrix CMatrix::getCofactor(int r,
                              int c) // r and c represents the index of the
 //	element that we want to find its cofactor//tested
@@ -391,7 +389,7 @@ CMatrix CMatrix::operator-(double d){ //tested and works - tuna
 //
 //
 //}
-/*void CMatrix::mul(CMatrix& m)
+void CMatrix::mul(CMatrix& m)
 {
         if (nC != m.nR)
                 throw("Invalid matrix dimension");
@@ -401,11 +399,16 @@ CMatrix CMatrix::operator-(double d){ //tested and works - tuna
                 for (int iC = 0; iC<r.nC; iC++)
                 {
                         r.values[iR][iC] = 0;
-                        for (int k = 0; k<m.nC; k++)
-                                r.values[iR][iC] += values[iR][k] *m.values[k][iC];
+                        for (int k = 0; k<m.nR; k++)
+                        {
+                            CComplex Z;
+                            Z =values[iR][k] *m.values[k][iC];
+                            r.values[iR][iC] += Z;
+                        }
+
                 }
         copy(r);
-}*/
+}
 //void CMatrix::operator*=(CMatrix& m)
 //{
 //        mul(m);

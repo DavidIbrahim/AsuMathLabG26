@@ -49,8 +49,8 @@ private:
   CMatrix operator-(CMatrix &m);
   CMatrix operator-(double d);
 
-  /*void mul(CMatrix &m);
-  void operator*=(CMatrix &m);
+  void mul(CMatrix &m);
+  /*void operator*=(CMatrix &m);
   void operator*=(double d);
   CMatrix operator*(CMatrix &m);
   CMatrix operator*(double d);
@@ -60,6 +60,7 @@ private:
   void operator/=(double d);
   CMatrix operator/(CMatrix &m);
   CMatrix operator/(double d);
+  */
   CMatrix operator++();    // Pre Increment
   CMatrix operator++(int); // Post Increment, int is not used
   CMatrix operator--();    // Pre Increment
@@ -67,7 +68,7 @@ private:
 
   CMatrix operator-();
   CMatrix operator+();
-
+  /*
   friend istream& operator >> (istream &is, CMatrix& C);  //Stream
   friend ostream& operator << (ostream &os, CMatrix& C); //Stream
   friend CMatrix operator /(double d ,CMatrix &m);
@@ -78,14 +79,15 @@ private:
   void setSubMatrix(int iR, int iC, CMatrix &m);
   void addColumn(CMatrix &m);
   void addRow(CMatrix& m);
-  /*
-  double &operator[](int i) { return values[i / nC][i % nC]; }
-  double &operator()(int i) { return values[i / nC][i % nC]; };
-  double &operator()(int r, int c) { return values[r][c]; };
+
+  CComplex &operator[](int i) { return values[i / nC][i % nC]; }
+  CComplex &operator()(int i) { return values[i / nC][i % nC]; };
+  CComplex &operator()(int r, int c) { return values[r][c]; };
   int getn() { return nR * nC; };
   int getnR() { return nR; };
   int getnC() { return nC; };
-  double getDeterminant();
+
+  /*double getDeterminant();
   CMatrix getTranspose();
   CMatrix getInverse();
   string getString2();
