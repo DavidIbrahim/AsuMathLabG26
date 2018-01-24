@@ -23,7 +23,7 @@ class CComplex
         CComplex conjugate();
 
         void add(const CComplex& C);
-        void sub(CComplex& C);
+        void sub(const CComplex& C);
 
         CComplex operator=(const CComplex& C);
         CComplex operator=(double D);
@@ -32,7 +32,7 @@ class CComplex
         CComplex operator+(CComplex& C);
         CComplex operator+(double D);
 
-        void operator-=(CComplex& C);
+        void operator-=(const CComplex& C);
         void operator-=(double D);
         CComplex operator-(CComplex& C);
         CComplex operator-(double D);
@@ -56,6 +56,10 @@ class CComplex
         void div(CComplex& C);
         void operator /=(CComplex& C);
         friend CComplex operator/(CComplex& A, CComplex& B);
+
+        friend bool operator==(const CComplex& A, const CComplex& B);
+        //friend bool operator>(const CComplex& A, const CComplex& B);
+        //friend bool operator<(const CComplex& A, const CComplex& B);
 
     protected:
 

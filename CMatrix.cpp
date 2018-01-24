@@ -66,20 +66,21 @@ CMatrix CMatrix::operator=(string s) {//////////////////////////////////////////
   copy(s);
   return *this;
 }
+*/
 void CMatrix::copy(string s) {
   reset();
   char *buffer = new char[s.length() + 1];
   strcpy(buffer, s.c_str());
   const char *lineSeparators = ";\r\n";
   char *line = strtok(buffer, lineSeparators);
-  char* remainlines = strtok(NULL, "");
+  char *remainlines = strtok(NULL, "");
 
   while (line) {
     CMatrix row;
     const char *separators = " []";
     char *token = strtok(line, separators);
     while (token) {
-      CMatrix item(atof(token));
+      CMatrix item(1,1,MI_VALUE,CComplex(token));
       row.addColumn(item);
       token = strtok(NULL, separators);
     }
@@ -90,7 +91,7 @@ void CMatrix::copy(string s) {
   }
   delete[] buffer;
 }
-*/
+
 CMatrix::CMatrix(double d) {//draft 94
   nR = nC = 0;
   values = NULL;
@@ -352,12 +353,13 @@ CMatrix CMatrix::operator-(double d){ //tested and works - tuna
 //
 //    return m;
 //}
+
 //CMatrix CMatrix::getInverse(){
 //    if (nR != nC)
 //        throw("Invalid matrix dimension");
 //    double det =getDeterminant();
-//   // if (det==0)
-//      //  throw("Matrix has no Inverse");
+////    if (det==0)
+////        throw("Matrix has no Inverse");
 //
 //    CMatrix cof(nC , nR);//to find cofactor matrix
 //    CMatrix trans (nC,nR);//to find transpose of matrix
@@ -380,14 +382,6 @@ CMatrix CMatrix::operator-(double d){ //tested and works - tuna
 //            Inv.values[i][j]=cof.values[j][i] / det;
 //
 //    return Inv;
-//
-//
-//
-//
-//
-//
-//
-//
 //}
 void CMatrix::mul(const CMatrix& m)
 {
@@ -431,27 +425,25 @@ CMatrix CMatrix::operator*(double d)
         return r;
 }
 
-//void CMatrix::div(CMatrix& m)
-//{
-//    CMatrix t;
+/*void CMatrix::div(CMatrix& m)
+{
+    CMatrix t;
+    t=m.getInverse();
+    mul(t);
+
+//    if (nC != m.nR)
+//        throw("Invalid matrix dimension");
+//    CMatrix r(nR, m.nC);
 //
-//    t=m.getInverse();
-//
-//    mul(t);
-//        /*if (nC != m.nR)
-//                throw("Invalid matrix dimension");
-//        CMatrix r(nR, m.nC);
-//
-//        for (int iR = 0; iR<r.nR; iR++)
-//                for (int iC = 0; iC<r.nC; iC++)
-//                {
-//                        r.values[iR][iC] = 0;
-//                        for (int k = 0; k<m.nC; k++)
-//                                r.values[iR][iC] += values[iR][k] /
-//m.values[k][iC];
-//                }
-//        copy(r);*/
-//}
+//    for (int iR = 0; iR<r.nR; iR++)
+//        for (int iC = 0; iC<r.nC; iC++)
+//        {
+//            r.values[iR][iC] = 0;
+//            for (int k = 0; k<m.nC; k++)
+//            r.values[iR][iC] += values[iR][k] / m.values[k][iC];
+//        }
+//    copy(r);
+}*/
 //void CMatrix::operator/=(CMatrix& m)
 //{
 //        div(m);
@@ -705,56 +697,53 @@ CMatrix CMatrix::operator*(double d)
 //
 //return zeroMatrix;
 //}
-//
-//
-///*
-//*   function to getDeterminant (Intel research Paper)
-//*
-//*/
-//double CMatrix::getDeterminant(){
-//
-//    int *ri = new int[nR];
-//    int i, j, k;
-//
-//    double    det = 1.0;
-//    CMatrix M(*this);
-//    double ** m = M.values;
-//// Initialize the pointer vector.
-//    for (i = 0 ; i < nR; i++)
-//        ri[i] = i;
-//
-//    for (int p = 1 ; p <= nR - 1; p++) {
-//        // Find pivot element
-//        for (i = p + 1 ; i <= nR; i++) {
-//            if (abs(m[ri[i-1]][p-1]) > abs(m[ri[p-1]][p-1])) {
-//                // Switch the index for the p-1 pivot row if necessary.
-//                int t = ri[p-1];
-//                ri[p-1] = ri[i-1];
-//                ri[i-1] = t;
-//                det = -det;
-//            }
-//        }
-//        if (m[ri[p-1]][p-1] == 0) {
-//            // The matrix is singular.
-//                    return false;
-//            }
-//        // Multiply the diagonal elements.
-//        det = det * m[ri[p-1]][p-1];
-//
-//        // Form multiplier.
-//        for (i = p + 1 ; i <= nR; i++) {
-//            m[ri[i-1]][p-1] /= m[ri[p-1]][p-1];
-//            // Eliminate [p-1].
-//            for (int j = p + 1 ; j <= nR; j++)
-//                m[ri[i-1]][j-1] -= m[ri[i-1]][p-1] * m[ri[p-1]][j-1];
-//        }
-//    }
-//    det = det * m[ri[nR-1]][nR-1];
-//
-//
-//    return det;
-//}
-//
+
+//function to getDeterminant (Intel research Paper)
+/*CComplex CMatrix::getDeterminant(){
+
+    int *ri = new int[nR];
+    int i, j, k;
+
+    CComplex det = CComplex(1.0);
+    CMatrix M(*this);
+    CComplex ** m = M.values;
+    //Initialize the pointer vector.
+    for (i = 0 ; i < nR; i++)
+        ri[i] = i;
+
+    for (int p = 1 ; p <= nR - 1; p++)
+    {
+        // Find pivot element
+        for (i = p + 1 ; i <= nR; i++)
+        {
+            if (m[ri[i-1]][p-1].magnitude() > m[ri[p-1]][p-1].magnitude())
+            {
+                // Switch the index for the p-1 pivot row if necessary.
+                int t = ri[p-1];
+                ri[p-1] = ri[i-1];
+                ri[i-1] = t;
+                det = -det;
+            }
+        }
+        if (m[ri[p-1]][p-1] == CComplex(0))
+        {// The matrix is singular.
+                    return false;
+        }
+        // Multiply the diagonal elements.
+        det = det * m[ri[p-1]][p-1];
+        // Form multiplier.
+        for (i = p + 1 ; i <= nR; i++)
+        {
+            m[ri[i-1]][p-1] /= m[ri[p-1]][p-1];
+            // Eliminate [p-1].
+            for (int j = p + 1 ; j <= nR; j++)
+                m[ri[i-1]][j-1] -= m[ri[i-1]][p-1] *m[ri[p-1]][j-1];
+        }
+    }
+    det = det * m[ri[nR-1]][nR-1];
+    return det;
+}*/
+
 bool CMatrix::isReal()
 {
     for(int iR=0; iR<nR; iR++)

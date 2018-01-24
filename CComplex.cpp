@@ -68,7 +68,7 @@ void CComplex::add(const CComplex& C)
     R += C.R;I += C.I;
 }
 
-void CComplex::sub(CComplex& C)
+void CComplex::sub(const CComplex& C)
 {
     R -= C.R;I -= C.I;
 }
@@ -109,7 +109,7 @@ CComplex CComplex::operator+(double D)
     return X;
 }
 
-void CComplex::operator-=(CComplex& C)
+void CComplex::operator-=(const CComplex& C)
 {
     sub(C);
 }
@@ -214,7 +214,8 @@ CComplex::CComplex(string s)
 }
 void CComplex::copy(string s)
 {
-    //s.erase(remove(s.begin(), s.end(), ' '), s.end());
+    for(int i=0; i<s.length(); i++)
+        if(s[i] == ' ') s.erase(i,1);
     int plusPos, minusPos, i_Pos;
     bool real, imag;
 
@@ -264,17 +265,6 @@ void CComplex::copy(string s)
         }
     }
 }
-/*void trim(string s)
-{
-    char* text = new char[s.length()+1];
-    int count=s.length();
-    strcpy(text, s.c_str());
-    if(strlen(text)==0)return;
-    char* p = text + strlen(text) - 1;
-    while(*p == ' ')*p--=0;
-    p = text;
-    while(*p == ' ')p++;
-    strcpy(text, p);
-    s="0";
-    for
-}*/
+bool operator==(const CComplex& A, const CComplex& B){ return (A.R==B.R)&&(A.I==B.I); }
+//bool operator>(const CComplex& A, const CComplex& B){ return (A.magnitude()>B.magnitude()); }
+//bool operator<(const CComplex& A, const CComplex& B){ return (A.magnitude()<B.magnitude()); }

@@ -28,7 +28,7 @@ private:
   //CMatrix(string s);
   void copy(const CMatrix &m);
   void copy(double d);
-  //void copy(string s);
+  void copy(string s);
   void reset();
 
   string getString();
@@ -55,12 +55,12 @@ private:
   CMatrix operator*(CMatrix &m);
   CMatrix operator*(double d);
 
-  /*void div(CMatrix &m);
+  void div(CMatrix &m);
   void operator/=(CMatrix &m);
   void operator/=(double d);
   CMatrix operator/(CMatrix &m);
   CMatrix operator/(double d);
-  */
+
   CMatrix operator++();    // Pre Increment
   CMatrix operator++(int); // Post Increment, int is not used
   CMatrix operator--();    // Pre Increment
@@ -72,9 +72,8 @@ private:
   friend istream& operator >> (istream &is, CMatrix& C);  //Stream
   friend ostream& operator << (ostream &os, CMatrix& C); //Stream
   friend CMatrix operator /(double d ,CMatrix &m);
-  void setSubMatrix(int iR, int iC, CMatrix &m);
-  CMatrix getSubMatrix(int r, int c, int nr, int nc);
   CMatrix getCofactor(int r, int c);
+  CMatrix getSubMatrix(int r, int c, int nr, int nc);
   */
   void setSubMatrix(int iR, int iC, CMatrix &m);
   void addColumn(CMatrix &m);
@@ -87,11 +86,11 @@ private:
   int getnR() { return nR; };
   int getnC() { return nC; };
 
-  /*double getDeterminant();
-  CMatrix getTranspose();
+  CComplex getDeterminant();
+  //CMatrix getTranspose();
   CMatrix getInverse();
-  string getString2();
-  void writeMatrixInFile(string file);*/
+  //string getString2();
+  //void writeMatrixInFile(string file);*/
 
 };
 
