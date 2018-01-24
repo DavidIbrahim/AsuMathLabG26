@@ -104,7 +104,29 @@ double stringToDouble(string s)
     is>>d;
     return d;
 }
+//check that the bracket at position pos in the string s is for a special function
+//returns 1 if it is for a special function
 
+bool checkTheBracketOfSpecialFn(string s,int pos)
+{
+    if(s[pos]!='(')
+        throw("it is not a '('");
+    if(pos==0)
+        return 0;
+    if(s[pos-1]=='+'||s[pos-1]=='-'||s[pos-1]=='*'||s[pos-1]=='/'||s[pos-1]=='^'||s[pos-1]=='%'||s[pos-1]==' '||s[pos-1]==';'||s[pos-1]==','||s[pos-1]=='\n')
+        return 0;
+    return 1;
+}
+
+//this function checks the sign(+ - * / ^ ) of position pos in the string s is a matrix operation
+//returns 1 if it is a matrix operation ot operation with special matrix
+//we should deal with brackets before this function
+bool checkSignsForMatrixOperations(string s,int pos)
+{
+    if(s[pos-1]==']'||s[pos-1]=='.'||s[pos+1]=='['||s[pos-1]==')')
+        return 1;
+    else return 0;
+}
 /*
 Matlab getMatlab(string name,vector<Matlab> & savedMatrices){
 
