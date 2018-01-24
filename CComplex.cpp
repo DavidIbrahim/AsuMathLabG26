@@ -32,10 +32,10 @@ CComplex::CComplex(const CComplex& C)
 string CComplex::getString()
 {
     char text[100];
-    if(I==0)sprintf(text, "%g", R);
+    /*if(I==0)sprintf(text, "%g", R);
     else if(R==0)sprintf(text, "%gi", I);
-    else if(I>=0)sprintf(text, "%g + %gi", R, I);
-    else if(I<0)sprintf(text, "%g - %gi", R, -I);
+    else */if(I>=0)sprintf(text, "%8g + %gi", R, I);
+    else if(I<0)sprintf(text, "%8g - %gi", R, -I);
     return string(text);
 }
 

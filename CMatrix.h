@@ -1,47 +1,49 @@
 #include <fstream>
 #include <string>
+#include "CComplex.h"
 #ifndef CMatrix_H
 #define CMatrix_H
+
 using namespace std;
 class CMatrix {
 private:
-    int nR, nC;
-    double **values;
+  int nR, nC;
+  CComplex **values;
 
-    static bool fixMatrix(CMatrix &m,int r,int c);
-    static bool checkIfZeroMatrix(CMatrix &m);
+  //static bool fixMatrix(CMatrix &m,int r,int c);
+  //static bool checkIfZeroMatrix(CMatrix &m);
   public:
 
   CMatrix();
-  double getDeterminant2();
-  double getDeterminant3();
+  //double getDeterminant2();
+  //double getDeterminant3();
   ~CMatrix();
   enum MI { MI_ZEROS, MI_ONES, MI_EYE, MI_RAND, MI_VALUE };
-
+  bool isReal();
   CMatrix(int nR, int nC, int initialization = MI_ZEROS,
-          double initializationValue = 0.0);
-  CMatrix(int nR, int nC, double first, ...);
+          CComplex initializationValue = CComplex(0.0));
+  //CMatrix(int nR, int nC, double first, ...);
   CMatrix(CMatrix &m);
   CMatrix(double d);
-  CMatrix(string s);
+  //CMatrix(string s);
   void copy(const CMatrix &m);
   void copy(double d);
-  void copy(string s);
+  //void copy(string s);
   void reset();
 
   string getString();
 
   CMatrix operator=(const CMatrix &m);
   CMatrix operator=(double d);
-  CMatrix operator=(string s);
+  //CMatrix operator=(string s);
 
   void add(const CMatrix &m);
   void operator+=(CMatrix &m);
   void operator+=(double d);
-   CMatrix operator+(CMatrix &m);
-   CMatrix operator+(double d);
+  CMatrix operator+(CMatrix &m);
+  CMatrix operator+(double d);
 
-  void sub(CMatrix &m);
+  /*void sub(CMatrix &m);
   void operator-=(CMatrix &m);
   void operator-=(double d);
   CMatrix operator-(CMatrix &m);
@@ -66,9 +68,9 @@ private:
   CMatrix operator-();
   CMatrix operator+();
 
-  	friend istream& operator >> (istream &is, CMatrix& C);  //Stream
+  friend istream& operator >> (istream &is, CMatrix& C);  //Stream
   friend ostream& operator << (ostream &os, CMatrix& C); //Stream
-friend CMatrix operator /(double d ,CMatrix &m);
+  friend CMatrix operator /(double d ,CMatrix &m);
   void setSubMatrix(int iR, int iC, CMatrix &m);
   CMatrix getSubMatrix(int r, int c, int nr, int nc);
   CMatrix getCofactor(int r, int c);
@@ -86,7 +88,7 @@ friend CMatrix operator /(double d ,CMatrix &m);
   CMatrix getTranspose();
   CMatrix getInverse();
   string getString2();
-  void writeMatrixInFile(string file);
+  void writeMatrixInFile(string file);*/
 
 };
 

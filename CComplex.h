@@ -57,7 +57,6 @@ class CComplex
         void operator /=(CComplex& C);
         friend CComplex operator/(CComplex& A, CComplex& B);
 
-
     protected:
 
     private:
