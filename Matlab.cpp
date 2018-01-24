@@ -87,7 +87,23 @@ bool replaceString(string& mainString, string replacedString, string replacingSt
     return true;
 
 }
-
+string doubleToString(double d)//convert double to string
+{
+    ostringstream os;
+    os<<d;
+    string s(os.str());
+    if(!(d-floor(d)))
+    s+=".0";
+    //return string(c);
+   return s;
+}
+double stringToDouble(string s)
+{
+    double d;
+    istringstream is(s);
+    is>>d;
+    return d;
+}
 
 /*
 Matlab getMatlab(string name,vector<Matlab> & savedMatrices){
@@ -965,60 +981,79 @@ string Matlab::getInstructionWithoutFunctions(string instruction)
             {
             case 1:
                 replacedString="sin("+extractedString+")";
+                value=doubleToString(sin(stringToDouble(value)));
                 break;
             case 2:
                 replacedString="cos("+extractedString+")";
+                value=doubleToString(cos(stringToDouble(value)));
                 break;
             case 3:
                 replacedString="tan("+extractedString+")";
+                value=doubleToString(tan(stringToDouble(value)));
                 break;
             case 4:
                 replacedString="asin("+extractedString+")";
+                value=doubleToString(asin(stringToDouble(value)));
                 break;
             case 5:
                 replacedString="acos("+extractedString+")";
+                value=doubleToString(acos(stringToDouble(value)));
                 break;
             case 6:
                 replacedString="atan("+extractedString+")";
+                value=doubleToString(atan(stringToDouble(value)));
                 break;
             case 7:
                 replacedString="sinh("+extractedString+")";
+                value=doubleToString(sinh(stringToDouble(value)));
                 break;
             case 8:
                 replacedString="cosh("+extractedString+")";
+                value=doubleToString(cosh(stringToDouble(value)));
                 break;
             case 9:
                 replacedString="tanh("+extractedString+")";
+                value=doubleToString(tanh(stringToDouble(value)));
                 break;
             case 10:
                 replacedString="asinh("+extractedString+")";
+                value=doubleToString(asinh(stringToDouble(value)));
                 break;
             case 11:
                 replacedString="acosh("+extractedString+")";
+                value=doubleToString(acosh(stringToDouble(value)));
                 break;
             case 12:
                 replacedString="atanh("+extractedString+")";
+                value=doubleToString(atanh(stringToDouble(value)));
                 break;
             case 13:
-                replacedString="abs("+extractedString+")";
+                replacedString="fabs("+extractedString+")";
+                value=doubleToString(fabs(stringToDouble(value)));
                 break;
             case 14:
                 replacedString="ceil("+extractedString+")";
+                value=doubleToString(ceil(stringToDouble(value)));
                 break;
             case 15:
                 replacedString="floor("+extractedString+")";
+                value=doubleToString(floor(stringToDouble(value)));
                 break;
             case 16:
                 replacedString="sqrt("+extractedString+")";
+                value=doubleToString(sqrt(stringToDouble(value)));
                 break;
             case 17:
                 replacedString="exp("+extractedString+")";
+                value=doubleToString(exp(stringToDouble(value)));
                 break;
             case 18:
                 replacedString="log("+extractedString+")";
+                value=doubleToString(log(stringToDouble(value)));
                 break;
             case 19:
                 replacedString="log10("+extractedString+")";
+                value=doubleToString(log10(stringToDouble(value)));
                 break;
             //case 20:replacedString="power("+extractedString+")"; break;
             default:
@@ -1035,64 +1070,85 @@ string Matlab::getInstructionWithoutFunctions(string instruction)
             {
             case 1:
                 replacedString="sin("+extractedString+")";
+                finalMatrix=CMatrix(finalMatrix).sin_element().getString2();
                 break;
             case 2:
                 replacedString="cos("+extractedString+")";
+                finalMatrix=CMatrix(finalMatrix).cos_element().getString2();
                 break;
             case 3:
                 replacedString="tan("+extractedString+")";
+                finalMatrix=CMatrix(finalMatrix).tan_element().getString2();
                 break;
             case 4:
                 replacedString="asin("+extractedString+")";
+                finalMatrix=CMatrix(finalMatrix).asin_element().getString2();
                 break;
             case 5:
                 replacedString="acos("+extractedString+")";
+                finalMatrix=CMatrix(finalMatrix).acos_element().getString2();
                 break;
             case 6:
                 replacedString="atan("+extractedString+")";
+                finalMatrix=CMatrix(finalMatrix).atan_element().getString2();
                 break;
             case 7:
                 replacedString="sinh("+extractedString+")";
+                finalMatrix=CMatrix(finalMatrix).sinh_element().getString2();
                 break;
             case 8:
                 replacedString="cosh("+extractedString+")";
+                finalMatrix=CMatrix(finalMatrix).cosh_element().getString2();
                 break;
             case 9:
                 replacedString="tanh("+extractedString+")";
+                finalMatrix=CMatrix(finalMatrix).tanh_element().getString2();
                 break;
             case 10:
                 replacedString="asinh("+extractedString+")";
+                finalMatrix=CMatrix(finalMatrix).asinh_element().getString2();
                 break;
             case 11:
                 replacedString="acosh("+extractedString+")";
+                finalMatrix=CMatrix(finalMatrix).acosh_element().getString2();
                 break;
             case 12:
                 replacedString="atanh("+extractedString+")";
+                finalMatrix=CMatrix(finalMatrix).atanh_element().getString2();
                 break;
             case 13:
                 replacedString="abs("+extractedString+")";
+                finalMatrix=CMatrix(finalMatrix).abs_element().getString2();
                 break;
             case 14:
                 replacedString="ceil("+extractedString+")";
+                finalMatrix=CMatrix(finalMatrix).ceil_element().getString2();
                 break;
             case 15:
                 replacedString="floor("+extractedString+")";
+                finalMatrix=CMatrix(finalMatrix).floor_element().getString2();
                 break;
             case 16:
                 replacedString="sqrt("+extractedString+")";
+                finalMatrix=CMatrix(finalMatrix).sqrt_element().getString2();
                 break;
             case 17:
                 replacedString="exp("+extractedString+")";
+                finalMatrix=CMatrix(finalMatrix).exp_element().getString2();
                 break;
             case 18:
                 replacedString="log("+extractedString+")";
+                finalMatrix=CMatrix(finalMatrix).log_element().getString2();
                 break;
             case 19:
                 replacedString="log10("+extractedString+")";
+                finalMatrix=CMatrix(finalMatrix).log10_element().getString2();
                 break;
+                /*
             case 20:
                 replacedString="power("+extractedString+")";
-                break;
+                finalMatrix=CMatrix(finalMatrix).power().getString2();
+                break;*/
             default:
                 throw("not supported function");
             }
@@ -1204,3 +1260,7 @@ string Matlab::extractStringInsideFunction(string instruction)
     return "invalid call for the function of extractStringInsideFunction";
 
 }
+
+
+
+
