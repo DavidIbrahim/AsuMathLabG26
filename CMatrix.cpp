@@ -150,11 +150,12 @@ return is;
 }
 
 ostream& operator << (ostream &os, CMatrix& m) { os<<m.getString(); return os; }
+*/
 void CMatrix::operator-=(CMatrix &m)
 {
    sub(m);
 }
-
+/*
 CMatrix operator /(double d,CMatrix &m){
 
         CMatrix ans(m.nR,m.nC);
@@ -163,12 +164,12 @@ CMatrix operator /(double d,CMatrix &m){
                         ans.values[iR][iC] = d/m.values[iR][iC];
     return ans;
 }
-
+*/
 CMatrix CMatrix:: operator-(CMatrix &m){
     CMatrix r=*this;
     r.sub(m);
     return r;
-}*/
+}
 
 void CMatrix::copy(double d) {//draft 171
   reset();
@@ -315,7 +316,7 @@ CMatrix CMatrix::getCofactor(int r,
     }
   return m;
 }
-
+*/
 void CMatrix::sub(CMatrix& m){ //tested and works - tuna
     if(nR!=m.nR||nC!=m.nC)
         throw("Invalid matrix dimension");
@@ -328,18 +329,17 @@ void CMatrix::operator-=(double d){ //tested and works - tuna
     CMatrix x(nR,nC,MI_VALUE,d);
     sub(x);
     }
-*/
 CMatrix CMatrix::operator+(double d){ //tested and works - tuna //draft 320
     CMatrix r = *this;
     r+=d;
     return r;
 }
-//CMatrix CMatrix::operator-(double d){ //tested and works - tuna
-//    CMatrix r = *this;
-//    r-=d;
-//    return r;
-//    }
-//
+CMatrix CMatrix::operator-(double d){ //tested and works - tuna
+    CMatrix r = *this;
+    r-=d;
+    return r;
+    }
+
 //CMatrix CMatrix::getTranspose(){      //CMatrix in UML, void in header file!!
 //    if(nR==1&&nC==1){
 //        CMatrix m(values[0][0]);
