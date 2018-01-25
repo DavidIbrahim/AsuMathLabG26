@@ -192,9 +192,11 @@ CComplex operator*(const CComplex& A, const CComplex& B)
     X*=B;
     return X;
 }
-void CComplex::div(CComplex& C)
+void CComplex::div( CComplex& C)
 {
-    mul(C.conjugate());
+    CComplex x(C.R, - C.I);
+
+    mul(x);
     R/=(C.R*C.R + C.I*C.I);
     I/=(C.R*C.R + C.I*C.I);
 }

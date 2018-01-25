@@ -59,7 +59,7 @@ private:
 
   void div(CMatrix &m);
   void operator/=(CMatrix &m);
-  //void operator/=(double d);   //PROBLEM-TUNA
+  void operator/=(double d);   //PROBLEM-TUNA
   CMatrix operator/(CMatrix &m);
   //CMatrix operator/(double d   //PROBLEM-TUNA
 

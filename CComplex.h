@@ -53,7 +53,7 @@ class CComplex
         void operator *=(const CComplex& C);
         friend CComplex operator*(const CComplex& A, const CComplex& B);
 
-        void div(CComplex& C);
+        void div( CComplex& C);
         void operator /=(CComplex& C);
         friend CComplex operator/(CComplex& A, CComplex& B);
 

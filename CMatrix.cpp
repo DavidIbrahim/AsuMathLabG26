@@ -258,12 +258,16 @@ CMatrix CMatrix::operator=(const CMatrix &m) { //draft 230
   copy(m);
   return *this;
 }
-/*
+
 void CMatrix::operator/=(double d) {
   for (int iR = 0; iR < nR; iR++)
-    for (int iC = 0; iC < nC; iC++)
-      values[iR][iC] /= d;
-}*/
+    for (int iC = 0; iC < nC; iC++){
+        CComplex x(d);
+        values[iR][iC].div(x);
+    }
+
+
+}
 CMatrix CMatrix::operator--() {
   add(CMatrix(nR, nC, MI_VALUE, -1.0));
   return *this;
