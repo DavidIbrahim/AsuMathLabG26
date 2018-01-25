@@ -483,6 +483,7 @@ string Matlab::getReadyInstruction(string instruction,vector<Matlab>& savedMatri
     instruction=getInstructionWithoutMatlabNames(instruction,savedMatrices);
     instruction=getInstructionWithoutSpecialMatrices(instruction);
     instruction=getInstructionWithoutExpressions(instruction);
+    instruction=getInstructionWithoutFunctions(instruction);
     instruction=getInstructionWithoutConcatenation(instruction);
     return instruction;
 }
@@ -1164,6 +1165,7 @@ string Matlab::getInstructionWithoutFunctions(string instruction)
         {
             string finalMatrix;
             string replacedString;
+            extractedString=getInstructionWithoutExpressions(extractedString);
             finalMatrix=getStringMatrix(extractedString);
             switch(checkInstructionForFunctions(instruction))
             {
