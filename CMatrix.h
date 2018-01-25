@@ -9,11 +9,10 @@ class CMatrix {
 private:
   int nR, nC;
   CComplex **values;
-
   //static bool fixMatrix(CMatrix &m,int r,int c);
   //static bool checkIfZeroMatrix(CMatrix &m);
-  public:
 
+  public:
   CMatrix();
   //double getDeterminant2();
   //double getDeterminant3();
@@ -59,9 +58,9 @@ private:
 
   void div(CMatrix &m);
   void operator/=(CMatrix &m);
-  void operator/=(double d);   //PROBLEM-TUNA
+  void operator/=(double d);
   CMatrix operator/(CMatrix &m);
-  //CMatrix operator/(double d   //PROBLEM-TUNA
+  CMatrix operator/(double d);
 
   CMatrix operator++();    // Pre Increment
   CMatrix operator++(int); // Post Increment, int is not used
@@ -73,7 +72,7 @@ private:
 
   friend istream& operator >> (istream &is, CMatrix& C);  //TO BE TESTED-TUNA
   friend ostream& operator << (ostream &os, CMatrix& C);  //TO BE TESTED-TUNA
-  //friend CMatrix operator /(double d ,CMatrix &m);      //PROBLEM-TUNA
+  friend CMatrix operator /(double d ,CMatrix &m);      //PROBLEM-TUNA
 
   CMatrix getCofactor(int r, int c);
   CMatrix getSubMatrix(int r, int c, int nr, int nc);
@@ -92,8 +91,8 @@ private:
   CComplex getDeterminant();
   CMatrix getTranspose(); //TO BE TESTED-TUNA
   CMatrix getInverse();
-  //string getString2();
-  //void writeMatrixInFile(string file);
+  string getString2();
+  void writeMatrixInFile(string file);
 
 };
 

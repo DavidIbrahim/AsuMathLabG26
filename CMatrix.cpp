@@ -137,18 +137,6 @@ void CMatrix::operator+=(double d) {
   CMatrix C(nR, nC, MI_VALUE, CComplex(d));
   add(C);
 }
-/*
-double CMatrix::getDeterminant2() //(waiting)
-{
-  if(nR!=nC)
-    throw("Invalid matrix dimension");
-  if(nR==1&&nC==1)return values[0][0];
-    double value = 0, m = 1;
-    for(int iR=0;iR<nR;iR++){
-         value+= m * values[0][iR] * getCofactor(0, iR).getDeterminant2();
-    m *= -1;
-    } return value;
-}*/
 
 CMatrix CMatrix::operator+(CMatrix &m) {//draft 139
   CMatrix r = *this;
@@ -168,14 +156,16 @@ void CMatrix::operator-=(CMatrix &m)
    sub(m);
 }
 
-/*CMatrix operator /(double d,CMatrix &m){
+CMatrix operator/(double d,CMatrix &m){
 
-        CMatrix ans(m.nR,m.nC);
-        for (int iR = 0; iR<m.nR; iR++)
-                for (int iC = 0; iC<m.nC; iC++)
-                        ans.values[iR][iC] = CComplex(d)/m.values[iR][iC];
+    CMatrix ans(m.nR,m.nC);
+    for (int iR = 0; iR<m.nR; iR++)
+        for (int iC = 0; iC<m.nC; iC++){
+            CComplex X=CComplex(d);
+        ans.values[iR][iC] = X/m.values[iR][iC];
+    }
     return ans;
-}*/
+}
 
 CMatrix CMatrix:: operator-(CMatrix &m){
     CMatrix r=*this;
@@ -213,26 +203,13 @@ void CMatrix::copy(const CMatrix &m) { //draft 182
 
 string CMatrix::getString() { //draft 199
   string s;
-  if(!isReal()){
-  for (int iR = 0; iR < nR; iR++) {
-    for (int iC = 0; iC < nC; iC++) {
-      s += values[iR][iC].getString();
-      s += "\t";
-    }
-    s += "\n";
-  }
-  }
-  else if(isReal())
-  {
       for (int iR = 0; iR < nR; iR++) {
         for (int iC = 0; iC < nC; iC++) {
-          char buffer[200];
-          sprintf(buffer, "%8g\t", values[iR][iC].real());
-          s += buffer;
+          s += values[iR][iC].getString(isReal());
+          s += "\t";
         }
         s += "\n";
-    }
-  }
+      }
   return s;
 }
 
@@ -259,15 +236,6 @@ CMatrix CMatrix::operator=(const CMatrix &m) { //draft 230
   return *this;
 }
 
-void CMatrix::operator/=(double d) {
-  for (int iR = 0; iR < nR; iR++)
-    for (int iC = 0; iC < nC; iC++){
-        CComplex x(d);
-        values[iR][iC].div(x);
-    }
-
-
-}
 CMatrix CMatrix::operator--() {
   add(CMatrix(nR, nC, MI_VALUE, -1.0));
   return *this;
@@ -468,41 +436,60 @@ void CMatrix::operator/=(CMatrix& m)
                 for (int iC = 0; iC<nC; iC++)
                         values[iR][iC] /= CComplex(d);
 }*/
+void CMatrix::operator/=(double d) {
+  for (int iR = 0; iR < nR; iR++)
+    for (int iC = 0; iC < nC; iC++){
+        CComplex x(d);
+        values[iR][iC].div(x);
+    }
+}
 CMatrix CMatrix::operator/(CMatrix& m)
 {
         CMatrix r = *this;
         r /= m;
         return r;
 }
-/*CMatrix CMatrix::operator/(double d)
+CMatrix CMatrix::operator/(double d)
 {
         CMatrix r = *this;
         r /= d;
         return r;
-}*/
+}
 
-//string CMatrix:: getString2(){
-//     string s="[";
-//  for (int iR = 0; iR < nR; iR++) {
-//    for (int iC = 0; iC < nC; iC++) {
-//      char buffer[200];
-//      sprintf(buffer, "%g ", values[iR][iC]);
-//      s += buffer;
-//    }
-//    s += ";";
-//  }
-//  s+="]";
-//  return s;
+string CMatrix::getString2(){
+     string s="[";
+     for (int iR = 0; iR < nR; iR++)
+     {
+            for (int iC = 0; iC < nC; iC++) {
+                /*char buffer[200];
+                sprintf(buffer, "%g ", values[iR][iC]);*/
+                s += values[iR][iC].getString(isReal());
+            }
+            s += ";";
+     }
+     s.erase(s.end()-1);//removes the last semicolon.
+     s+="]";
+     return s;
+}
+
+void CMatrix::writeMatrixInFile(string file) {
+
+     std::ofstream out(file.c_str());
+     out<<getString2();
+     out.close();
+}
+
+//double CMatrix::getDeterminant2() //(waiting)
+//{
+//  if(nR!=nC)
+//    throw("Invalid matrix dimension");
+//  if(nR==1&&nC==1)return values[0][0];
+//    double value = 0, m = 1;
+//    for(int iR=0;iR<nR;iR++){
+//         value+= m * values[0][iR] * getCofactor(0, iR).getDeterminant2();
+//    m *= -1;
+//    } return value;
 //}
-//
-//void CMatrix::writeMatrixInFile(string file) {
-//
-//     std::ofstream out(file.c_str());
-//     out<<getString2();
-//    out.close();
-//}
-//
-//
 //double CMatrix::getDeterminant3(){
 //
 //    if(nR!=nC)
@@ -602,7 +589,6 @@ CMatrix CMatrix::operator/(CMatrix& m)
 //    return ans;
 //*/
 //}
-//
 //bool  CMatrix:: fixMatrix(CMatrix &m , int r,int c) {
 //
 //    int index =0;
@@ -610,9 +596,8 @@ CMatrix CMatrix::operator/(CMatrix& m)
 //    static int fC=-1;
 //    static int fnR = 0;
 //    if(r == -1 && c == -1){
-//         fR=-1;
-//         fC=-1;
-//
+//        fR=-1;
+//        fC=-1;
 //        return true;
 //    }
 //    if(r == fR && fC==c){
@@ -627,15 +612,12 @@ CMatrix CMatrix::operator/(CMatrix& m)
 //    for(int i = fnR-1; i>-1;i--){
 //
 //        if(i==r) continue;
-//        if(m.values[r][i]!=0){
+//        if(m.values[r][i]!=CComplex(0)){
 //                index = i;
-//
-//
 //                break;
 //        }
 //    }
-//
-//   double temp;
+//    CComplex temp;
 //    for(int j = 0 ; j<m.nC ; j++){
 //                temp = m.values[j][c];
 //                m.values[j][c] = m.values[j][index];
@@ -643,46 +625,40 @@ CMatrix CMatrix::operator/(CMatrix& m)
 //    }
 //    return true;
 //}
-//bool  CMatrix:: checkIfZeroMatrix(CMatrix &m ){
-//
+//bool CMatrix:: checkIfZeroMatrix(CMatrix &m){
 //    bool zeroMatrix = false ;
 //    for(int i = 0 ; i <m.nR ; i++){
 //       for(int j = i+1; j<m.nR; j++ ){
 //            if ((m.values[i][0]!=0 && m.values[j][0]==0)
 //                ||(m.values[i][0]==0 && m.values[j][0]!=0)) continue;
-//            double factor = m.values[i][0]/m.values[j][0];
+//            CComplex factor = m.values[i][0]/m.values[j][0];
 //            for(int k =1 ; k<m.nC ; k++){
 //                zeroMatrix = true;
-//                double temp = m.values[i][k]/m.values[j][k];
-//                if(!( (temp - factor) <0.000000001 && (temp-factor)> - 0.000000001)){
+//                CComplex temp = m.values[i][k]/m.values[j][k];
+//                if(!( (temp - factor) <CComplex(0.000000001) && (temp-factor)> - CComplex(0.000000001))){
 //                    zeroMatrix = false;
 //                    break;
 //                }
 //            }
 //            if(zeroMatrix) return zeroMatrix;
-//
-//
 //       }
 //    }
 //    for(int i = 0 ; i <m.nR ; i++){
 //       for(int j = i+1; j<m.nR; j++ ){
 //            if ((m.values[i][0]!=0 && m.values[j][0]==0)
 //                ||(m.values[i][0]==0 && m.values[j][0]!=0)) continue;
-//            double factor = m.values[0][i]/m.values[0][j];
+//            CComplex factor = m.values[0][i]/m.values[0][j];
 //            for(int k =1 ; k<m.nC ; k++){
 //                zeroMatrix = true;
-//                double temp = m.values[k][i]/m.values[k][j];
+//                CComplex temp = m.values[k][i]/m.values[k][j];
 //                if(!( (temp - factor) <0.000000001 && (temp-factor)> - 0.000000001)){
 //                    zeroMatrix = false;
 //                    break;
 //                }
 //            }
 //            if(zeroMatrix) return zeroMatrix;
-//
-//
 //       }
 //    }
-//
 //return zeroMatrix;
 //}
 
@@ -690,11 +666,12 @@ CMatrix CMatrix::operator/(CMatrix& m)
 CComplex CMatrix::getDeterminant(){
 
     int *ri = new int[nR];
-    int i, j, k;
+    int i, j;
 
     CComplex det = CComplex(1.0);
     CMatrix M(*this);
-    CComplex ** m = M.values;
+    CComplex **m = M.values;
+
     //Initialize the pointer vector.
     for (i = 0 ; i < nR; i++)
         ri[i] = i;
@@ -724,7 +701,7 @@ CComplex CMatrix::getDeterminant(){
         {
             m[ri[i-1]][p-1] /= m[ri[p-1]][p-1];
             // Eliminate [p-1].
-            for (int j = p + 1 ; j <= nR; j++)
+            for (j = p + 1 ; j <= nR; j++)
                 m[ri[i-1]][j-1] -= m[ri[i-1]][p-1] *m[ri[p-1]][j-1];
         }
     }

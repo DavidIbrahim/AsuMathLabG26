@@ -29,13 +29,20 @@ CComplex::CComplex(const CComplex& C)
     R = C.R; I = C.I;
 }
 
-string CComplex::getString()
+string CComplex::getString(bool isReal)
 {
     char text[100];
+    if(isReal)
+    {
+        sprintf(text, "%8g\t", R);
+
+    }
+    else if(!isReal){
     /*if(I==0)sprintf(text, "%g", R);
     else if(R==0)sprintf(text, "%gi", I);
     else */if(I>=0)sprintf(text, "%8g + %8gi", R, I);
     else if(I<0)sprintf(text, "%8g - %8gi", R, -I);
+    }
     return string(text);
 }
 
@@ -136,7 +143,7 @@ CComplex CComplex::operator-()
 }
 CComplex::operator const string()
 {
-    return getString();
+    return getString(I==0);
 }
 
 istream& operator >> (istream &is, CComplex& C)
@@ -148,7 +155,7 @@ istream& operator >> (istream &is, CComplex& C)
 }
 ostream& operator << (ostream& os, CComplex& C)
 {
-    os<<C.getString();
+    os<<C.getString(C.I==0);
     return os;
 }
 
@@ -268,5 +275,6 @@ void CComplex::copy(string s)
     }
 }
 bool operator==(const CComplex& A, const CComplex& B){ return (A.R==B.R)&&(A.I==B.I); }
+bool operator!=(const CComplex& A, const CComplex& B){ return (A.R!=B.R)&&(A.I!=B.I); }
 //bool operator>(const CComplex& A, const CComplex& B){ return (A.magnitude()>B.magnitude()); }
 //bool operator<(const CComplex& A, const CComplex& B){ return (A.magnitude()<B.magnitude()); }

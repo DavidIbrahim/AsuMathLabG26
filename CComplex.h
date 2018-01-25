@@ -14,7 +14,7 @@ class CComplex
         CComplex(const CComplex& C);
         CComplex(string s);
         void copy(string s);
-        string getString();
+        string getString(bool isReal);
         double magnitude();
         double angle();
         void negative();
@@ -58,6 +58,7 @@ class CComplex
         friend CComplex operator/(CComplex& A, CComplex& B);
 
         friend bool operator==(const CComplex& A, const CComplex& B);
+        friend bool operator!=(const CComplex& A, const CComplex& B);
         //friend bool operator>(const CComplex& A, const CComplex& B);
         //friend bool operator<(const CComplex& A, const CComplex& B);
 
