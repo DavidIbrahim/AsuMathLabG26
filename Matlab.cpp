@@ -1170,21 +1170,41 @@ string Matlab::getStringMatrix(string complexString)
     return complexString;
 
 }
-string extractTheNumber( string const &mainString,int positionOfFirstDigit)
+string extractTheNumber( string const &mainString,int positionOfFirstDigit,bool reverse_ = false)
 {
-    int positionOfLastDigit = positionOfFirstDigit;
-    bool  stillWhiteSpace = true;
-    while((mainString[positionOfLastDigit]>='0' && mainString[positionOfLastDigit]<='9')||stillWhiteSpace)
+    if(!reverse_)
     {
-        if(stillWhiteSpace)
-            if(mainString[positionOfLastDigit]!=' ') stillWhiteSpace = false;
-            else positionOfFirstDigit++;
-        positionOfLastDigit++;
+        int positionOfLastDigit = positionOfFirstDigit;
+        bool  stillWhiteSpace = true;
+        while((mainString[positionOfLastDigit]>='0' && mainString[positionOfLastDigit]<='9')||stillWhiteSpace)
+        {
+            if(stillWhiteSpace)
+                if(mainString[positionOfLastDigit]!=' ') stillWhiteSpace = false;
+                else positionOfFirstDigit++;
+            positionOfLastDigit++;
+        }
+
+        string answer = mainString.substr(positionOfFirstDigit, positionOfLastDigit -positionOfFirstDigit  );
+        return answer;
     }
+    else {
 
-    string answer = mainString.substr(positionOfFirstDigit, positionOfLastDigit -positionOfFirstDigit  );
-    return answer;
+         int positionOfLastDigit = positionOfFirstDigit;
+        bool  stillWhiteSpace = true;
+        while((mainString[positionOfFirstDigit]>='0' && mainString[positionOfFirstDigit]<='9')||stillWhiteSpace)
+        {
+            if(stillWhiteSpace)
+                if(mainString[positionOfFirstDigit]!=' ') stillWhiteSpace = false;
+                else positionOfLastDigit--;
+            positionOfFirstDigit--;
+            if(positionOfFirstDigit==0) break;
+        }
+        if(positionOfFirstDigit == 0) positionOfFirstDigit = -1;
+        string answer = mainString.substr(positionOfFirstDigit+1, positionOfLastDigit -positionOfFirstDigit+1  );
+        return answer;
 
+
+    }
 
 }
 
@@ -1202,16 +1222,19 @@ int indexOfTheBracket(bool squareBracket,bool searchingForBeginning,string instr
                 if(i-indexOfOperator>2 && instruction[i]!=' ') return -1;
 
             }
+            return -1 ;
         }
         else
         {
             bracketToSearchFor = ']';
 
-            for(int i =indexOfOperator; i>0; i--){
+            for(int i =indexOfOperator; i>0; i--)
+            {
                 if(instruction[i] == bracketToSearchFor) return i;
-                if(i-indexOfOperator>2 && instruction[i]!=' ') return -1;
+                if(indexOfOperator-i>0 && instruction[i]!=' ') return -1;
 
             }
+            return -1 ;
 
         }
     }
@@ -1229,22 +1252,23 @@ string Matlab::dealwithOperators(string instruction)
 
     // first dealing with .^ operator
 
-    char operator_ = '.^';
+    string operator_ = ".^";
     int pos = instruction.find(operator_);
 
-    //deal with  ^ operator
-    operator_ = '^';
-    pos = instruction.find(operator_);
-    while(pos!=string::npos)
-    {
 
-        string powerDegree = extractTheNumber(instruction,pos+1) ;
+     ///     .^ operator
+    operator_ = ".^";
+
+    while(pos!=string::npos)
+    {   pos = instruction.find(operator_);
+
+        string powerDegree = extractTheNumber(instruction,pos+2) ;
 
         int positionOftheMatrixEnd = indexOfTheBracket(true,false,instruction,pos);
         string matrixString = findTheMatrix(instruction,false,positionOftheMatrixEnd);
         CMatrix x(matrixString);
-        x = x.power(atof(powerDegree.c_str()));
-        int beginning = instruction.find(matrixString);
+        x = x.dot_power(atof(powerDegree.c_str()));
+        int beginning = instruction.rfind(matrixString,pos);
         int ending= instruction.find(powerDegree,pos)+powerDegree.size();
         string replacedString = instruction.substr(beginning,ending-beginning);
         replaceString(instruction,replacedString,x.getString2());
@@ -1252,7 +1276,82 @@ string Matlab::dealwithOperators(string instruction)
 
     }
 
-    // matrix * matrix operator
+    ///     ^ operator
+    operator_ = '^';
+
+    while(pos!=string::npos)
+    {   pos = instruction.find(operator_);
+
+        string powerDegree = extractTheNumber(instruction,pos+1) ;
+
+        int positionOftheMatrixEnd = indexOfTheBracket(true,false,instruction,pos);
+        string matrixString = findTheMatrix(instruction,false,positionOftheMatrixEnd);
+        CMatrix x(matrixString);
+        x = x.power(atof(powerDegree.c_str()));
+        int beginning = instruction.rfind(matrixString,pos);
+        int ending= instruction.find(powerDegree,pos)+powerDegree.size();
+        string replacedString = instruction.substr(beginning,ending-beginning);
+        replaceString(instruction,replacedString,x.getString2());
+        pos= instruction.find(operator_);
+
+    }
+
+
+
+    /// matrix * matrix operator
+    operator_ = '*';
+    pos = 0;
+    while(pos!=string::npos)
+    {
+         pos= instruction.find(operator_,pos+1);
+
+        int positionOftheRightMatrixBeginning = indexOfTheBracket(true,true,instruction,pos);
+        int positionOftheLeftMatrixEnd = indexOfTheBracket(true,false,instruction,pos);
+
+        if(positionOftheLeftMatrixEnd==-1||positionOftheRightMatrixBeginning==-1) continue;
+
+
+        string leftMatrixString = findTheMatrix(instruction,false,positionOftheLeftMatrixEnd);
+        string rightMatrixString = findTheMatrix(instruction,true,positionOftheRightMatrixBeginning);
+
+        CMatrix leftMatrix(leftMatrixString);
+        CMatrix rightMatrix(rightMatrixString);
+        leftMatrix.mul(rightMatrix);
+        int beginning = instruction.rfind(leftMatrixString,pos);
+        int ending= instruction.find(rightMatrixString,pos)+rightMatrixString.size();
+        string replacedString = instruction.substr(beginning,ending-beginning);
+        replaceString(instruction,replacedString,leftMatrix.getString2());
+
+    }
+
+    /// matrix * number operator
+    operator_ = '*';
+    pos = 0;
+    while(pos!=string::npos)
+    {
+          pos= instruction.find(operator_,pos+1);
+        int positionOftheRightMatrixBeginning = indexOfTheBracket(true,true,instruction,pos);
+        int positionOftheLeftMatrixEnd = indexOfTheBracket(true,false,instruction,pos);
+
+        if(positionOftheLeftMatrixEnd==-1||positionOftheRightMatrixBeginning!=-1) continue;
+        string numberMultiplied = extractTheNumber(instruction,pos+1) ;
+
+
+        string leftMatrixString = findTheMatrix(instruction,false,positionOftheLeftMatrixEnd);
+
+
+        CMatrix leftMatrix(leftMatrixString);
+
+        leftMatrix = leftMatrix * atof(numberMultiplied.c_str());
+        int beginning = instruction.rfind(leftMatrixString,pos);
+        int ending= instruction.find(numberMultiplied,pos)+numberMultiplied.size();
+        string replacedString = instruction.substr(beginning,ending-beginning);
+        replaceString(instruction,replacedString,leftMatrix.getString2());
+
+
+    }
+
+    /// number * matrix operator
     operator_ = '*';
     pos = instruction.find(operator_);
     while(pos!=string::npos)
@@ -1261,7 +1360,89 @@ string Matlab::dealwithOperators(string instruction)
         int positionOftheRightMatrixBeginning = indexOfTheBracket(true,true,instruction,pos);
         int positionOftheLeftMatrixEnd = indexOfTheBracket(true,false,instruction,pos);
 
-        if(positionOftheLeftMatrixEnd==-1||positionOftheRightMatrixBeginning==-1) break;
+        if(positionOftheLeftMatrixEnd!=-1||positionOftheRightMatrixBeginning==-1) throw("error");
+        string numberMultiplied = extractTheNumber(instruction,pos-1,true) ;
+
+
+        string rightStringMatrix = findTheMatrix(instruction,true,positionOftheRightMatrixBeginning);
+
+
+        CMatrix rightMatrix(rightStringMatrix);
+
+        rightMatrix = rightMatrix * atof(numberMultiplied.c_str());
+        int ending = instruction.find(rightStringMatrix,pos)+rightStringMatrix.size();
+        int beginning= instruction.rfind(numberMultiplied,pos);
+        string replacedString = instruction.substr(beginning,ending-beginning);
+        replaceString(instruction,replacedString,rightMatrix.getString2());
+        pos= instruction.find(operator_);
+
+    }
+
+     /// matrix ./ number operator
+    operator_ = "./";
+    pos = 0;
+    while(pos!=string::npos)
+    {
+          pos= instruction.find(operator_,pos+1);
+        int positionOftheRightMatrixBeginning = indexOfTheBracket(true,true,instruction,pos);
+        int positionOftheLeftMatrixEnd = indexOfTheBracket(true,false,instruction,pos);
+
+        if(positionOftheLeftMatrixEnd==-1||positionOftheRightMatrixBeginning!=-1) continue;
+        string numberMultiplied = extractTheNumber(instruction,pos+2) ;
+
+
+        string leftMatrixString = findTheMatrix(instruction,false,positionOftheLeftMatrixEnd);
+
+
+        CMatrix leftMatrix(leftMatrixString);
+
+        leftMatrix = leftMatrix / atof(numberMultiplied.c_str());
+        int beginning = instruction.rfind(leftMatrixString,pos);
+        int ending= instruction.find(numberMultiplied,pos)+numberMultiplied.size();
+        string replacedString = instruction.substr(beginning,ending-beginning);
+        replaceString(instruction,replacedString,leftMatrix.getString2());
+
+
+    }
+
+    /// number ./ matrix operator
+    operator_ = "./";
+    pos = instruction.find(operator_);
+    while(pos!=string::npos)
+    {
+
+        int positionOftheRightMatrixBeginning = indexOfTheBracket(true,true,instruction,pos);
+        int positionOftheLeftMatrixEnd = indexOfTheBracket(true,false,instruction,pos);
+
+        if(positionOftheLeftMatrixEnd!=-1||positionOftheRightMatrixBeginning==-1) throw("error");
+        string numberMultiplied = extractTheNumber(instruction,pos-1,true) ;
+
+
+        string rightStringMatrix = findTheMatrix(instruction,true,positionOftheRightMatrixBeginning);
+
+
+        CMatrix rightMatrix(rightStringMatrix);
+
+        rightMatrix =  atof(numberMultiplied.c_str()) /rightMatrix ;
+        int ending = instruction.find(rightStringMatrix,pos)+rightStringMatrix.size();
+        int beginning= instruction.rfind(numberMultiplied,pos);
+        string replacedString = instruction.substr(beginning,ending-beginning);
+        replaceString(instruction,replacedString,rightMatrix.getString2());
+        pos= instruction.find(operator_);
+
+    }
+
+       /// matrix / matrix operator
+    operator_ = '/';
+    pos = 0;
+    while(pos!=string::npos)
+    {
+         pos= instruction.find(operator_,pos+1);
+
+        int positionOftheRightMatrixBeginning = indexOfTheBracket(true,true,instruction,pos);
+        int positionOftheLeftMatrixEnd = indexOfTheBracket(true,false,instruction,pos);
+
+        if(positionOftheLeftMatrixEnd==-1||positionOftheRightMatrixBeginning==-1) continue;
 
 
         string leftMatrixString = findTheMatrix(instruction,false,positionOftheLeftMatrixEnd);
@@ -1269,14 +1450,16 @@ string Matlab::dealwithOperators(string instruction)
 
         CMatrix leftMatrix(leftMatrixString);
         CMatrix rightMatrix(rightMatrixString);
-         leftMatrix.mul(rightMatrix);
+        leftMatrix.div(rightMatrix);
         int beginning = instruction.rfind(leftMatrixString,pos);
         int ending= instruction.find(rightMatrixString,pos)+rightMatrixString.size();
         string replacedString = instruction.substr(beginning,ending-beginning);
         replaceString(instruction,replacedString,leftMatrix.getString2());
-        pos= instruction.find(operator_);
 
     }
+
+
+
 
 
     return instruction;

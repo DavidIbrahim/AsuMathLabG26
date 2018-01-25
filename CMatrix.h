@@ -73,6 +73,7 @@ public:
   CMatrix signbit_element(void);
 /************************************************************************************************************************/
   // the dot add and dot subtract are the same as the normal add and subtract
+   CMatrix dot_power(double d );
   CMatrix dot_mult(const CMatrix &m );
   CMatrix dot_div1(const CMatrix &m );/*   \    */
   CMatrix dot_div2(const CMatrix &m );/*   /    */

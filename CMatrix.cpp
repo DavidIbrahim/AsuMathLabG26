@@ -1575,6 +1575,31 @@ the comment from the throw******************************************************
   }
 
 
+  /** @brief it div each element with its equiv. element
+ *  @param1  the matrix that does the call
+ *  @param2  another matrix as i/p
+ *  @return a matrix where each element is div with its equiv element @param1 / @param2
+ *
+ */
+//this is according to oct.
+
+  CMatrix CMatrix::dot_power(double d )   /*   /    */
+  {
+
+
+
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = pow(values[iR][iC],d);}
+
+  return result ;
+  }
+
+
+
+
+
 
 
 
