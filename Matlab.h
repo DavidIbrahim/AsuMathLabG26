@@ -7,57 +7,65 @@
 ///The object of this class consists of the matrix and it's name
 class Matlab
 {
-    private:
-        CMatrix matrix;
-        string name;
+private:
+    CMatrix matrix;
+    string name;
 
-        //bool checkIfSpecialMatrix(string instruction);
+    //bool checkIfSpecialMatrix(string instruction);
 
-        string getInstructionWithoutSpecialMatrices(string instruction);
-void dealWithConcatenationHelperFn(string &instruction ,string s);
+    string getInstructionWithoutSpecialMatrices(string instruction);
+    void dealWithConcatenationHelperFn(string &instruction,string s);
+
+    string  dealWithAddAndSubOperators(string instruction, string operator_);
+
+    string getInstructionWithoutExpressions(string instruction);
+    string getReadyInstruction(string instruction,vector<Matlab>& savedMatrices);
+    void trimAllSpaces(string &s);
+    string dealWithBrackets(string complexString);
+    int findTheClosingBracket(string s,char openingBracket,int start=0);
+    int findTheOpeningBracket(string s, char openingBracket,int start);
+    string dealWithConcatenation(string instruction);
+public:
+    string dealwithOperators(string instruction);
+    string dealwithSpecialFunctions(string instruction);
+    string dealwithSpecialFunctionsHelperFunction(string instruction,string specialFunction);
+    string findTheMatrix(string instruction,bool openingBracket,int pos);
+    string getStringMatrix(string complexString);
+    int checkInstructionForFunctions(string instruction);
+    string extractStringInsideFunction(string instruction);
+    enum {};
+    bool checkStringForMatrix(string complexString);
+    Matlab();
+    Matlab(const Matlab& x);
+    //static Matlab getMatlabFromVector(string name, vector<Matlab> & matlabObjects)
+    Matlab(string name,const CMatrix &matrix);
+    Matlab(string instruction,vector<Matlab>& myVector);
+
+    CMatrix getMatrix()
+    {
+        return matrix;
+    }
+    string getName()
+    {
+        return name;
+    }
+
+    string getString();
+    string getInstructionWithoutConcatenation(string instruction);
+    string getInstructionWithoutMatlabNames(string instruction,vector<Matlab>& savedMatrices);
+
+    string getInstructionWithoutFunctions(string instruction);
 
 
 
-        string getInstructionWithoutExpressions(string instruction);
-        string getReadyInstruction(string instruction,vector<Matlab>& savedMatrices);
-        void trimAllSpaces(string &s);
-        string dealWithBrackets(string complexString);
-        int findTheClosingBracket(string s,char openingBracket,int start=0);
-        int findTheOpeningBracket(string s, char openingBracket,int start);
-        string dealWithConcatenation(string instruction);
-    public:
-        string dealwithOperators(string instruction);
-        string findTheMatrix(string instruction,bool openingBracket,int pos);
-        string getStringMatrix(string complexString);
-        int checkInstructionForFunctions(string instruction);
-        string extractStringInsideFunction(string instruction);
-        enum{};
-        bool checkStringForMatrix(string complexString);
-        Matlab();
-        Matlab(const Matlab& x);
-        //static Matlab getMatlabFromVector(string name, vector<Matlab> & matlabObjects)
-        Matlab(string name ,const CMatrix &matrix);
-        Matlab(string instruction,vector<Matlab>& myVector);
+    virtual ~Matlab();
 
-        CMatrix getMatrix(){return matrix;}
-        string getName(){return name;}
-
-        string getString();
-        string getInstructionWithoutConcatenation(string instruction);
-        string getInstructionWithoutMatlabNames(string instruction,vector<Matlab>& savedMatrices);
-
-        string getInstructionWithoutFunctions(string instruction);
+    string solvetrignometry(string s) ;
+    string calcSimpleExpression(string s);
+    string getStringValue(string complexString);
 
 
-
-        virtual ~Matlab();
-
-        string solvetrignometry(string s) ;
-        string calcSimpleExpression(string s);
-        string getStringValue(string complexString);
-
-
-    protected:
+protected:
 
 
 };
