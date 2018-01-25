@@ -7,65 +7,116 @@
 ///The object of this class consists of the matrix and it's name
 class Matlab
 {
+
 private:
     CMatrix matrix;
     string name;
+  
+        //bool checkIfSpecialMatrix(string instruction);
 
-    //bool checkIfSpecialMatrix(string instruction);
+        string getInstructionWithoutSpecialMatrices(string instruction);
 
-    string getInstructionWithoutSpecialMatrices(string instruction);
+
+       
+        public:
+        string getInstructionWithoutExpressions(string instruction);
+        string getReadyInstruction(string instruction,vector<Matlab>& savedMatrices);
+        void trimAllSpaces(string &s);
+        string dealWithBrackets(string complexString);
+
+
+
+        //bool checkIfSpecialMatrix(string instruction);
+
+      
+
+
+        public:
+      
+        string getReadyInstruction(string instruction,vector<Matlab>& savedMatrices);
+        void trimAllSpaces(string &s);
+    
+        int findTheClosingBracket(string s,char openingBracket,int pos=0);ction);
+
+    
     void dealWithConcatenationHelperFn(string &instruction,string s);
 
     string  dealWithAddAndSubOperators(string instruction, string operator_);
 
-    string getInstructionWithoutExpressions(string instruction);
-    string getReadyInstruction(string instruction,vector<Matlab>& savedMatrices);
-    void trimAllSpaces(string &s);
-    string dealWithBrackets(string complexString);
+    
+   
+   
     int findTheClosingBracket(string s,char openingBracket,int start=0);
     int findTheOpeningBracket(string s, char openingBracket,int start);
-    string dealWithConcatenation(string instruction);
-public:
+    string dealWithConcatenation(string instruction);   CMatrix matrix;
+        string name;
+
+        //bool checkIfSpecialMatrix(string instruction);
+
+      
+
+
+     
+      
+       
+        string getReadyInstruction(string instruction,vector<Matlab>& savedMatrices);
+        void trimAllSpaces(string &s);
+        
+
+
     string dealwithOperators(string instruction);
     string dealwithSpecialFunctions(string instruction);
     string dealwithSpecialFunctionsHelperFunction(string instruction,string specialFunction);
     string findTheMatrix(string instruction,bool openingBracket,int pos);
     string getStringMatrix(string complexString);
     int checkInstructionForFunctions(string instruction);
-    string extractStringInsideFunction(string instruction);
+
     enum {};
     bool checkStringForMatrix(string complexString);
-    Matlab();
-    Matlab(const Matlab& x);
-    //static Matlab getMatlabFromVector(string name, vector<Matlab> & matlabObjects)
-    Matlab(string name,const CMatrix &matrix);
-    Matlab(string instruction,vector<Matlab>& myVector);
+   
+   
+  
+ 
 
-    CMatrix getMatrix()
-    {
-        return matrix;
-    }
-    string getName()
-    {
-        return name;
-    }
-
-    string getString();
-    string getInstructionWithoutConcatenation(string instruction);
-    string getInstructionWithoutMatlabNames(string instruction,vector<Matlab>& savedMatrices);
-
-    string getInstructionWithoutFunctions(string instruction);
 
 
 
     virtual ~Matlab();
 
-    string solvetrignometry(string s) ;
+   
     string calcSimpleExpression(string s);
-    string getStringValue(string complexString);
+ 
+   int checkInstructionForFunctions(string instruction);
+        string extractStringInsideFunction(string instruction);
+        enum{};
+
+        Matlab();
+        Matlab(const Matlab& x);
+        //static Matlab getMatlabFromVector(string name, vector<Matlab> & matlabObjects)
+        Matlab(string name ,const CMatrix &matrix);
+        Matlab(string instruction,vector<Matlab>& myVector);
+
+        CMatrix getMatrix(){return matrix;}
+        string getName(){return name;}
+
+        string getString();
+        string getInstructionWithoutConcatenation(string instruction);
+        string getInstructionWithoutMatlabNames(string instruction,vector<Matlab>& savedMatrices);
+
+        string getInstructionWithoutFunctions(string instruction);
+        bool checkSignsForMatrixOperations(string s,int pos);
+
+
+
+        string solvetrignometry(string s) ;
+ 
+        string getStringValue(string complexString);
+        string solvingBrackets(string s);
+        string findTheSignOperators(string s,int pos);
 
 
 protected:
+
 
 
 };

@@ -87,8 +87,84 @@ bool replaceString(string& mainString, string replacedString, string replacingSt
     return true;
 
 }
+string doubleToString(double d)//convert double to string
+{
+    ostringstream os;
+    os<<d;
+    string s(os.str());
+    if(!(d-floor(d)))
+    s+=".0";
+    //return string(c);
+   return s;
+}
+double stringToDouble(string s)
+{
+    double d;
+    istringstream is(s);
+    is>>d;
+    return d;
+}
+//check that the bracket at position pos in the string s is for a special function
+//returns 1 if it is for a special function
 
-
+bool checkTheBracketOfSpecialFn(string s,int pos)
+{
+    if(s[pos]!='(')
+        throw("it is not a '('");
+    if(pos==0)
+        return 0;
+    if(s[pos-1]=='+'||s[pos-1]=='-'||s[pos-1]=='*'||s[pos-1]=='/'||s[pos-1]=='^'||s[pos-1]=='%'||s[pos-1]==' '||s[pos-1]==';'||s[pos-1]==','||s[pos-1]=='\n')
+        return 0;
+    return 1;
+}
+/*
+//this fn searches for * or / in string s from a certain pos and returns the position of the first one found
+int searchForMulDiv(string s,int pos)
+{
+    for(int i=pos;i<s.length();i++)
+    {
+        if(s[i]=='*'||s[i]=='/')
+            return i;
+    }
+}
+*/
+//this function checks the sign(+ - * / ^ ) of position pos in the string s is a matrix operation
+//returns 1 if it is a matrix operation or operation with special matrix
+//we should deal with brackets before this function
+bool Matlab::checkSignsForMatrixOperations(string s,int pos)
+{
+    if(s[pos-1]==']'||s[pos-1]=='.'||s[pos+1]=='['||s[pos-1]==')'||s[pos+1]=='s'||s[pos+1]=='c'||s[pos+1]=='a'||s[pos+1]=='e'||s[pos+1]=='l'||s[pos+1]=='f'||s[pos+1]=='p')
+        return 1;
+    else
+    {
+        if(s[pos]=='+'||s[pos]=='-')
+        {
+            string temp;
+            for(int i=pos+1;i<s.length();i++)
+            {
+                if(s[i]!='+'&&s[i]!='-'&&s[i]!=' '&&s[i]!=']'&&s[i]!=')'&&s[i]!=';')
+                    temp+=s[i];
+                else
+                break;
+            }
+            if(checkStringForMatrix(temp))
+                return 1;
+            temp="";
+            for(int i=pos-1;i>=0;i--)
+            {
+                if(s[i]!='+'&&s[i]!='-'&&s[i]!=' '&&s[i]!='['&&s[i]!='('&&s[i]!=';')
+                    temp+=s[i];
+                else
+                break;
+            }
+            if(checkStringForMatrix(temp))
+                return 1;
+            return 0;
+        }
+        else
+            return 0;
+    }
+}
 /*
 Matlab getMatlab(string name,vector<Matlab> & savedMatrices){
 
@@ -296,8 +372,10 @@ bool Matlab::checkStringForMatrix(string complexString)
     int position=-1 ;
     //position can never return with a negative sign
     position = complexString.find("[");
+    int position2=-1;
+    position2=complexString.find("]");
     //getting the position of [ which indicates a matrix is in that string
-    if(position>=0)
+    if(position>=0||position2>=0)
         return 1;
     return 0;
 
@@ -315,6 +393,43 @@ bool Matlab::checkStringForMatrix(string complexString)
 
 string Matlab::getInstructionWithoutExpressions(string instruction)
 {
+    string simplifiedInstruction;
+    string signOperators;
+    string equivalentValue;
+    simplifiedInstruction=solvingBrackets(instruction);
+    //dealing with powers first
+    for(int i=simplifiedInstruction.length()-1;i>=0;i--)
+    {
+        if(simplifiedInstruction[i]=='^'&&!checkSignsForMatrixOperations(simplifiedInstruction,i))
+        {
+            signOperators=findTheSignOperators(simplifiedInstruction,i);
+            equivalentValue=getStringValue(signOperators);
+            replaceString(simplifiedInstruction,signOperators,equivalentValue);
+        }
+    }
+    //dealing with * & /
+    for(int i=0;i<simplifiedInstruction.length();i++)
+    {
+        if((simplifiedInstruction[i]=='*'||simplifiedInstruction[i]=='/')&&!checkSignsForMatrixOperations(simplifiedInstruction,i))
+        {
+            signOperators=findTheSignOperators(simplifiedInstruction,i);
+            equivalentValue=getStringValue(signOperators);
+            replaceString(simplifiedInstruction,signOperators,equivalentValue);
+        }
+    }
+    //dealing with + & -
+    for(int i=0;i<simplifiedInstruction.length();i++)
+    {
+        if((simplifiedInstruction[i]=='+'||simplifiedInstruction[i]=='-')&&!checkSignsForMatrixOperations(simplifiedInstruction,i))
+        {
+            signOperators=findTheSignOperators(simplifiedInstruction,i);
+           // cout<<signOperators<<endl;
+            equivalentValue=getStringValue(signOperators);
+            //cout<<equivalentValue<<endl;
+            replaceString(simplifiedInstruction,signOperators,equivalentValue);
+        }
+    }
+    return simplifiedInstruction;
     /* this code is incorrect
     istringstream is;
     is.str(instruction);
@@ -359,7 +474,11 @@ string Matlab::getReadyInstruction(string instruction,vector<Matlab>& savedMatri
     instruction=getInstructionWithoutMatlabNames(instruction,savedMatrices);
     instruction=getInstructionWithoutSpecialMatrices(instruction);
     instruction=getInstructionWithoutExpressions(instruction);
+    instruction=getInstructionWithoutFunctions(instruction);
+    //after removing functions we need another simplification
     instruction=getInstructionWithoutConcatenation(instruction);
+    instruction=getInstructionWithoutExpressions(instruction);
+    instruction=getStringMatrix(instruction);
     return instruction;
 }
 
@@ -789,6 +908,48 @@ string Matlab::calcSimpleExpression(string s)
 
 
 
+/**
+* @brief : private Helper function for dealing with brackets (2+5)/(5-2)
+*
+* @brief helper method for getStringValue
+**/
+int Matlab::findTheClosingBracket(string s, char openingBracket,int pos)
+{
+
+    int count =0;
+    char closingBracket;
+
+    if (openingBracket == '(')
+        closingBracket=')';
+
+    else if (openingBracket == '[')
+        closingBracket=']';
+
+    else
+    {
+        throw ("accepted openingBracets are '(' or '[' only");
+    }
+
+    bool foundFirstBracket = false;
+
+    for(int i =pos ; i<s.size(); i++)
+    {
+        if(s[i]==openingBracket)
+        {
+            count++;
+            foundFirstBracket = true;
+        }
+        if(s[i]==closingBracket)
+            count--;
+        if(count == 0 && foundFirstBracket)
+            return i;
+    }
+    return string::npos;
+}
+
+
+
+
 
 
 // here you need to use your function of find the bracket then get its value by my function then you need to
@@ -913,60 +1074,79 @@ string Matlab::getInstructionWithoutFunctions(string instruction)
             {
             case 1:
                 replacedString="sin("+extractedString+")";
+                value=doubleToString(sin(stringToDouble(value)));
                 break;
             case 2:
                 replacedString="cos("+extractedString+")";
+                value=doubleToString(cos(stringToDouble(value)));
                 break;
             case 3:
                 replacedString="tan("+extractedString+")";
+                value=doubleToString(tan(stringToDouble(value)));
                 break;
             case 4:
                 replacedString="asin("+extractedString+")";
+                value=doubleToString(asin(stringToDouble(value)));
                 break;
             case 5:
                 replacedString="acos("+extractedString+")";
+                value=doubleToString(acos(stringToDouble(value)));
                 break;
             case 6:
                 replacedString="atan("+extractedString+")";
+                value=doubleToString(atan(stringToDouble(value)));
                 break;
             case 7:
                 replacedString="sinh("+extractedString+")";
+                value=doubleToString(sinh(stringToDouble(value)));
                 break;
             case 8:
                 replacedString="cosh("+extractedString+")";
+                value=doubleToString(cosh(stringToDouble(value)));
                 break;
             case 9:
                 replacedString="tanh("+extractedString+")";
+                value=doubleToString(tanh(stringToDouble(value)));
                 break;
             case 10:
                 replacedString="asinh("+extractedString+")";
+                value=doubleToString(asinh(stringToDouble(value)));
                 break;
             case 11:
                 replacedString="acosh("+extractedString+")";
+                value=doubleToString(acosh(stringToDouble(value)));
                 break;
             case 12:
                 replacedString="atanh("+extractedString+")";
+                value=doubleToString(atanh(stringToDouble(value)));
                 break;
             case 13:
-                replacedString="abs("+extractedString+")";
+                replacedString="fabs("+extractedString+")";
+                value=doubleToString(fabs(stringToDouble(value)));
                 break;
             case 14:
                 replacedString="ceil("+extractedString+")";
+                value=doubleToString(ceil(stringToDouble(value)));
                 break;
             case 15:
                 replacedString="floor("+extractedString+")";
+                value=doubleToString(floor(stringToDouble(value)));
                 break;
             case 16:
                 replacedString="sqrt("+extractedString+")";
+                value=doubleToString(sqrt(stringToDouble(value)));
                 break;
             case 17:
                 replacedString="exp("+extractedString+")";
+                value=doubleToString(exp(stringToDouble(value)));
                 break;
             case 18:
                 replacedString="log("+extractedString+")";
+                value=doubleToString(log(stringToDouble(value)));
                 break;
             case 19:
                 replacedString="log10("+extractedString+")";
+                value=doubleToString(log10(stringToDouble(value)));
                 break;
             //case 20:replacedString="power("+extractedString+")"; break;
             default:
@@ -978,69 +1158,91 @@ string Matlab::getInstructionWithoutFunctions(string instruction)
         {
             string finalMatrix;
             string replacedString;
+            extractedString=getInstructionWithoutExpressions(extractedString);
             finalMatrix=getStringMatrix(extractedString);
             switch(checkInstructionForFunctions(instruction))
             {
             case 1:
                 replacedString="sin("+extractedString+")";
+                finalMatrix=CMatrix(finalMatrix).sin_element().getString2();
                 break;
             case 2:
                 replacedString="cos("+extractedString+")";
+                finalMatrix=CMatrix(finalMatrix).cos_element().getString2();
                 break;
             case 3:
                 replacedString="tan("+extractedString+")";
+                finalMatrix=CMatrix(finalMatrix).tan_element().getString2();
                 break;
             case 4:
                 replacedString="asin("+extractedString+")";
+                finalMatrix=CMatrix(finalMatrix).asin_element().getString2();
                 break;
             case 5:
                 replacedString="acos("+extractedString+")";
+                finalMatrix=CMatrix(finalMatrix).acos_element().getString2();
                 break;
             case 6:
                 replacedString="atan("+extractedString+")";
+                finalMatrix=CMatrix(finalMatrix).atan_element().getString2();
                 break;
             case 7:
                 replacedString="sinh("+extractedString+")";
+                finalMatrix=CMatrix(finalMatrix).sinh_element().getString2();
                 break;
             case 8:
                 replacedString="cosh("+extractedString+")";
+                finalMatrix=CMatrix(finalMatrix).cosh_element().getString2();
                 break;
             case 9:
                 replacedString="tanh("+extractedString+")";
+                finalMatrix=CMatrix(finalMatrix).tanh_element().getString2();
                 break;
             case 10:
                 replacedString="asinh("+extractedString+")";
+                finalMatrix=CMatrix(finalMatrix).asinh_element().getString2();
                 break;
             case 11:
                 replacedString="acosh("+extractedString+")";
+                finalMatrix=CMatrix(finalMatrix).acosh_element().getString2();
                 break;
             case 12:
                 replacedString="atanh("+extractedString+")";
+                finalMatrix=CMatrix(finalMatrix).atanh_element().getString2();
                 break;
             case 13:
                 replacedString="abs("+extractedString+")";
+                finalMatrix=CMatrix(finalMatrix).abs_element().getString2();
                 break;
             case 14:
                 replacedString="ceil("+extractedString+")";
+                finalMatrix=CMatrix(finalMatrix).ceil_element().getString2();
                 break;
             case 15:
                 replacedString="floor("+extractedString+")";
+                finalMatrix=CMatrix(finalMatrix).floor_element().getString2();
                 break;
             case 16:
                 replacedString="sqrt("+extractedString+")";
+                finalMatrix=CMatrix(finalMatrix).sqrt_element().getString2();
                 break;
             case 17:
                 replacedString="exp("+extractedString+")";
+                finalMatrix=CMatrix(finalMatrix).exp_element().getString2();
                 break;
             case 18:
                 replacedString="log("+extractedString+")";
+                finalMatrix=CMatrix(finalMatrix).log_element().getString2();
                 break;
             case 19:
                 replacedString="log10("+extractedString+")";
+                finalMatrix=CMatrix(finalMatrix).log10_element().getString2();
                 break;
+                /*
             case 20:
                 replacedString="power("+extractedString+")";
-                break;
+                finalMatrix=CMatrix(finalMatrix).power().getString2();
+                break;*/
             default:
                 throw("not supported function");
             }
@@ -1152,6 +1354,7 @@ string Matlab::extractStringInsideFunction(string instruction)
     return "invalid call for the function of extractStringInsideFunction";
 
 }
+
 /** @brief simplify the String to the final matrix string
  *
  * @param complexString it is a string of matrix operations without any matlab names or special matrix or special functions
@@ -1847,3 +2050,61 @@ int Matlab::findTheOpeningBracket(string s, char openingBracket,int start)
 
 
 
+
+
+string Matlab::solvingBrackets(string s)
+{
+    string temp,replacingString;
+    for(int i=0;i<s.length();i++)
+    {
+        if(s[i]=='(')
+        {
+            if(!checkTheBracketOfSpecialFn(s,i))
+            {
+                int endPosition=findTheClosingBracket(s,'(',i);
+                temp=s.substr(i,endPosition-i+1);
+                if(!checkStringForMatrix(temp))
+                    replacingString=getStringValue(temp);
+                else
+                    throw("error");
+                replaceString(s,temp,replacingString,i);
+            }
+        }
+    }
+    return s;
+}
+
+//input : s="5*5+6 pos=1
+//output: 5*5
+string Matlab::findTheSignOperators(string s,int pos)
+{
+    int i=pos-1;
+    string replacingString="";
+    string temp="";
+    while(1)
+    {
+        if(s[i]=='+'||s[i]=='-'||s[i]=='*'||s[i]=='/'||s[i]=='['||s[i]==']'||s[i]==' '||s[i]==';'||s[i]=='('||s[i]==')'||s[i]=='^')
+            break;
+        temp+=s[i];
+        if(i==0)
+            break;
+        i--;
+    }
+    for(int j=0;j<temp.length();j++)
+    {
+        replacingString+=temp[temp.length()-1-j];
+    }
+    replacingString+=s[pos];
+    i=pos+1;
+    while(1)
+    {
+        if(s[i]=='+'||s[i]=='-'||s[i]=='*'||s[i]=='/'||s[i]=='['||s[i]==']'||s[i]==' '||s[i]==';'||s[i]=='('||s[i]==')'||s[i]=='^')
+            break;
+        replacingString+=s[i];
+        if(i==s.length()-1)
+            break;
+        i++;
+    }
+    return replacingString;
+
+}
