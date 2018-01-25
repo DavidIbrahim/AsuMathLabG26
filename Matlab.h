@@ -17,6 +17,7 @@ class Matlab
 
 
         string getStringMatrix(string complexString);
+        public:
         string getInstructionWithoutExpressions(string instruction);
         string getReadyInstruction(string instruction,vector<Matlab>& savedMatrices);
         void trimAllSpaces(string &s);
@@ -41,7 +42,7 @@ class Matlab
         string getInstructionWithoutMatlabNames(string instruction,vector<Matlab>& savedMatrices);
 
         string getInstructionWithoutFunctions(string instruction);
-
+        bool checkSignsForMatrixOperations(string s,int pos);
 
 
         virtual ~Matlab();

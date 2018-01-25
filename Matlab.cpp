@@ -117,15 +117,53 @@ bool checkTheBracketOfSpecialFn(string s,int pos)
         return 0;
     return 1;
 }
-
+/*
+//this fn searches for * or / in string s from a certain pos and returns the position of the first one found
+int searchForMulDiv(string s,int pos)
+{
+    for(int i=pos;i<s.length();i++)
+    {
+        if(s[i]=='*'||s[i]=='/')
+            return i;
+    }
+}
+*/
 //this function checks the sign(+ - * / ^ ) of position pos in the string s is a matrix operation
 //returns 1 if it is a matrix operation or operation with special matrix
 //we should deal with brackets before this function
-bool checkSignsForMatrixOperations(string s,int pos)
+bool Matlab::checkSignsForMatrixOperations(string s,int pos)
 {
-    if(s[pos-1]==']'||s[pos-1]=='.'||s[pos+1]=='['||s[pos-1]==')')
+    if(s[pos-1]==']'||s[pos-1]=='.'||s[pos+1]=='['||s[pos-1]==')'||s[pos+1]=='s'||s[pos+1]=='c'||s[pos+1]=='a'||s[pos+1]=='e'||s[pos+1]=='l'||s[pos+1]=='f'||s[pos+1]=='p')
         return 1;
-    else return 0;
+    else
+    {
+        if(s[pos]=='+'||s[pos]=='-')
+        {
+            string temp;
+            for(int i=pos+1;i<s.length();i++)
+            {
+                if(s[i]!='+'&&s[i]!='-'&&s[i]!=' '&&s[i]!=']'&&s[i]!=')'&&s[i]!=';')
+                    temp+=s[i];
+                else
+                break;
+            }
+            if(checkStringForMatrix(temp))
+                return 1;
+            temp="";
+            for(int i=pos-1;i>=0;i--)
+            {
+                if(s[i]!='+'&&s[i]!='-'&&s[i]!=' '&&s[i]!='['&&s[i]!='('&&s[i]!=';')
+                    temp+=s[i];
+                else
+                break;
+            }
+            if(checkStringForMatrix(temp))
+                return 1;
+            return 0;
+        }
+        else
+            return 0;
+    }
 }
 /*
 Matlab getMatlab(string name,vector<Matlab> & savedMatrices){
@@ -333,8 +371,10 @@ bool Matlab::checkStringForMatrix(string complexString)
     int position=-1 ;
     //position can never return with a negative sign
     position = complexString.find("[");
+    int position2=-1;
+    position2=complexString.find("]");
     //getting the position of [ which indicates a matrix is in that string
-    if(position>=0)
+    if(position>=0||position2>=0)
         return 1;
     return 0;
 
@@ -362,7 +402,43 @@ string Matlab::getStringMatrix(string complexString)
 
 string Matlab::getInstructionWithoutExpressions(string instruction)
 {
-
+    string simplifiedInstruction;
+    string signOperators;
+    string equivalentValue;
+    simplifiedInstruction=solvingBrackets(instruction);
+    //dealing with powers first
+    for(int i=simplifiedInstruction.length()-1;i>=0;i--)
+    {
+        if(simplifiedInstruction[i]=='^'&&!checkSignsForMatrixOperations(simplifiedInstruction,i))
+        {
+            signOperators=findTheSignOperators(simplifiedInstruction,i);
+            equivalentValue=getStringValue(signOperators);
+            replaceString(simplifiedInstruction,signOperators,equivalentValue);
+        }
+    }
+    //dealing with * & /
+    for(int i=0;i<simplifiedInstruction.length();i++)
+    {
+        if((simplifiedInstruction[i]=='*'||simplifiedInstruction[i]=='/')&&!checkSignsForMatrixOperations(simplifiedInstruction,i))
+        {
+            signOperators=findTheSignOperators(simplifiedInstruction,i);
+            equivalentValue=getStringValue(signOperators);
+            replaceString(simplifiedInstruction,signOperators,equivalentValue);
+        }
+    }
+    //dealing with + & -
+    for(int i=0;i<simplifiedInstruction.length();i++)
+    {
+        if((simplifiedInstruction[i]=='+'||simplifiedInstruction[i]=='-')&&!checkSignsForMatrixOperations(simplifiedInstruction,i))
+        {
+            signOperators=findTheSignOperators(simplifiedInstruction,i);
+           // cout<<signOperators<<endl;
+            equivalentValue=getStringValue(signOperators);
+            //cout<<equivalentValue<<endl;
+            replaceString(simplifiedInstruction,signOperators,equivalentValue);
+        }
+    }
+    return simplifiedInstruction;
     /* this code is incorrect
     istringstream is;
     is.str(instruction);
