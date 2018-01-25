@@ -21,7 +21,7 @@ class Matlab
         string getReadyInstruction(string instruction,vector<Matlab>& savedMatrices);
         void trimAllSpaces(string &s);
         string dealWithBrackets(string complexString);
-        int findTheClosingBracket(string s,char openingBracket);
+        int findTheClosingBracket(string s,char openingBracket,int pos=0);
     public:
         int checkInstructionForFunctions(string instruction);
         string extractStringInsideFunction(string instruction);
@@ -49,7 +49,7 @@ class Matlab
         string solvetrignometry(string s) ;
         string calcSimpleExpression(string s);
         string getStringValue(string complexString);
-
+        string solvingBrackets(string s);
 
     protected:
 

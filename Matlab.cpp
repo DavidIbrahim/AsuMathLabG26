@@ -119,7 +119,7 @@ bool checkTheBracketOfSpecialFn(string s,int pos)
 }
 
 //this function checks the sign(+ - * / ^ ) of position pos in the string s is a matrix operation
-//returns 1 if it is a matrix operation ot operation with special matrix
+//returns 1 if it is a matrix operation or operation with special matrix
 //we should deal with brackets before this function
 bool checkSignsForMatrixOperations(string s,int pos)
 {
@@ -840,7 +840,7 @@ string Matlab::calcSimpleExpression(string s)
 *
 * @brief helper method for getStringValue
 **/
-int Matlab::findTheClosingBracket(string s, char openingBracket)
+int Matlab::findTheClosingBracket(string s, char openingBracket,int pos)
 {
 
     int count =0;
@@ -859,7 +859,7 @@ int Matlab::findTheClosingBracket(string s, char openingBracket)
 
     bool foundFirstBracket = false;
 
-    for(int i =0 ; i<s.size(); i++)
+    for(int i =pos ; i<s.size(); i++)
     {
         if(s[i]==openingBracket)
         {
@@ -1283,6 +1283,32 @@ string Matlab::extractStringInsideFunction(string instruction)
 
 }
 
+/** @brief this fn solves the brackets inside a string and replace it by it's equivalent value except brackets inside a special functions
+ *
+ * @param s the string without matlab names or special matrices ex:1.2*5+(5*(2+3))*[5+3 4*5]./2*3*[5 (6*2);2 4]+(6+2*5)+sin(2+3*4)+5*(2+2)*5+sin(2*3*[4 5 6])
+ * @return the string without brackets ex:1.2*5+25*[5+3 4*5]./2*3*[5 12;2 4]+16+sin(2+3*4)+5*4*5+sin(2*3*[4 5 6])
+ *
+ */
 
-
+string Matlab::solvingBrackets(string s)
+{
+    string temp,replacingString;
+    for(int i=0;i<s.length();i++)
+    {
+        if(s[i]=='(')
+        {
+            if(!checkTheBracketOfSpecialFn(s,i))
+            {
+                int endPosition=findTheClosingBracket(s,'(',i);
+                temp=s.substr(i,endPosition-i+1);
+                if(!checkStringForMatrix(temp))
+                    replacingString=getStringValue(temp);
+                else
+                    throw("error");
+                replaceString(s,temp,replacingString,i);
+            }
+        }
+    }
+    return s;
+}
 
