@@ -1041,98 +1041,84 @@ CMatrix  CMatrix::tanh_element (void )
 //
 //
 ///***********************************************************************************************************/
-//
-///** @brief this fn makes the abs dot for each element in the matrix
-// *
-// *  @param  the matrix that does the call ex: [-30 -30;-60 -60]//but practically the parameters are void
-// *
-// *  @return a matrix where each element with abs made for it ex: [30 30;60 60]
-// *
-// */
-////this is according to oct.
-//CMatrix CMatrix::abs_element   (void )
-//  {
-//      CMatrix result( nR ,nC );
-//      for(int iR=0;iR<result.nR;iR++)
-//        for(int iC=0;iC<result.nC;iC++)
-//            {result.values[iR][iC] = abs(values[iR][iC]);}
-//        return result;
-//  }
-//
-//
-//
-///** @brief
-//The ceil fn
-//Round up value
-//Rounds x upward, returning the smallest integral value that is not less than x in each element of matrix.
-//
-// *  @param  the matrix that does the call ex: [3.40 30.6;-60.4 -60.6]//but practically the parameters are void
-// *
-// *  @return a matrix where each element with abs made for it ex: [30 30;60 60]
-// *
-// */
-////this is according to oct.
-//CMatrix CMatrix::ceil_element   (void )
-// {
-//      CMatrix result( nR ,nC );
-//      for(int iR=0;iR<result.nR;iR++)
-//        for(int iC=0;iC<result.nC;iC++)
-//            {result.values[iR][iC] = ceil(values[iR][iC]);}
-//        return result;
-//
-//
-//
-// }
-//
-//
-//
-///** @brief
-//The floor fn
-//
-//Round down value
-//Rounds x downward, returning the largest integral value that is not greater than x in each element of matrix.
-// *  @param  the matrix that does the call ex: [3.40 30.6;-60.4 -60.6]//but practically the parameters are void
-// *
-// *  @return a matrix where each element with abs made for it ex: [30 30;60 60]
-// *
-// */
-////this is according to oct.
-//CMatrix CMatrix::floor_element  (void )
-//  {
-//      CMatrix result( nR ,nC );
-//      for(int iR=0;iR<result.nR;iR++)
-//        for(int iC=0;iC<result.nC;iC++)
-//            {result.values[iR][iC] = floor(values[iR][iC]);}
-//        return result;
-//
-//
-//  }
-//
-//
-//
-///** @brief
-//The square root fn
-//
-//Compute square root
-//Returns the square root of x in each element of matrix.
-// *  @param  the matrix that does the call ex: [3.40 30.6;-60.4 -60.6]//but practically the parameters are void
-// *
-// *  @return a matrix where each element with abs made for it ex: [30 30;60 60]
-// *
-// */
-////this is according to oct.
-//CMatrix CMatrix::sqrt_element  (void )
-//  {
-//      CMatrix result( nR ,nC );
-//      for(int iR=0;iR<result.nR;iR++)
-//        for(int iC=0;iC<result.nC;iC++)
-//            {result.values[iR][iC] = sqrt(values[iR][iC]);}
-//        return result;
-//
-//
-//  }
-//
-//
+
+/** @brief this fn makes the abs dot for each element in the matrix
+ *
+ *  @param  the matrix that does the call ex: [-30 -30;-60 -60]//but practically the parameters are void
+ *
+ *  @return a matrix where each element with abs made for it ex: [30 30;60 60]
+ *
+ */
+//this is according to oct.
+CMatrix CMatrix::abs_element   (void )
+  {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = CComplex(abs(values[iR][iC].real()),0);}
+        return result;
+  }
+
+/** @brief
+The ceil fn
+Round up value
+Rounds x upward, returning the smallest integral value that is not less than x in each element of matrix.
+
+ *  @param  the matrix that does the call ex: [3.40 30.6;-60.4 -60.6]//but practically the parameters are void
+ *
+ *  @return a matrix where each element with abs made for it ex: [30 30;60 60]
+ *
+ */
+//this is according to oct.
+CMatrix CMatrix::ceil_element   (void )
+ {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = CComplex(ceil(values[iR][iC].real()),0);}
+        return result;
+ }
+
+/** @brief
+The floor fn
+
+Round down value
+Rounds x downward, returning the largest integral value that is not greater than x in each element of matrix.
+ *  @param  the matrix that does the call ex: [3.40 30.6;-60.4 -60.6]//but practically the parameters are void
+ *
+ *  @return a matrix where each element with abs made for it ex: [30 30;60 60]
+ *
+ */
+//this is according to oct.
+CMatrix CMatrix::floor_element  (void )
+  {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = CComplex(floor(values[iR][iC].real()),0);}
+        return result;
+
+
+  }
+/** @brief
+The square root fn
+
+Compute square root
+Returns the square root of x in each element of matrix.
+ *  @param  the matrix that does the call ex: [3.40 30.6;-60.4 -60.6]//but practically the parameters are void
+ *
+ *  @return a matrix where each element with abs made for it ex: [30 30;60 60]
+ *
+ */
+//this is according to oct.
+CMatrix CMatrix::sqrt_element  (void )
+  {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = CComplex(sqrt((values[iR][iC]).real()),0);}
+        return result;
+  }
 ///***********************************************************************************************************/
 //
 //
@@ -1145,25 +1131,30 @@ CMatrix  CMatrix::tanh_element (void )
 //
 //
 //
-///** @brief this fn makes the exp dot for each element in the matrix
-// *
-// *  @param  the matrix that does the call ex: [30 30;60 60]//but practically the parameters are void
-// *
-// *  @return a matrix where each element with exp made for it ex:
-// *
-// */
-////this is according to oct.
-//CMatrix  CMatrix::exp_element (void )
-//   {
-//      CMatrix result( nR ,nC );
-//      for(int iR=0;iR<result.nR;iR++)
-//        for(int iC=0;iC<result.nC;iC++)
-//            {result.values[iR][iC] = exp(values[iR][iC]);}
-//        return result;
-//   }
-//
-//
-//
+/** @brief this fn makes the exp dot for each element in the matrix
+ *
+ *  @param  the matrix that does the call ex: [30 30;60 60]//but practically the parameters are void
+ *
+ *  @return a matrix where each element with exp made for it ex:
+ *
+ */
+//this is according to oct.
+CMatrix  CMatrix::exp_element (void )
+   {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+        {
+            double R=cos(values[iR][iC].imaginary());
+            double I=sin(values[iR][iC].imaginary());
+            CComplex X(R,I);
+            result.values[iR][iC] = X*exp(values[iR][iC].real());
+        }
+        return result;
+   }
+
+
+
 ///** @brief this fn makes the log10 dot for each element in the matrix
 // *
 // *  @param  the matrix that does the call ex: [30 30;60 60]//but practically the parameters are void

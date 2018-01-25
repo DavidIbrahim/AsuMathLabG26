@@ -40,23 +40,23 @@ private:
   CMatrix operator=(string s);
 
 /**********************************************************here is the new functions********************************************/
-  CMatrix sin_element (void );//modified and tested
-  CMatrix cos_element (void );//modified and tested
-  CMatrix tan_element (void );//modified and tested
-  CMatrix sinh_element (void );//modified and tested
-  CMatrix cosh_element (void );//modified and tested
-  CMatrix tanh_element (void );//modified and tested
-  CMatrix asin_element (void );
-  CMatrix acos_element (void );
-  CMatrix atan_element (void );
-  CMatrix asinh_element (void );
-  CMatrix acosh_element (void );
-  CMatrix atanh_element (void );
+  CMatrix sin_element (void);//modified and tested //complex numbers
+  CMatrix cos_element (void);//modified and tested //complex numbers
+  CMatrix tan_element (void);//modified and tested //complex numbers
+  CMatrix sinh_element (void);//modified and tested//complex numbers
+  CMatrix cosh_element (void);//modified and tested//complex numbers
+  CMatrix tanh_element (void);//modified and tested//complex numbers
+  CMatrix asin_element (void);
+  CMatrix acos_element (void);
+  CMatrix atan_element (void);
+  CMatrix asinh_element (void);
+  CMatrix acosh_element (void);
+  CMatrix atanh_element (void);
 /************************************************************************************************************************/
-  CMatrix abs_element    (void );
-  CMatrix ceil_element   (void );
-  CMatrix floor_element  (void );
-  CMatrix sqrt_element   (void );
+  CMatrix abs_element    (void);//only real
+  CMatrix ceil_element   (void);//only real
+  CMatrix floor_element  (void);//only real
+  CMatrix sqrt_element   (void);//only real
 /************************************************************************************************************************/
   CMatrix exp_element   (void);
   CMatrix log_element   (void);
