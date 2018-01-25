@@ -25,9 +25,11 @@ private:
   //CMatrix(int nR, int nC, double first, ...);
   CMatrix(const CMatrix &m);
   CMatrix(double d);
+  CMatrix(const CComplex c);
   CMatrix(string s);
   void copy(const CMatrix &m);
   void copy(double d);
+  void copy(const CComplex c);
   void copy(string s);
   void reset();
 
@@ -72,9 +74,10 @@ private:
   friend istream& operator >> (istream &is, CMatrix& C);  //Stream
   friend ostream& operator << (ostream &os, CMatrix& C); //Stream
   friend CMatrix operator /(double d ,CMatrix &m);
-  CMatrix getCofactor(int r, int c);
-  CMatrix getSubMatrix(int r, int c, int nr, int nc);
   */
+  CMatrix getCofactor(int r, int c);
+  //CMatrix getSubMatrix(int r, int c, int nr, int nc);
+
   void setSubMatrix(int iR, int iC, CMatrix &m);
   void addColumn(CMatrix &m);
   void addRow(CMatrix& m);

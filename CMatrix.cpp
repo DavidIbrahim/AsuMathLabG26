@@ -97,6 +97,19 @@ CMatrix::CMatrix(double d) {//draft 94
   values = NULL;
   copy(d);
 }
+CMatrix::CMatrix(const CComplex c){
+  nR = nC = 0;
+  values = NULL;
+  copy(c);
+}
+void CMatrix::copy(const CComplex c) {
+  reset();
+  this->nR = 1;
+  this->nC = 1;
+  values = new CComplex *[1];
+  values[0] = new CComplex[1];
+  values[0][0] = c;
+}
 void CMatrix::addColumn(CMatrix &m) {
   CMatrix n(max(nR, m.nR), nC + m.nC);
   n.setSubMatrix(0, 0, *this);
@@ -300,23 +313,24 @@ CMatrix CMatrix::operator++(int) {
   add(CMatrix(nR, nC, MI_VALUE, 1.0));
   return C;
 }
-/*
-CMatrix CMatrix::getCofactor(int r,
-                             int c) // r and c represents the index of the
-//	element that we want to find its cofactor//tested
+
+CMatrix CMatrix::getCofactor(int r, int c)
 {
-  if (nR <= 1 && nC <= 1)
-    throw("Invalid matrix dimension");
-  CMatrix m(nR - 1, nC - 1);
-  for (int iR = 0; iR < m.nR; iR++)
-    for (int iC = 0; iC < m.nC; iC++) {
-      int sR = (iR < r) ? iR : iR + 1;
-      int sC = (iC < c) ? iC : iC + 1;
-      m.values[iR][iC] = values[sR][sC];
-    }
-  return m;
+    // r and c represents the index of the
+    //element that we want to find its cofactor//tested
+    if (nR <= 1 && nC <= 1)
+        throw("Invalid matrix dimension");
+    CMatrix m(nR - 1, nC - 1);
+    for (int iR = 0; iR < m.nR; iR++)
+        for (int iC = 0; iC < m.nC; iC++)
+        {
+            int sR = (iR < r) ? iR : iR + 1;
+            int sC = (iC < c) ? iC : iC + 1;
+            m.values[iR][iC] = values[sR][sC];
+        }
+    return m;
 }
-*/
+
 void CMatrix::sub(const CMatrix& m){ //tested and works - tuna
     if(nR!=m.nR||nC!=m.nC)
         throw("Invalid matrix dimension");
@@ -354,35 +368,33 @@ CMatrix CMatrix::operator-(double d){ //tested and works - tuna
 //    return m;
 //}
 
-//CMatrix CMatrix::getInverse(){
-//    if (nR != nC)
-//        throw("Invalid matrix dimension");
-//    double det =getDeterminant();
-////    if (det==0)
-////        throw("Matrix has no Inverse");
-//
-//    CMatrix cof(nC , nR);//to find cofactor matrix
-//    CMatrix trans (nC,nR);//to find transpose of matrix
-//    CMatrix Inv (nC,nR);
-//    int sign=1;
-//    for(int i=0;i<nR;i++)
-//    {
-//        for(int j=0;j<nC;j++)
-//        {
-//            cof.values[i][j]=sign*getCofactor(i,j).getDeterminant();
-//
-//            sign*=-1;
-//
-//        }
-//        if(nC%2==0) sign *= -1;
-//    }
-//
-//    for(int i=0;i<nR;i++)
-//        for(int j=0;j<nC;j++)
-//            Inv.values[i][j]=cof.values[j][i] / det;
-//
-//    return Inv;
-//}
+CMatrix CMatrix::getInverse(){
+    if (nR != nC)
+        throw("Invalid matrix dimension");
+    CComplex det =getDeterminant();
+//  if (det==0)
+//      throw("Matrix has no Inverse");
+
+    CMatrix cof(nC , nR);//to find cofactor matrix
+    CMatrix trans (nC,nR);//to find transpose of matrix
+    CMatrix Inv (nC,nR);
+    int sign=1;
+    for(int i=0;i<nR;i++)
+    {
+        for(int j=0;j<nC;j++)
+        {
+            cof.values[i][j]=CComplex(sign)*getCofactor(i,j).getDeterminant();
+            sign*=-1;
+        }
+        if(nC%2==0) sign *= -1;
+    }
+
+    for(int i=0;i<nR;i++)
+        for(int j=0;j<nC;j++)
+            Inv.values[i][j]=cof.values[j][i] / det;
+
+    return Inv;
+}
 void CMatrix::mul(const CMatrix& m)
 {
         if (nC != m.nR)
@@ -521,15 +533,7 @@ CMatrix CMatrix::operator*(double d)
 //    for(i=0; i<nC ; i++){
 //        u[0][i]/=temp;
 //    }
-//
-//
-//
 //  }
-//
-//
-//
-//
-//
 //   for(i= 0 ; i<nR;i++){
 //
 //         for(j = 0; j<i;j++){
@@ -537,10 +541,7 @@ CMatrix CMatrix::operator*(double d)
 //                CMatrix::fixMatrix(U,j,j)   ;
 //                ans*=-1;
 //                i-=2;
-//
 //                if(i<0) i=0;
-//
-//
 //                break;
 //              }
 //        factor = u[i][j]/u[j][j];
@@ -552,17 +553,9 @@ CMatrix CMatrix::operator*(double d)
 //            if(x<0.000000000000001 && x>-0.00000000000001) x =0;
 //
 //            u[i][k]=x;
-//
 //            }
-//
 //    }
-//
-//
-//
 //   }
-//
-//
-//
 //   for(int i=0;i<nR; i++){
 //        ans*=u[i][i];
 //        if(ans==0) return ans;
@@ -652,9 +645,6 @@ CMatrix CMatrix::operator*(double d)
 //    }
 //    return true;
 //}
-//
-//
-//
 //bool  CMatrix:: checkIfZeroMatrix(CMatrix &m ){
 //
 //    bool zeroMatrix = false ;
@@ -699,7 +689,7 @@ CMatrix CMatrix::operator*(double d)
 //}
 
 //function to getDeterminant (Intel research Paper)
-/*CComplex CMatrix::getDeterminant(){
+CComplex CMatrix::getDeterminant(){
 
     int *ri = new int[nR];
     int i, j, k;
@@ -742,7 +732,7 @@ CMatrix CMatrix::operator*(double d)
     }
     det = det * m[ri[nR-1]][nR-1];
     return det;
-}*/
+}
 
 bool CMatrix::isReal()
 {

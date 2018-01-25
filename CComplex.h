@@ -51,7 +51,7 @@ class CComplex
 
         void mul(const CComplex& C);
         void operator *=(const CComplex& C);
-        friend CComplex operator*(CComplex& A, CComplex& B);
+        friend CComplex operator*(const CComplex& A, const CComplex& B);
 
         void div(CComplex& C);
         void operator /=(CComplex& C);

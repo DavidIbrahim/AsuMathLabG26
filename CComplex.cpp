@@ -186,7 +186,7 @@ void CComplex::operator *=(const CComplex& C)
 {
     mul(C);
 }
-CComplex operator*(CComplex& A, CComplex& B)
+CComplex operator*(const CComplex& A, const CComplex& B)
 {
     CComplex X=A;
     X*=B;
