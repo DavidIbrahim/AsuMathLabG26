@@ -484,7 +484,10 @@ string Matlab::getReadyInstruction(string instruction,vector<Matlab>& savedMatri
     instruction=getInstructionWithoutSpecialMatrices(instruction);
     instruction=getInstructionWithoutExpressions(instruction);
     instruction=getInstructionWithoutFunctions(instruction);
+    //after removing functions we need another simplification
     instruction=getInstructionWithoutConcatenation(instruction);
+    instruction=getInstructionWithoutExpressions(instruction);
+    instruction=getStringMatrix(instruction);
     return instruction;
 }
 
