@@ -40,12 +40,12 @@ private:
   CMatrix operator=(string s);
 
 /**********************************************************here is the new functions********************************************/
-  CMatrix sin_element (void );
-  CMatrix cos_element (void );
-  CMatrix tan_element (void );
-  CMatrix sinh_element (void );
-  CMatrix cosh_element (void );
-  CMatrix tanh_element (void );
+  CMatrix sin_element (void );//modified and tested
+  CMatrix cos_element (void );//modified and tested
+  CMatrix tan_element (void );//modified and tested
+  CMatrix sinh_element (void );//modified and tested
+  CMatrix cosh_element (void );//modified and tested
+  CMatrix tanh_element (void );//modified and tested
   CMatrix asin_element (void );
   CMatrix acos_element (void );
   CMatrix atan_element (void );
