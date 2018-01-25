@@ -1174,15 +1174,50 @@ string extractTheNumber( string const &mainString,int positionOfFirstDigit)
 {
     int positionOfLastDigit = positionOfFirstDigit;
     bool  stillWhiteSpace = true;
-    while((mainString[positionOfLastDigit]>="0" && mainString[positionOfLastDigit]<="9")||stillWhiteSpace)
+    while((mainString[positionOfLastDigit]>='0' && mainString[positionOfLastDigit]<='9')||stillWhiteSpace)
     {
         if(stillWhiteSpace)
             if(mainString[positionOfLastDigit]!=' ') stillWhiteSpace = false;
+            else positionOfFirstDigit++;
         positionOfLastDigit++;
     }
 
-    string answer = mainString.substr(positionOfFirstDigit, positionOfLastDigit -positionOfFirstDigit +1 );
+    string answer = mainString.substr(positionOfFirstDigit, positionOfLastDigit -positionOfFirstDigit  );
     return answer;
+
+
+}
+
+int indexOfTheBracket(bool squareBracket,bool searchingForBeginning,string instruction,int indexOfOperator)
+{
+    char bracketToSearchFor;
+    if(squareBracket)
+    {
+        if(searchingForBeginning)
+        {
+            bracketToSearchFor = '[';
+            for(int i =indexOfOperator;  i<instruction.size() ; i++)
+            {
+                if(instruction[i] == bracketToSearchFor) return i;
+                if(i-indexOfOperator>2 && instruction[i]!=' ') return -1;
+
+            }
+        }
+        else
+        {
+            bracketToSearchFor = ']';
+
+            for(int i =indexOfOperator; i>0; i--){
+                if(instruction[i] == bracketToSearchFor) return i;
+                if(i-indexOfOperator>2 && instruction[i]!=' ') return -1;
+
+            }
+
+        }
+    }
+
+
+
 
 
 }
@@ -1190,19 +1225,59 @@ string extractTheNumber( string const &mainString,int positionOfFirstDigit)
 string Matlab::dealwithOperators(string instruction)
 {
 
-    // first dealing with power
 
 
-    int pos = instruction.find("^");
+    // first dealing with .^ operator
+
+    char operator_ = '.^';
+    int pos = instruction.find(operator_);
+
+    //deal with  ^ operator
+    operator_ = '^';
+    pos = instruction.find(operator_);
     while(pos!=string::npos)
     {
 
         string powerDegree = extractTheNumber(instruction,pos+1) ;
-        int positionOftheMatrixEnd = instruction.rfind(']',pos);
-        string matrixString = findTheMatrix(instruction,false,positionOftheMatrixEnd-1)
 
+        int positionOftheMatrixEnd = indexOfTheBracket(true,false,instruction,pos);
+        string matrixString = findTheMatrix(instruction,false,positionOftheMatrixEnd);
+        CMatrix x(matrixString);
+        x = x.power(atof(powerDegree.c_str()));
+        int beginning = instruction.find(matrixString);
+        int ending= instruction.find(powerDegree,pos)+powerDegree.size();
+        string replacedString = instruction.substr(beginning,ending-beginning);
+        replaceString(instruction,replacedString,x.getString2());
+        pos= instruction.find(operator_);
 
     }
+
+    // matrix * matrix operator
+    operator_ = '*';
+    pos = instruction.find(operator_);
+    while(pos!=string::npos)
+    {
+
+        int positionOftheRightMatrixBeginning = indexOfTheBracket(true,true,instruction,pos);
+        int positionOftheLeftMatrixEnd = indexOfTheBracket(true,false,instruction,pos);
+
+        if(positionOftheLeftMatrixEnd==-1||positionOftheRightMatrixBeginning==-1) break;
+
+
+        string leftMatrixString = findTheMatrix(instruction,false,positionOftheLeftMatrixEnd);
+        string rightMatrixString = findTheMatrix(instruction,true,positionOftheRightMatrixBeginning);
+
+        CMatrix leftMatrix(leftMatrixString);
+        CMatrix rightMatrix(rightMatrixString);
+         leftMatrix.mul(rightMatrix);
+        int beginning = instruction.rfind(leftMatrixString,pos);
+        int ending= instruction.find(rightMatrixString,pos)+rightMatrixString.size();
+        string replacedString = instruction.substr(beginning,ending-beginning);
+        replaceString(instruction,replacedString,leftMatrix.getString2());
+        pos= instruction.find(operator_);
+
+    }
+
 
     return instruction;
 
