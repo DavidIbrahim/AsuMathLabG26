@@ -44,6 +44,10 @@ int main(int argc, char*argv[])
 {
 
 
+
+    Matlab x;
+    cout<<x.dealwithOperators("[ 1 2 3 ; 4 5 6; 7 8 9 ]*[ 5 2 3 ; 4 5 6; 7 8 9 ]+[ 1 2 3 ; 4 5 6; 7 8 9 ] ^ 03 +[ 5 2 3 ; 4 5 6; 7 8 9 ] ^ -1");
+
     /*  a brief example on how to use vectors  */
     vector<Matlab> myVector;   //initialized a vector  for matlab objects
     CMatrix m("[1 2 3;4 5 6]");// initialized a matrix  m
@@ -54,6 +58,7 @@ int main(int argc, char*argv[])
     myVector.push_back(Matlab("x",CMatrix("[0 0 0 0 ; 0 0 0 0 ; 0 0 0 0]")));
     cout<<endl<<"printing the Matlab Objects in the Vector"<<endl<<endl;
     printVector(myVector);
+
     return 0;
 }
 
