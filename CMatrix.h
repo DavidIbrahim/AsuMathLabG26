@@ -59,9 +59,9 @@ private:
 
   void div(CMatrix &m);
   void operator/=(CMatrix &m);
-  void operator/=(double d);
+  //void operator/=(double d);   //PROBLEM-TUNA
   CMatrix operator/(CMatrix &m);
-  CMatrix operator/(double d);
+  //CMatrix operator/(double d   //PROBLEM-TUNA
 
   CMatrix operator++();    // Pre Increment
   CMatrix operator++(int); // Post Increment, int is not used
@@ -70,13 +70,13 @@ private:
 
   CMatrix operator-();
   CMatrix operator+();
-  /*
-  friend istream& operator >> (istream &is, CMatrix& C);  //Stream
-  friend ostream& operator << (ostream &os, CMatrix& C); //Stream
-  friend CMatrix operator /(double d ,CMatrix &m);
-  */
+
+  friend istream& operator >> (istream &is, CMatrix& C);  //TO BE TESTED-TUNA
+  friend ostream& operator << (ostream &os, CMatrix& C);  //TO BE TESTED-TUNA
+  //friend CMatrix operator /(double d ,CMatrix &m);      //PROBLEM-TUNA
+
   CMatrix getCofactor(int r, int c);
-  //CMatrix getSubMatrix(int r, int c, int nr, int nc);
+  CMatrix getSubMatrix(int r, int c, int nr, int nc);
 
   void setSubMatrix(int iR, int iC, CMatrix &m);
   void addColumn(CMatrix &m);
@@ -90,10 +90,10 @@ private:
   int getnC() { return nC; };
 
   CComplex getDeterminant();
-  //CMatrix getTranspose();
+  CMatrix getTranspose(); //TO BE TESTED-TUNA
   CMatrix getInverse();
   //string getString2();
-  //void writeMatrixInFile(string file);*/
+  //void writeMatrixInFile(string file);
 
 };
 

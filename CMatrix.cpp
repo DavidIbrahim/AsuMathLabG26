@@ -155,28 +155,28 @@ CMatrix CMatrix::operator+(CMatrix &m) {//draft 139
   r += m;
   return r;
 }
-/*
+
 istream& operator >> (istream &is, CMatrix& m) { string s; getline(is, s, ']'); s+="]";
 m = CMatrix(s);
 return is;
 }
 
 ostream& operator << (ostream &os, CMatrix& m) { os<<m.getString(); return os; }
-*/
+
 void CMatrix::operator-=(CMatrix &m)
 {
    sub(m);
 }
-/*
-CMatrix operator /(double d,CMatrix &m){
+
+/*CMatrix operator /(double d,CMatrix &m){
 
         CMatrix ans(m.nR,m.nC);
         for (int iR = 0; iR<m.nR; iR++)
                 for (int iC = 0; iC<m.nC; iC++)
-                        ans.values[iR][iC] = d/m.values[iR][iC];
+                        ans.values[iR][iC] = CComplex(d)/m.values[iR][iC];
     return ans;
-}
-*/
+}*/
+
 CMatrix CMatrix:: operator-(CMatrix &m){
     CMatrix r=*this;
     r.sub(m);
@@ -290,11 +290,9 @@ CMatrix CMatrix::operator++() {
   return *this;
 }
 
-/*
-//r and c are the beginning of where you want ur subMatrix
-// nr and nc are the size of the subMatrix
-
-CMatrix CMatrix::getSubMatrix(int r, int c, int nr, int nc) {
+CMatrix CMatrix::getSubMatrix(int r, int c, int nr, int nc)
+{//r and c are the beginning of where you want ur subMatrix
+ // nr and nc are the size of the subMatrix
         if((r+nr)>nR || (c+nc)>nC)
                 throw("Invalid matrix dimension");
         CMatrix m(nr, nc);
@@ -302,7 +300,7 @@ CMatrix CMatrix::getSubMatrix(int r, int c, int nr, int nc) {
                 for(int iC=0;iC<m.nC;iC++)
                         m.values[iR][iC] = values[r+iR][c+iC];
         return m;
-}*/
+}
 
 void CMatrix::operator+=(CMatrix &m) //draft 281
 {
@@ -354,19 +352,19 @@ CMatrix CMatrix::operator-(double d){ //tested and works - tuna
     return r;
     }
 
-//CMatrix CMatrix::getTranspose(){      //CMatrix in UML, void in header file!!
-//    if(nR==1&&nC==1){
-//        CMatrix m(values[0][0]);
-//        return m;
-//    }
-//    CMatrix m(nC, nR);
-//
-//    for(int iR=0;iR<m.nR;iR++)
-//        for(int iC=0;iC<m.nC;iC++)
-//            m.values[iR][iC] = values[iC][iR];
-//
-//    return m;
-//}
+CMatrix CMatrix::getTranspose(){      //CMatrix in UML, void in header file!!
+    if(nR==1&&nC==1){
+        CMatrix m(values[0][0]);
+        return m;
+    }
+    CMatrix m(nC, nR);
+
+    for(int iR=0;iR<m.nR;iR++)
+        for(int iC=0;iC<m.nC;iC++)
+            m.values[iR][iC] = values[iC][iR];
+
+    return m;
+}
 
 CMatrix CMatrix::getInverse(){
     if (nR != nC)
@@ -437,7 +435,7 @@ CMatrix CMatrix::operator*(double d)
         return r;
 }
 
-/*void CMatrix::div(CMatrix& m)
+void CMatrix::div(CMatrix& m)
 {
     CMatrix t;
     t=m.getInverse();
@@ -455,34 +453,30 @@ CMatrix CMatrix::operator*(double d)
 //            r.values[iR][iC] += values[iR][k] / m.values[k][iC];
 //        }
 //    copy(r);
+}
+void CMatrix::operator/=(CMatrix& m)
+{
+        div(m);
+}
+/*void CMatrix::operator/=(double d)
+{
+        for (int iR = 0; iR<nR; iR++)
+                for (int iC = 0; iC<nC; iC++)
+                        values[iR][iC] /= CComplex(d);
 }*/
-//void CMatrix::operator/=(CMatrix& m)
-//{
-//        div(m);
-//}
-//void CMatrix::operator/=(double d)
-//{
-//        for (int iR = 0; iR<nR; iR++)
-//                for (int iC = 0; iC<nC; iC++)
-//                        values[iR][iC] /= d;
-//}
-//CMatrix CMatrix::operator/(CMatrix& m)
-//{
-//        CMatrix r = *this;
-//        r /= m;
-//        return r;
-//}
-//CMatrix CMatrix::operator/(double d)
-//{
-//        CMatrix r = *this;
-//        r /= d;
-//        return r;
-//}
-//
-///*
-//*
-//*
-//*/
+CMatrix CMatrix::operator/(CMatrix& m)
+{
+        CMatrix r = *this;
+        r /= m;
+        return r;
+}
+/*CMatrix CMatrix::operator/(double d)
+{
+        CMatrix r = *this;
+        r /= d;
+        return r;
+}*/
+
 //string CMatrix:: getString2(){
 //     string s="[";
 //  for (int iR = 0; iR < nR; iR++) {
@@ -602,7 +596,7 @@ CMatrix CMatrix::operator*(double d)
 //        if(ans==0) return ans;
 //    }
 //    return ans;
-//    */
+//*/
 //}
 //
 //bool  CMatrix:: fixMatrix(CMatrix &m , int r,int c) {
