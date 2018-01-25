@@ -50,6 +50,7 @@ class Matlab
         string calcSimpleExpression(string s);
         string getStringValue(string complexString);
         string solvingBrackets(string s);
+        string findTheSignOperators(string s,int pos);
 
     protected:
 

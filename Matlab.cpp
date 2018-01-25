@@ -362,6 +362,7 @@ string Matlab::getStringMatrix(string complexString)
 
 string Matlab::getInstructionWithoutExpressions(string instruction)
 {
+
     /* this code is incorrect
     istringstream is;
     is.str(instruction);
@@ -1312,3 +1313,37 @@ string Matlab::solvingBrackets(string s)
     return s;
 }
 
+//input : s="5*5+6 pos=1
+//output: 5*5
+string Matlab::findTheSignOperators(string s,int pos)
+{
+    int i=pos-1;
+    string replacingString="";
+    string temp="";
+    while(1)
+    {
+        if(s[i]=='+'||s[i]=='-'||s[i]=='*'||s[i]=='/'||s[i]=='['||s[i]==']'||s[i]==' '||s[i]==';'||s[i]=='('||s[i]==')'||s[i]=='^')
+            break;
+        temp+=s[i];
+        if(i==0)
+            break;
+        i--;
+    }
+    for(int j=0;j<temp.length();j++)
+    {
+        replacingString+=temp[temp.length()-1-j];
+    }
+    replacingString+=s[pos];
+    i=pos+1;
+    while(1)
+    {
+        if(s[i]=='+'||s[i]=='-'||s[i]=='*'||s[i]=='/'||s[i]=='['||s[i]==']'||s[i]==' '||s[i]==';'||s[i]=='('||s[i]==')'||s[i]=='^')
+            break;
+        replacingString+=s[i];
+        if(i==s.length()-1)
+            break;
+        i++;
+    }
+    return replacingString;
+
+}
