@@ -1263,6 +1263,7 @@ CMatrix CMatrix::log2_element(void)
 /***********************************************************************************************************/
 
 
+
 ///** @brief
 //round
 //Round to nearest
@@ -1619,6 +1620,7 @@ CMatrix CMatrix::log2_element(void)
 //      }
 //
 //
+
 bool CMatrix::isReal()
 {
     for(int iR=0; iR<nR; iR++)
