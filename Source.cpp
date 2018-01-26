@@ -7,58 +7,109 @@
 #include <string.h>
 #include <stdlib.h>
 #include "Matlab.h"
-#include<conio.h>
+
+
 
 using namespace std;
+int main(int argc, char*argv[])
+{
+    /*
+    	ifstream infile ("//home//samuel//Documents//CodeBlocks//Phase1_linux//example.m");
+    */
+    bool file_input = false;
+    istream* in = &cin;
+    ifstream infile;
+    if (argc == 2)
+    {
+        infile.open(argv[1]);
+        in = &infile;
+        file_input = true;
+    }
+
+    vector<Matlab> data;
+    string s;
+    string mat ="";
+    bool mat_intit = false;
+    bool mat_cont = false;
+    bool echo = false;
 
 
-void stressTesting(){
+    //ifstream infile("D:\\Users\\samue\\Documents\\Code Blocks\\Phase1\\example.m");
 
-while(true){
-        CMatrix B(32,32,CMatrix::MI_RAND);
-        //cout<<B.getString2()<<"  ";
-         float ans1 = B.getDeterminant();
-        float ans2 = B.getDeterminant3();
+    while(getline(*in,s))
+    {
+        int l = s.length();
 
-        if(abs(ans1-ans2)<0.001)
-            cout<<" test is ok"<<endl;
-        else {
-            cout<<endl<<"testFailed"<<endl;
-            cout<<"Det 1 = "<<ans1<<endl<<"Det 2 = "<<ans2<<endl;
-            B.writeMatrixInFile("error.txt");
-            break;
+        Matlab m;
+        if(s[l-1]=='\r' || s[l-1]=='\n') s.erase(l-1); //fixing new line issue between Windows and Linux
+        if(s=="")continue;
+        //mat = s;
+        // cout<<s<<endl;
+        if(s.find('[')!= string::npos || mat_cont)
+            mat_intit = true;
+        else
+            mat_intit = false;
+
+
+        if(mat_intit)
+        {
+            mat+=s;
+            if(mat[mat.length()-1]!=';'&&mat[mat.length()-1]!='[') mat+=';';
+
         }
 
-
-    }
-
-}
-void printVector( vector<Matlab>& myVector){
-    for(int i =0; i<myVector.size(); i++) {
-        cout<<myVector[i].getString()<<endl;
-    }
-}
+        if((m.findTheClosingBracket(mat,'[')==string::npos) && mat_intit)
+        {
+            mat_cont = true;
+        }
+        else
+            mat_cont =false;
 
 
-int main(int argc, char*argv[])
+        if(mat_cont)continue;
+        //if(mat_cont) continue;
+
+        if (mat.length() >0)
+        {
+            //cout<<mat<<endl;
+            if(mat[mat.length()-1]== ';')
+            {
+                mat.erase(mat.length()-1);
+                echo = false;
+            }
+            else echo = true;
+
+cout<< mat<<endl;
+            mat= "";
+
+        }
+        else if(s.find("=")==string::npos)
+        {
+            Matlab::getMatlabFromVector(s,data).getString();
+        }
+        else
+        {
+            if(s[s.length()-1]== ';')
+            {
+                s.erase(s.length()-1);
+                echo = false;
+            }
+            else echo = true;
+
+if(echo)
 {
 
 
-
-    Matlab x;
-    cout<<x.dealwithOperators("[ 1 2 3 ; 4 5 6; 7 8 9 ]*[ 5 2 3 ; 4 5 6; 7 8 9 ]+[ 1 2 3 ; 4 5 6; 7 8 9 ] ^ 03 +[ 5 2 3 ; 4 5 6; 7 8 9 ] ^ -1");
-
-    /*  a brief example on how to use vectors  */
-    vector<Matlab> myVector;   //initialized a vector  for matlab objects
-    CMatrix m("[1 2 3;4 5 6]");// initialized a matrix  m
-    myVector.push_back( Matlab("A",m));// put a new Matlab object with name A and matrix m in myVector;
-    cout<<myVector[0].getString()<<endl;// the same as array myVector[0] will return the firstMatlab object pushed in myVector
-   /*           Now I will add another Matlab objects for u to test           */
-    myVector.push_back(Matlab("luffy",CMatrix("[1 2 3 ; 4 5 6 ; 7 8 9]")));
-    myVector.push_back(Matlab("x",CMatrix("[0 0 0 0 ; 0 0 0 0 ; 0 0 0 0]")));
-    cout<<endl<<"printing the Matlab Objects in the Vector"<<endl<<endl;
-    printVector(myVector);
-
-    return 0;
 }
 
+
+cout<<s<<endl;
+
+}
+
+
+}
+    CMatrix A ( "[1 2 3;4 5 6;7 8 9;]");
+    cout<<A.getString();
+    return 0;
+}
