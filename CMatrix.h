@@ -40,26 +40,26 @@ private:
   CMatrix operator=(string s);
 
 /**********************************************************here is the new functions********************************************/
-  CMatrix sin_element (void );
-  CMatrix cos_element (void );
-  CMatrix tan_element (void );
-  CMatrix sinh_element (void );
-  CMatrix cosh_element (void );
-  CMatrix tanh_element (void );
-  CMatrix asin_element (void );
-  CMatrix acos_element (void );
-  CMatrix atan_element (void );
-  CMatrix asinh_element (void );
-  CMatrix acosh_element (void );
-  CMatrix atanh_element (void );
+  CMatrix sin_element (void);//modified and tested //complex numbers
+  CMatrix cos_element (void);//modified and tested //complex numbers
+  CMatrix tan_element (void);//modified and tested //complex numbers
+  CMatrix sinh_element (void);//modified and tested//complex numbers
+  CMatrix cosh_element (void);//modified and tested//complex numbers
+  CMatrix tanh_element (void);//modified and tested//complex numbers
+  CMatrix asin_element (void);
+  CMatrix acos_element (void);
+  CMatrix atan_element (void);
+  CMatrix asinh_element (void);
+  CMatrix acosh_element (void);
+  CMatrix atanh_element (void);
 /************************************************************************************************************************/
-  CMatrix abs_element    (void );
-  CMatrix ceil_element   (void );
-  CMatrix floor_element  (void );
-  CMatrix sqrt_element   (void );
+  CMatrix abs_element    (void);//only real
+  CMatrix ceil_element   (void);//only real
+  CMatrix floor_element  (void);//only real
+  CMatrix sqrt_element   (void);//only real
 /************************************************************************************************************************/
-  CMatrix exp_element   (void);
-  CMatrix log_element   (void);
+  CMatrix exp_element   (void);//complex numbers
+  CMatrix log_element   (void);//only real
   CMatrix log10_element (void);
   CMatrix expm1_element (void);
   CMatrix log1p_element (void);
