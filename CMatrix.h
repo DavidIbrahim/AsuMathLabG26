@@ -58,8 +58,8 @@ private:
   CMatrix floor_element  (void);//only real
   CMatrix sqrt_element   (void);//only real
 /************************************************************************************************************************/
-  CMatrix exp_element   (void);
-  CMatrix log_element   (void);
+  CMatrix exp_element   (void);//complex numbers
+  CMatrix log_element   (void);//only real
   CMatrix log10_element (void);
   CMatrix expm1_element (void);
   CMatrix log1p_element (void);

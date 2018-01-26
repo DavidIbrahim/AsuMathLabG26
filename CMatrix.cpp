@@ -1155,116 +1155,114 @@ CMatrix  CMatrix::exp_element (void )
 
 
 
-///** @brief this fn makes the log10 dot for each element in the matrix
-// *
-// *  @param  the matrix that does the call ex: [30 30;60 60]//but practically the parameters are void
-// *
-// *  @return a matrix where each element with log10 made for it ex:
-// *
-// */
-////this is according to oct.
-//CMatrix  CMatrix::log10_element (void )
-//   {
-//      CMatrix result( nR ,nC );
-//      for(int iR=0;iR<result.nR;iR++)
-//        for(int iC=0;iC<result.nC;iC++)
-//            {result.values[iR][iC] = log10(values[iR][iC]);}
-//        return result;
-//   }
-//
-//
-///** @brief this fn makes the log dot for each element in the matrix
-// *
-// *  @param  the matrix that does the call ex: [30 30;60 60]//but practically the parameters are void
-// *
-// *  @return a matrix where each element with log made for it ex:
-// *
-// */
-////this is according to oct.
-//CMatrix  CMatrix::log_element (void )
-//   {
-//      CMatrix result( nR ,nC );
-//      for(int iR=0;iR<result.nR;iR++)
-//        for(int iC=0;iC<result.nC;iC++)
-//            {result.values[iR][iC] = log(values[iR][iC]);}
-//        return result;
-//   }
-//
-///** @brief Compute exponential minus one
-//Returns e raised to the power x minus one: ex-1.
-//For small magnitude values of x, expm1 may be more accurate than exp(x)-1.
-//
-// *  @param  the matrix that does the call ex: [30 30;60 60]//but practically the parameters are void
-// *
-// *  @return a matrix where each element with expm1 made for it ex:
-// *
-// */
-////this is according to oct.
-//CMatrix CMatrix::expm1_element (void)
-//   {
-//      CMatrix result( nR ,nC );
-//      for(int iR=0;iR<result.nR;iR++)
-//        for(int iC=0;iC<result.nC;iC++)
-//            {result.values[iR][iC] = expm1(values[iR][iC]);}
-//        return result;
-//
-//   }
-//
-//
-//
-///** @brief Compute logarithm plus one
-//Returns the natural logarithm of one plus x.
-//
-//For small magnitude values of x, logp1 may be more accurate than log(1+x).
-//
-// *  @param  the matrix that does the call ex: [30 30;60 60]//but practically the parameters are void
-// *
-// *  @return a matrix where each element with log1p made for it ex:
-// *
-// */
-////this is according to oct.
-//CMatrix CMatrix::log1p_element(void)
-//   {
-//      CMatrix result( nR ,nC );
-//      for(int iR=0;iR<result.nR;iR++)
-//        for(int iC=0;iC<result.nC;iC++)
-//            {result.values[iR][iC] = log1p(values[iR][iC]);}
-//        return result;
-//
-//
-//
-//   }
-//
-//
-//
-//
-///** @brief
-//Compute binary logarithm
-//Returns the binary (base-2) logarithm of x.
-//
-//
-// *  @param  the matrix that does the call ex: [30 30;60 60]//but practically the parameters are void
-// *
-// *  @return a matrix where each element with log1p made for it ex:
-// *
-// */
-////this is according to oct.
-//CMatrix CMatrix::log2_element(void)
-//   {
-//      CMatrix result( nR ,nC );
-//      for(int iR=0;iR<result.nR;iR++)
-//        for(int iC=0;iC<result.nC;iC++)
-//            {result.values[iR][iC] = log2(values[iR][iC]);}
-//        return result;
-//
-//
-//
-//   }
-//
-//
-///***********************************************************************************************************/
-//
-//
+/** @brief this fn makes the log10 dot for each element in the matrix
+ *
+ *  @param  the matrix that does the call ex: [30 30;60 60]//but practically the parameters are void
+ *
+ *  @return a matrix where each element with log10 made for it ex:
+ *
+ */
+//this is according to oct.
+CMatrix  CMatrix::log10_element (void )
+   {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = CComplex(log10(values[iR][iC].real()),0);}
+        return result;
+   }
+
+
+/** @brief this fn makes the log dot for each element in the matrix
+ *
+ *  @param  the matrix that does the call ex: [30 30;60 60]//but practically the parameters are void
+ *
+ *  @return a matrix where each element with log made for it ex:
+ *
+ */
+//this is according to oct.
+CMatrix  CMatrix::log_element (void )
+   {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = CComplex(log(values[iR][iC].real()),0);}
+        return result;
+   }
+
+/** @brief Compute exponential minus one
+Returns e raised to the power x minus one: ex-1.
+For small magnitude values of x, expm1 may be more accurate than exp(x)-1.
+
+ *  @param  the matrix that does the call ex: [30 30;60 60]//but practically the parameters are void
+ *
+ *  @return a matrix where each element with expm1 made for it ex:
+ *
+ */
+//this is according to oct.
+CMatrix CMatrix::expm1_element (void)
+   {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = CComplex(expm1(values[iR][iC].real()),0);}
+        return result;
+
+   }
+
+
+
+/** @brief Compute logarithm plus one
+Returns the natural logarithm of one plus x.
+
+For small magnitude values of x, logp1 may be more accurate than log(1+x).
+
+ *  @param  the matrix that does the call ex: [30 30;60 60]//but practically the parameters are void
+ *
+ *  @return a matrix where each element with log1p made for it ex:
+ *
+ */
+//this is according to oct.
+CMatrix CMatrix::log1p_element(void)
+   {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = CComplex(log1p(values[iR][iC].real()),0);}
+        return result;
+
+   }
+
+
+
+
+/** @brief
+Compute binary logarithm
+Returns the binary (base-2) logarithm of x.
+
+
+ *  @param  the matrix that does the call ex: [30 30;60 60]//but practically the parameters are void
+ *
+ *  @return a matrix where each element with log1p made for it ex:
+ *
+ */
+//this is according to oct.
+CMatrix CMatrix::log2_element(void)
+   {
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = CComplex(log2(values[iR][iC].real()),0);}
+        return result;
+
+
+
+   }
+
+
+/***********************************************************************************************************/
+
+
 ///** @brief
 //round
 //Round to nearest
