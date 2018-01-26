@@ -473,7 +473,7 @@ string CMatrix::getString2(){
             for (int iC = 0; iC < nC; iC++) {
                 /*char buffer[200];
                 sprintf(buffer, "%g ", values[iR][iC]);*/
-                s += values[iR][iC].getString(isReal);
+                s += values[iR][iC].getString2()+" ";
             }
             s += ";";
      }

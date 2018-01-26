@@ -37,7 +37,7 @@ class CComplex
         void operator-=(double D);
         CComplex operator-(CComplex& C);
         CComplex operator-(double D);
-
+        string getString2();
 
         CComplex operator-();
         operator const string();
