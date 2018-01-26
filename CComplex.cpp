@@ -4,7 +4,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <iostream>
-
+#include <sstream>
 CComplex::CComplex()
 {
     R = I = 0.0;
@@ -45,7 +45,7 @@ string CComplex::getString(bool isReal)
     char text[100];
     if(isReal)
     {
-        sprintf(text, "%g ", R);
+        sprintf(text, "%8g ", R);
 
     }
     else if(!isReal){
@@ -55,6 +55,30 @@ string CComplex::getString(bool isReal)
     else if(I<0)sprintf(text, "%8g - %8gi", R, -I);
     }
     return string(text);
+}
+
+string CComplex::getString2(){
+
+    ostringstream strs;
+    strs << R;
+
+string str = strs.str();
+strs.str("");
+    if(abs(I)<0.00001) return str;
+    else if(I>0)
+    {   if(I==1) return str + "+i";
+        strs<<I;
+        str = str + "+" + strs.str();
+        return str+"i";
+
+    }
+    else {
+            if(I==-1) return str + "+i";
+        strs << I;
+        return str + strs.str()+"i";
+    }
+
+
 }
 
 double CComplex::magnitude()
