@@ -11,13 +11,13 @@ class Matlab
 private:
     CMatrix matrix;
     string name;
-  
+
         //bool checkIfSpecialMatrix(string instruction);
 
         string getInstructionWithoutSpecialMatrices(string instruction);
 
 
-       
+
         public:
         string getInstructionWithoutExpressions(string instruction);
         string getReadyInstruction(string instruction,vector<Matlab>& savedMatrices);
@@ -28,40 +28,30 @@ private:
 
         //bool checkIfSpecialMatrix(string instruction);
 
-      
+
 
 
         public:
-      
-        string getReadyInstruction(string instruction,vector<Matlab>& savedMatrices);
-        void trimAllSpaces(string &s);
-    
-        int findTheClosingBracket(string s,char openingBracket,int pos=0);ction);
 
-    
+
+
+
+
+
+
     void dealWithConcatenationHelperFn(string &instruction,string s);
 
     string  dealWithAddAndSubOperators(string instruction, string operator_);
 
-    
-   
-   
+
+
+
     int findTheClosingBracket(string s,char openingBracket,int start=0);
     int findTheOpeningBracket(string s, char openingBracket,int start);
-    string dealWithConcatenation(string instruction);   CMatrix matrix;
-        string name;
-
-        //bool checkIfSpecialMatrix(string instruction);
-
-      
+    string dealWithConcatenation(string instruction);
 
 
-     
-      
-       
-        string getReadyInstruction(string instruction,vector<Matlab>& savedMatrices);
-        void trimAllSpaces(string &s);
-        
+
 
 
     string dealwithOperators(string instruction);
@@ -73,20 +63,20 @@ private:
 
     enum {};
     bool checkStringForMatrix(string complexString);
-   
-   
-  
- 
+
+
+
+
 
 
 
 
     virtual ~Matlab();
 
-   
+
     string calcSimpleExpression(string s);
- 
-   int checkInstructionForFunctions(string instruction);
+
+
         string extractStringInsideFunction(string instruction);
         enum{};
 
@@ -109,7 +99,7 @@ private:
 
 
         string solvetrignometry(string s) ;
- 
+
         string getStringValue(string complexString);
         string solvingBrackets(string s);
         string findTheSignOperators(string s,int pos);

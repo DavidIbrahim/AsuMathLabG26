@@ -908,45 +908,6 @@ string Matlab::calcSimpleExpression(string s)
 
 
 
-/**
-* @brief : private Helper function for dealing with brackets (2+5)/(5-2)
-*
-* @brief helper method for getStringValue
-**/
-int Matlab::findTheClosingBracket(string s, char openingBracket,int pos)
-{
-
-    int count =0;
-    char closingBracket;
-
-    if (openingBracket == '(')
-        closingBracket=')';
-
-    else if (openingBracket == '[')
-        closingBracket=']';
-
-    else
-    {
-        throw ("accepted openingBracets are '(' or '[' only");
-    }
-
-    bool foundFirstBracket = false;
-
-    for(int i =pos ; i<s.size(); i++)
-    {
-        if(s[i]==openingBracket)
-        {
-            count++;
-            foundFirstBracket = true;
-        }
-        if(s[i]==closingBracket)
-            count--;
-        if(count == 0 && foundFirstBracket)
-            return i;
-    }
-    return string::npos;
-}
-
 
 
 
@@ -1174,70 +1135,70 @@ string Matlab::getInstructionWithoutFunctions(string instruction)
                 replacedString="tan("+extractedString+")";
                 finalMatrix=CMatrix(finalMatrix).tan_element().getString2();
                 break;
-            case 4:
-                replacedString="asin("+extractedString+")";
-                finalMatrix=CMatrix(finalMatrix).asin_element().getString2();
-                break;
-            case 5:
-                replacedString="acos("+extractedString+")";
-                finalMatrix=CMatrix(finalMatrix).acos_element().getString2();
-                break;
-            case 6:
-                replacedString="atan("+extractedString+")";
-                finalMatrix=CMatrix(finalMatrix).atan_element().getString2();
-                break;
-            case 7:
-                replacedString="sinh("+extractedString+")";
-                finalMatrix=CMatrix(finalMatrix).sinh_element().getString2();
-                break;
-            case 8:
-                replacedString="cosh("+extractedString+")";
-                finalMatrix=CMatrix(finalMatrix).cosh_element().getString2();
-                break;
-            case 9:
-                replacedString="tanh("+extractedString+")";
-                finalMatrix=CMatrix(finalMatrix).tanh_element().getString2();
-                break;
-            case 10:
-                replacedString="asinh("+extractedString+")";
-                finalMatrix=CMatrix(finalMatrix).asinh_element().getString2();
-                break;
-            case 11:
-                replacedString="acosh("+extractedString+")";
-                finalMatrix=CMatrix(finalMatrix).acosh_element().getString2();
-                break;
-            case 12:
-                replacedString="atanh("+extractedString+")";
-                finalMatrix=CMatrix(finalMatrix).atanh_element().getString2();
-                break;
-            case 13:
-                replacedString="abs("+extractedString+")";
-                finalMatrix=CMatrix(finalMatrix).abs_element().getString2();
-                break;
-            case 14:
-                replacedString="ceil("+extractedString+")";
-                finalMatrix=CMatrix(finalMatrix).ceil_element().getString2();
-                break;
-            case 15:
-                replacedString="floor("+extractedString+")";
-                finalMatrix=CMatrix(finalMatrix).floor_element().getString2();
-                break;
-            case 16:
-                replacedString="sqrt("+extractedString+")";
-                finalMatrix=CMatrix(finalMatrix).sqrt_element().getString2();
-                break;
-            case 17:
-                replacedString="exp("+extractedString+")";
-                finalMatrix=CMatrix(finalMatrix).exp_element().getString2();
-                break;
-            case 18:
-                replacedString="log("+extractedString+")";
-                finalMatrix=CMatrix(finalMatrix).log_element().getString2();
-                break;
-            case 19:
-                replacedString="log10("+extractedString+")";
-                finalMatrix=CMatrix(finalMatrix).log10_element().getString2();
-                break;
+//            case 4:
+//                replacedString="asin("+extractedString+")";
+//                finalMatrix=CMatrix(finalMatrix).asin_element().getString2();
+//                break;
+//            case 5:
+//                replacedString="acos("+extractedString+")";
+//                finalMatrix=CMatrix(finalMatrix).acos_element().getString2();
+//                break;
+//            case 6:
+//                replacedString="atan("+extractedString+")";
+//                finalMatrix=CMatrix(finalMatrix).atan_element().getString2();
+//                break;
+//            case 7:
+//                replacedString="sinh("+extractedString+")";
+//                finalMatrix=CMatrix(finalMatrix).sinh_element().getString2();
+//                break;
+//            case 8:
+//                replacedString="cosh("+extractedString+")";
+//                finalMatrix=CMatrix(finalMatrix).cosh_element().getString2();
+//                break;
+//            case 9:
+//                replacedString="tanh("+extractedString+")";
+//                finalMatrix=CMatrix(finalMatrix).tanh_element().getString2();
+//                break;
+//            case 10:
+//                replacedString="asinh("+extractedString+")";
+//                finalMatrix=CMatrix(finalMatrix).asinh_element().getString2();
+//                break;
+//            case 11:
+//                replacedString="acosh("+extractedString+")";
+//                finalMatrix=CMatrix(finalMatrix).acosh_element().getString2();
+//                break;
+//            case 12:
+//                replacedString="atanh("+extractedString+")";
+//                finalMatrix=CMatrix(finalMatrix).atanh_element().getString2();
+//                break;
+//            case 13:
+//                replacedString="abs("+extractedString+")";
+//                finalMatrix=CMatrix(finalMatrix).abs_element().getString2();
+//                break;
+//            case 14:
+//                replacedString="ceil("+extractedString+")";
+//                finalMatrix=CMatrix(finalMatrix).ceil_element().getString2();
+//                break;
+//            case 15:
+//                replacedString="floor("+extractedString+")";
+//                finalMatrix=CMatrix(finalMatrix).floor_element().getString2();
+//                break;
+//            case 16:
+//                replacedString="sqrt("+extractedString+")";
+//                finalMatrix=CMatrix(finalMatrix).sqrt_element().getString2();
+//                break;
+//            case 17:
+//                replacedString="exp("+extractedString+")";
+//                finalMatrix=CMatrix(finalMatrix).exp_element().getString2();
+//                break;
+//            case 18:
+//                replacedString="log("+extractedString+")";
+//                finalMatrix=CMatrix(finalMatrix).log_element().getString2();
+//                break;
+//            case 19:
+//                replacedString="log10("+extractedString+")";
+//                finalMatrix=CMatrix(finalMatrix).log10_element().getString2();
+//                break;
                 /*
             case 20:
                 replacedString="power("+extractedString+")";

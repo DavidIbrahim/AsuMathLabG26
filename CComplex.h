@@ -21,6 +21,7 @@ class CComplex
         double real();
         double imaginary();
         CComplex conjugate();
+        CComplex power(double d);
 
         void add(const CComplex& C);
         void sub(const CComplex& C);
@@ -61,6 +62,8 @@ class CComplex
         friend bool operator!=(const CComplex& A, const CComplex& B);
         //friend bool operator>(const CComplex& A, const CComplex& B);
         //friend bool operator<(const CComplex& A, const CComplex& B);
+
+
 
     protected:
 

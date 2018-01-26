@@ -231,6 +231,8 @@ void CMatrix::reset() { //draft 212
 }
 
 void CMatrix::add(const CMatrix &m) { //draft 222
+    CMatrix x = m;
+
   if (nR != m.nR || nC != m.nC)
     throw("Invalid matrix dimension");
   for (int iR = 0; iR < nR; iR++)
@@ -722,55 +724,55 @@ CComplex CMatrix::getDeterminant(){
 
 /*****************************************************************************************************/
 
-///** @brief this fn makes horizontal concatenation of 2 matrices
-// *
-// * @param m1 the first matrix
-// * @param m2 the second matrix
-// * @return the concatenated matrix
-// *
-// */
-//
-//CMatrix CMatrix::horizontalConcatenation(CMatrix &m1,CMatrix &m2)
-//{
-//    if(m1.nR!=m2.nR)throw("invalid matrix dimension");
-//    CMatrix m(m1.nR,(m2.nC +m1.nC));
-//
-//    for(int iR=0;iR<m1.nR;iR++)
-//    {
-//        for(int iC=0;iC<m1.nC;iC++)
-//            {m.values[iR][iC]= m1.values[iR][iC];}
-//    }
-//    for(int iR=0;iR<m2.nR;iR++)
-//        for(int iC=0;iC<m2.nC;iC++)
-//            m.values[iR][iC+m1.nC]= m2.values[iR][iC];
-//    return m;
-//
-//
-//
-//}
-///** @brief this fn makes vertical concatenation of 2 matrices
-// *
-// * @param m1 the first matrix
-// * @param m2 the second matrix
-// * @return the concatenated matrix
-// *
-// */
-//CMatrix CMatrix::verticalConcatenation(CMatrix &m1,CMatrix &m2)
-//{
-//
-//    if(m1.nC!=m2.nC)throw("invalid matrix dimension");
-//    CMatrix m((m1.nR+m2.nR),m1.nC);
-//
-//    for(int iR=0;iR<m1.nR;iR++)
-//    {
-//        for(int iC=0;iC<m1.nC;iC++)
-//            {m.values[iR][iC]= m1.values[iR][iC];}
-//    }
-//    for(int iR=0;iR<m2.nR;iR++)
-//        for(int iC=0;iC<m2.nC;iC++)
-//            m.values[iR+m1.nR][iC]= m2.values[iR][iC];
-//    return m;
-//}
+/** @brief this fn makes horizontal concatenation of 2 matrices
+ *
+ * @param m1 the first matrix
+ * @param m2 the second matrix
+ * @return the concatenated matrix
+ *
+ */
+
+CMatrix CMatrix::horizontalConcatenation(CMatrix &m1,CMatrix &m2)
+{
+    if(m1.nR!=m2.nR)throw("invalid matrix dimension");
+    CMatrix m(m1.nR,(m2.nC +m1.nC));
+
+    for(int iR=0;iR<m1.nR;iR++)
+    {
+        for(int iC=0;iC<m1.nC;iC++)
+            {m.values[iR][iC]= m1.values[iR][iC];}
+    }
+    for(int iR=0;iR<m2.nR;iR++)
+        for(int iC=0;iC<m2.nC;iC++)
+            m.values[iR][iC+m1.nC]= m2.values[iR][iC];
+    return m;
+
+
+
+}
+/** @brief this fn makes vertical concatenation of 2 matrices
+ *
+ * @param m1 the first matrix
+ * @param m2 the second matrix
+ * @return the concatenated matrix
+ *
+ */
+CMatrix CMatrix::verticalConcatenation(CMatrix &m1,CMatrix &m2)
+{
+
+    if(m1.nC!=m2.nC)throw("invalid matrix dimension");
+    CMatrix m((m1.nR+m2.nR),m1.nC);
+
+    for(int iR=0;iR<m1.nR;iR++)
+    {
+        for(int iC=0;iC<m1.nC;iC++)
+            {m.values[iR][iC]= m1.values[iR][iC];}
+    }
+    for(int iR=0;iR<m2.nR;iR++)
+        for(int iC=0;iC<m2.nC;iC++)
+            m.values[iR+m1.nR][iC]= m2.values[iR][iC];
+    return m;
+}
 //
 //
 //
@@ -810,13 +812,15 @@ CMatrix  CMatrix::sin_element (void )
       for(int iR=0;iR<result.nR;iR++)
         for(int iC=0;iC<result.nC;iC++)
         {
-            double R=sin(values[iR][iC].real())*cosh(values[iR][iC].imaginary());
-            double I=sinh(values[iR][iC].real())*cos(values[iR][iC].imaginary());
-            CComplex X(R,I);
-            result.values[iR][iC] = X;
+            double R=sin(values[iR][iC].real());//*cosh(values[iR][iC].imaginary());
+          //  double I=sinh(values[iR][iC].real())*cos(values[iR][iC].imaginary());
+          //  CComplex X(R,I);
+            result.values[iR][iC] = R;
         }
         return result;
    }
+
+
 
 /** @brief this fn makes the cos dot for each element in the matrix
  *
@@ -1487,63 +1491,87 @@ CMatrix CMatrix::log2_element(void)
 //
 //  }
 //
-//
-///*****************noteeeeeeeeeeeeeeeeeeeeeeeeee when call this functions but catch for throw and remove
-//the comment from the throw*******************************************************************************************************************/
-//
-///** @brief it mul each element with its equiv. element
-// *  @param1  the matrix that does the call
-// *  @param2  another matrix as i/p
-// *  @return a matrix where each element is mul with its equiv element
-// *
-// */
-////this is according to oct.
-//
-//  CMatrix CMatrix::dot_mult(const CMatrix &m )
-//  {
-//
-//    if(m.nR!=nR || m.nC!=nC )
-//        {
-//       printf("error: quotient: nonconformant arguments (op1 is %dx%d, op2 is %dx%d)\n",nR,nC,m.nR,m.nC);
-//       // throw("error");
-//        CMatrix v (1,1,0) ;
-//        return v;
-//        }
-//
-//      CMatrix result( nR ,nC );
-//      for(int iR=0;iR<result.nR;iR++)
-//        for(int iC=0;iC<result.nC;iC++)
-//            {result.values[iR][iC] = values[iR][iC] * m.values[iR][iC];}
-//
-//  return result ;
-//  }
-//
-///** @brief it div each element with its equiv. element
-// *  @param1  the matrix that does the call
-// *  @param2  another matrix as i/p
-// *  @return a matrix where each element is div with its equiv element @param2 / @param1
-// *
-// */
-////this is according to oct.
-//
-//  CMatrix CMatrix::dot_div1(const CMatrix &m )   /*   \    */
-//  {
-//
-//    if(m.nR!=nR || m.nC!=nC )
-//        {
-//       printf("error: quotient: nonconformant arguments (op1 is %dx%d, op2 is %dx%d)\n",nR,nC,m.nR,m.nC);
-//       // throw("error");
-//        CMatrix v (1,1,0) ;
-//        return v;
-//        }
-//
-//      CMatrix result( nR ,nC );
-//      for(int iR=0;iR<result.nR;iR++)
-//        for(int iC=0;iC<result.nC;iC++)
-//            {result.values[iR][iC] =  m.values[iR][iC]/ values[iR][iC];}
-//
-//  return result ;
-//  }
+
+/*****************noteeeeeeeeeeeeeeeeeeeeeeeeee when call this functions but catch for throw and remove
+the comment from the throw*******************************************************************************************************************/
+
+/** @brief it mul each element with its equiv. element
+ *  @param1  the matrix that does the call
+ *  @param2  another matrix as i/p
+ *  @return a matrix where each element is mul with its equiv element
+ *
+ */
+//this is according to oct.
+
+  CMatrix CMatrix::dot_mult(const CMatrix &m )
+  {
+
+    if(m.nR!=nR || m.nC!=nC )
+        {
+       printf("error: quotient: nonconformant arguments (op1 is %dx%d, op2 is %dx%d)\n",nR,nC,m.nR,m.nC);
+       // throw("error");
+        CMatrix v (1,1,0) ;
+        return v;
+        }
+
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = values[iR][iC] * m.values[iR][iC];}
+
+  return result ;
+  }
+
+  /*****************noteeeeeeeeeeeeeeeeeeeeeeeeee when call this functions but catch for throw and remove
+the comment from the throw*******************************************************************************************************************/
+
+/** @brief it mul each element with its equiv. element
+ *  @param1  the matrix that does the call
+ *  @param2  another matrix as i/p
+ *  @return a matrix where each element is mul with its equiv element
+ *
+ */
+//this is according to oct.
+
+  CMatrix CMatrix::dot_power(double d )
+  {
+
+
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] = values[iR][iC].power(d);}
+
+  return result ;
+  }
+
+
+/** @brief it div each element with its equiv. element
+ *  @param1  the matrix that does the call
+ *  @param2  another matrix as i/p
+ *  @return a matrix where each element is div with its equiv element @param2 / @param1
+ *
+ */
+//this is according to oct.
+
+  CMatrix CMatrix::dot_div1(const CMatrix &m )   /*   \    */
+  {
+
+    if(m.nR!=nR || m.nC!=nC )
+        {
+       printf("error: quotient: nonconformant arguments (op1 is %dx%d, op2 is %dx%d)\n",nR,nC,m.nR,m.nC);
+       // throw("error");
+        CMatrix v (1,1,0) ;
+        return v;
+        }
+
+      CMatrix result( nR ,nC );
+      for(int iR=0;iR<result.nR;iR++)
+        for(int iC=0;iC<result.nC;iC++)
+            {result.values[iR][iC] =  m.values[iR][iC]/ values[iR][iC];}
+
+  return result ;
+  }
 ///** @brief it div each element with its equiv. element
 // *  @param1  the matrix that does the call
 // *  @param2  another matrix as i/p
@@ -1581,51 +1609,52 @@ CMatrix CMatrix::log2_element(void)
 //
 //
 //
-///***************************************************************************************************************/
-//
-//
-//   CMatrix CMatrix::power(double number_double )
-//  {
-//      if(number_double==-1)
-//      {
-//          CMatrix x( nR ,nC );
-//         x  = getInverse();
-//         return x;
-//      }
-//
-//      CMatrix result( nR ,nC ,MI_EYE  );
-//      int number_int=number_double;
-//      if(number_double-number_int>0)
-//        {//then num contains fraction so
-//            if(nR!=1 || nC!=1 )
-//            {
-//                printf("error: according to  the specs if the pow of the value was fraction then the matrix must be 1x1 \n");
-//           //   throw("error");
-//                CMatrix v (1,1) ;
-//                return v;
-//            }
-//            result.values[0][0] = pow(values[0][0],number_double);
-//        }
-//      else
-//      {
-//          while (number_int)
-//            {
-//        if (number_int & 1)
-//            result *= *this;
-//        number_int >>= 1;
-//        *this *= *this;
-//    }
-//    }
-//      return result ;
-//      }
-//
-//
+/***************************************************************************************************************/
+
+
+CMatrix CMatrix::power(double number_double )
+{
+    if(number_double==-1)
+    {
+        CMatrix x( nR,nC );
+        x  = getInverse();
+        return x;
+    }
+
+    CMatrix result( nR,nC,MI_EYE  );
+    int number_int=number_double;
+    if(number_double-number_int>0)
+    {
+        //then num contains fraction so
+        if(nR!=1 || nC!=1 )
+        {
+            printf("error: according to  the specs if the pow of the value was fraction then the matrix must be 1x1 \n");
+            //   throw("error");
+            CMatrix v (1,1) ;
+            return v;
+        }
+        result.values[0][0] = values[0][0].power(number_double);
+    }
+    else
+    {
+        while (number_int)
+        {
+            if (number_int & 1)
+                result *= *this;
+            number_int >>= 1;
+            *this *= *this;
+        }
+    }
+    return result ;
+}
+
+
 
 bool CMatrix::isReal()
 {
     for(int iR=0; iR<nR; iR++)
         for(int iC=0; iC<nC; iC++)
-            if (values[iR][iC].imaginary()!=0) return false;
+            if (abs(values[iR][iC].imaginary())>0.0000001) return false;
     return true;
 }
 
