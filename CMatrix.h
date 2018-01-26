@@ -38,7 +38,8 @@ private:
   CMatrix operator=(const CMatrix &m);
   CMatrix operator=(double d);
   CMatrix operator=(string s);
-
+  static CMatrix horizontalConcatenation(CMatrix &m1,CMatrix &m2);
+    static CMatrix verticalConcatenation(CMatrix &m1,CMatrix &m2);
 /**********************************************************here is the new functions********************************************/
   CMatrix sin_element (void);//modified and tested //complex numbers
   CMatrix cos_element (void);//modified and tested //complex numbers

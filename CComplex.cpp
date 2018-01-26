@@ -29,12 +29,23 @@ CComplex::CComplex(const CComplex& C)
     R = C.R; I = C.I;
 }
 
+CComplex CComplex::power(double power)  {
+    double mod = magnitude();
+    double arg = angle();
+    mod = pow(mod, power);
+    arg *= power;
+    double real = mod *cos(arg);
+    double imag = mod * sin(arg);
+    CComplex result(real, imag);
+    return result;
+}
+
 string CComplex::getString(bool isReal)
 {
     char text[100];
     if(isReal)
     {
-        sprintf(text, "%8g\t", R);
+        sprintf(text, "%g ", R);
 
     }
     else if(!isReal){
