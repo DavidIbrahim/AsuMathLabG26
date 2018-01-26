@@ -99,7 +99,7 @@
 	<string.h>
 	<stdlib.h>
 
-1516880802 source:e:\projects\c++\asumathlabg26\cmatrix.cpp
+1516999958 source:e:\projects\c++\asumathlabg26\cmatrix.cpp
 	<fstream>
 	"CMatrix.h"
 	<iomanip>
@@ -109,11 +109,12 @@
 	<time.h>
 	<math.h>
 
-1516880802 e:\projects\c++\asumathlabg26\cmatrix.h
+1516999958 e:\projects\c++\asumathlabg26\cmatrix.h
 	<fstream>
 	<string>
+	"CComplex.h"
 
-1516891342 source:e:\projects\c++\asumathlabg26\matlab.cpp
+1516999958 source:e:\projects\c++\asumathlabg26\matlab.cpp
 	<stdio.h>
 	<iostream>
 	"CMatrix.h"
@@ -133,12 +134,12 @@
 	<iomanip>
 	<limits>
 
-1516880802 e:\projects\c++\asumathlabg26\matlab.h
+1516999958 e:\projects\c++\asumathlabg26\matlab.h
 	"CMatrix.h"
 	<vector>
 	<sstream>
 
-1516891539 source:e:\projects\c++\asumathlabg26\source.cpp
+1516996644 source:e:\projects\c++\asumathlabg26\source.cpp
 	<stdio.h>
 	<iostream>
 	"CMatrix.h"
@@ -148,5 +149,16 @@
 	<string.h>
 	<stdlib.h>
 	"Matlab.h"
-	<conio.h>
+
+1516999958 source:e:\projects\c++\asumathlabg26\ccomplex.cpp
+	"CComplex.h"
+	<string.h>
+	<stdlib.h>
+	<math.h>
+	<stdio.h>
+	<iostream>
+	<sstream>
+
+1516999958 e:\projects\c++\asumathlabg26\ccomplex.h
+	<string>
 
