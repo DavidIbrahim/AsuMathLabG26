@@ -31,6 +31,8 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="CComplex.cpp" />
+		<Unit filename="CComplex.h" />
 		<Unit filename="CMatrix.cpp" />
 		<Unit filename="CMatrix.h" />
 		<Unit filename="Makefile" />
