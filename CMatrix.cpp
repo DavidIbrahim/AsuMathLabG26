@@ -1649,7 +1649,6 @@ CMatrix CMatrix::power(double number_double )
 }
 
 
-
 bool CMatrix::isReal()
 {
     for(int iR=0; iR<nR; iR++)

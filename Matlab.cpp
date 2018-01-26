@@ -1881,6 +1881,9 @@ string Matlab::dealwithSpecialFunctions(string instruction)
 
     instruction = dealwithSpecialFunctionsHelperFunction(instruction,"sin");
 
+    instruction = dealwithSpecialFunctionsHelperFunction(instruction,"cos");
+     instruction = dealwithSpecialFunctionsHelperFunction(instruction,"log10");
+      instruction = dealwithSpecialFunctionsHelperFunction(instruction,"log");
 
 
 
@@ -1906,6 +1909,12 @@ string Matlab::dealwithSpecialFunctionsHelperFunction(string instruction,string 
 
         if(specialFunction=="sin")
             rightMatrix = rightMatrix.sin_element();
+        if(specialFunction=="cos")
+            rightMatrix = rightMatrix.cos_element();
+        if(specialFunction=="log10")
+            rightMatrix = rightMatrix.log10_element();
+        if(specialFunction=="log")
+            rightMatrix = rightMatrix.log_element();
 
 
 

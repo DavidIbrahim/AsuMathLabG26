@@ -64,7 +64,7 @@ string CComplex::getString2(){
 
 string str = strs.str();
 strs.str("");
-    if(abs(I)<0.00001) return str;
+    if(I==0) return str;
     else if(I>0)
     {   if(I==1) return str + "+i";
         strs<<I;
