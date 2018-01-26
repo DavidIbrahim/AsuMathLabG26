@@ -93,9 +93,9 @@ string doubleToString(double d)//convert double to string
     os<<d;
     string s(os.str());
     if(!(d-floor(d)))
-    s+=".0";
+        s+=".0";
     //return string(c);
-   return s;
+    return s;
 }
 double stringToDouble(string s)
 {
@@ -140,22 +140,22 @@ bool Matlab::checkSignsForMatrixOperations(string s,int pos)
         if(s[pos]=='+'||s[pos]=='-')
         {
             string temp;
-            for(int i=pos+1;i<s.length();i++)
+            for(int i=pos+1; i<s.length(); i++)
             {
                 if(s[i]!='+'&&s[i]!='-'&&s[i]!=' '&&s[i]!=']'&&s[i]!=')'&&s[i]!=';')
                     temp+=s[i];
                 else
-                break;
+                    break;
             }
             if(checkStringForMatrix(temp))
                 return 1;
             temp="";
-            for(int i=pos-1;i>=0;i--)
+            for(int i=pos-1; i>=0; i--)
             {
                 if(s[i]!='+'&&s[i]!='-'&&s[i]!=' '&&s[i]!='['&&s[i]!='('&&s[i]!=';')
                     temp+=s[i];
                 else
-                break;
+                    break;
             }
             if(checkStringForMatrix(temp))
                 return 1;
@@ -398,7 +398,7 @@ string Matlab::getInstructionWithoutExpressions(string instruction)
     string equivalentValue;
     simplifiedInstruction=solvingBrackets(instruction);
     //dealing with powers first
-    for(int i=simplifiedInstruction.length()-1;i>=0;i--)
+    for(int i=simplifiedInstruction.length()-1; i>=0; i--)
     {
         if(simplifiedInstruction[i]=='^'&&!checkSignsForMatrixOperations(simplifiedInstruction,i))
         {
@@ -408,7 +408,7 @@ string Matlab::getInstructionWithoutExpressions(string instruction)
         }
     }
     //dealing with * & /
-    for(int i=0;i<simplifiedInstruction.length();i++)
+    for(int i=0; i<simplifiedInstruction.length(); i++)
     {
         if((simplifiedInstruction[i]=='*'||simplifiedInstruction[i]=='/')&&!checkSignsForMatrixOperations(simplifiedInstruction,i))
         {
@@ -418,12 +418,12 @@ string Matlab::getInstructionWithoutExpressions(string instruction)
         }
     }
     //dealing with + & -
-    for(int i=0;i<simplifiedInstruction.length();i++)
+    for(int i=0; i<simplifiedInstruction.length(); i++)
     {
         if((simplifiedInstruction[i]=='+'||simplifiedInstruction[i]=='-')&&!checkSignsForMatrixOperations(simplifiedInstruction,i))
         {
             signOperators=findTheSignOperators(simplifiedInstruction,i);
-           // cout<<signOperators<<endl;
+            // cout<<signOperators<<endl;
             equivalentValue=getStringValue(signOperators);
             //cout<<equivalentValue<<endl;
             replaceString(simplifiedInstruction,signOperators,equivalentValue);
@@ -1199,11 +1199,11 @@ string Matlab::getInstructionWithoutFunctions(string instruction)
 //                replacedString="log10("+extractedString+")";
 //                finalMatrix=CMatrix(finalMatrix).log10_element().getString2();
 //                break;
-                /*
+            /*
             case 20:
-                replacedString="power("+extractedString+")";
-                finalMatrix=CMatrix(finalMatrix).power().getString2();
-                break;*/
+            replacedString="power("+extractedString+")";
+            finalMatrix=CMatrix(finalMatrix).power().getString2();
+            break;*/
             default:
                 throw("not supported function");
             }
@@ -1327,7 +1327,7 @@ string Matlab::extractStringInsideFunction(string instruction)
 
 string Matlab::getStringMatrix(string complexString)
 {
-    complexString = dealWithConcatenation(complexString);
+
     complexString = dealwithSpecialFunctions(complexString);
     string oldString = "";
     while(oldString != complexString)
@@ -1335,6 +1335,13 @@ string Matlab::getStringMatrix(string complexString)
         oldString= complexString;
         complexString = dealwithOperators(complexString);
     }
+    oldString = "";
+ while(oldString != complexString)
+    {
+        oldString= complexString;
+    complexString = dealWithConcatenation(complexString);
+    }
+
 
     return complexString;
 
@@ -1369,7 +1376,8 @@ string extractTheNumber( string const &mainString,int positionOfFirstDigit,bool 
             positionOfFirstDigit--;
             if(positionOfFirstDigit==0) break;
         }
-        if(positionOfFirstDigit == 0) positionOfFirstDigit = -1;
+        if(positionOfFirstDigit == 0&&(mainString[positionOfFirstDigit]>='0' && mainString[positionOfFirstDigit]<='9')) positionOfFirstDigit = -1;
+
         string answer = mainString.substr(positionOfFirstDigit+1, positionOfLastDigit -positionOfFirstDigit+1  );
         return answer;
 
@@ -1522,6 +1530,7 @@ string Matlab::dealwithOperators(string instruction)
 
 
     }
+    instruction = dealWithAddAndSubOperators(instruction,".*");
 
     /// number * matrix operator
     operator_ = '*';
@@ -1547,6 +1556,33 @@ string Matlab::dealwithOperators(string instruction)
         string replacedString = instruction.substr(beginning,ending-beginning);
         replaceString(instruction,replacedString,rightMatrix.getString2());
         pos= instruction.find(operator_);
+
+    }
+
+
+      /// matrix ./ matrix operator
+    operator_ = "./";
+    pos = 0;
+    while(pos!=string::npos)
+    {
+        pos= instruction.find(operator_,pos+1);
+
+        int positionOftheRightMatrixBeginning = indexOfTheBracket(true,true,instruction,pos);
+        int positionOftheLeftMatrixEnd = indexOfTheBracket(true,false,instruction,pos);
+
+        if(positionOftheLeftMatrixEnd==-1||positionOftheRightMatrixBeginning==-1) continue;
+
+
+        string leftMatrixString = findTheMatrix(instruction,false,positionOftheLeftMatrixEnd);
+        string rightMatrixString = findTheMatrix(instruction,true,positionOftheRightMatrixBeginning);
+
+        CMatrix leftMatrix(leftMatrixString);
+        CMatrix rightMatrix(rightMatrixString);
+        leftMatrix.dot_div1(rightMatrix);
+        int beginning = instruction.rfind(leftMatrixString,pos);
+        int ending= instruction.find(rightMatrixString,pos)+rightMatrixString.size();
+        string replacedString = instruction.substr(beginning,ending-beginning);
+        replaceString(instruction,replacedString,leftMatrix.getString2());
 
     }
 
@@ -1603,6 +1639,9 @@ string Matlab::dealwithOperators(string instruction)
         pos= instruction.find(operator_);
 
     }
+
+
+    instruction = dealWithAddAndSubOperators(instruction,"/");
 
     /// matrix / matrix operator
     operator_ = '/';
@@ -1677,7 +1716,7 @@ string Matlab :: dealWithAddAndSubOperators(string instruction, string operator_
         CMatrix rightMatrix(rightMatrixString);
 
         bool leftMatrixIsPositive= true;
-         string sign = "";
+        string sign = "";
         int beginning = instruction.rfind(leftMatrixString,pos);
         int ending= instruction.find(rightMatrixString,pos)+rightMatrixString.size();
         for(int i = beginning-1 ; i>0; i--)
@@ -1700,7 +1739,8 @@ string Matlab :: dealWithAddAndSubOperators(string instruction, string operator_
             leftMatrix = leftMatrix + rightMatrix;
         else if(operator_=="-"||operator_==".-")
             leftMatrix = leftMatrix - rightMatrix;
-
+         else if(operator_==".*")
+            leftMatrix = leftMatrix.dot_mult(rightMatrix);
 
 
 
@@ -1711,7 +1751,7 @@ string Matlab :: dealWithAddAndSubOperators(string instruction, string operator_
 
     }
 
-    /// matrix + number operator
+    /// matrix operator number operator
 
     pos = 0;
     while(pos!=string::npos)
@@ -1754,8 +1794,10 @@ string Matlab :: dealWithAddAndSubOperators(string instruction, string operator_
             leftMatrix = leftMatrix + atof(numberMultiplied.c_str());
         else if(operator_=="-"||operator_==".-")
             leftMatrix = leftMatrix - atof(numberMultiplied.c_str());
-
-
+        else if(operator_==".*")
+            leftMatrix = leftMatrix * atof(numberMultiplied.c_str());
+        else if(operator_=="/")
+            leftMatrix = leftMatrix / atof(numberMultiplied.c_str());
 
 
         string replacedString = instruction.substr(beginning,ending-beginning);
@@ -1788,6 +1830,11 @@ string Matlab :: dealWithAddAndSubOperators(string instruction, string operator_
             rightMatrix = rightMatrix + atof(numberMultiplied.c_str());
         else if(operator_=="-"||operator_==".-")
             rightMatrix = rightMatrix- atof(numberMultiplied.c_str());
+        else if(operator_==".*")
+            rightMatrix = rightMatrix * atof(numberMultiplied.c_str());
+          else if(operator_=="/")
+            rightMatrix =  atof(numberMultiplied.c_str()) /rightMatrix ;
+
 
 
         int ending = instruction.find(rightStringMatrix,pos)+rightStringMatrix.size();
@@ -1807,28 +1854,68 @@ void Matlab::dealWithConcatenationHelperFn(string &instruction,string s)
 {
 
     int pos = instruction.find(s);
+    bool isThereSquareBracketsContainingTheConcatanatedMatrix = false;
+    bool isThereConcatenation = false;
     while(pos!=string::npos)
     {
         int beginning = instruction.rfind("[",pos);
 
         int ending = instruction.find("]",pos+2);
+        int theFirstOpeningSquareBracketPos= beginning;
+        int theLastClosingSquareBracketPos= ending;
+        for(int i = beginning-1; i>-1; i--)
+        {
+            if(instruction[i]=='[')
+            {
+                theFirstOpeningSquareBracketPos=i;
+                break;
+            }
+
+            else if(instruction[i]!=' ')
+            {
+                theFirstOpeningSquareBracketPos = beginning;
+                break;
+            }
+        }
+
+        if(theFirstOpeningSquareBracketPos!=beginning)
+        {
+            for(int i = ending+1; i>0; i++)
+            {
+                if(instruction[i]==']')
+                {
+
+                    theLastClosingSquareBracketPos = i;
+                    isThereSquareBracketsContainingTheConcatanatedMatrix = true;
+                    break;
+                }
+                else if(instruction[i]!=' ')
+                {
+                    theFirstOpeningSquareBracketPos = beginning;
+
+                    break;
+                }
+
+            }
+        }
 
         string matrixConcatenated = instruction.substr(beginning,ending-beginning+1 );
         string matrixConcatenatedSolved = getInstructionWithoutConcatenation(matrixConcatenated );
-        if(instruction.at(beginning-1)=='['   && instruction.at(ending+1)==']')
-        {
-            matrixConcatenated = '[' + matrixConcatenated +']';
-        }
+        string replacedString = instruction.substr(theFirstOpeningSquareBracketPos,theLastClosingSquareBracketPos-theFirstOpeningSquareBracketPos+1);
+        isThereConcatenation = true;
 
-
-        replaceString(instruction,matrixConcatenated,matrixConcatenatedSolved);
+        replaceString(instruction,replacedString,matrixConcatenatedSolved);
         pos = instruction.find(s);
-
 
     }
 
+   // if(!isThereSquareBracketsContainingTheConcatanatedMatrix && isThereConcatenation) throw("syntax error");
+
 
 }
+
+
+
 
 string Matlab::dealWithConcatenation(string instruction)
 {
@@ -1882,8 +1969,8 @@ string Matlab::dealwithSpecialFunctions(string instruction)
     instruction = dealwithSpecialFunctionsHelperFunction(instruction,"sin");
 
     instruction = dealwithSpecialFunctionsHelperFunction(instruction,"cos");
-     instruction = dealwithSpecialFunctionsHelperFunction(instruction,"log10");
-      instruction = dealwithSpecialFunctionsHelperFunction(instruction,"log");
+    instruction = dealwithSpecialFunctionsHelperFunction(instruction,"log10");
+    instruction = dealwithSpecialFunctionsHelperFunction(instruction,"log");
 
 
 
@@ -2025,7 +2112,7 @@ int Matlab::findTheOpeningBracket(string s, char openingBracket,int start)
 string Matlab::solvingBrackets(string s)
 {
     string temp,replacingString;
-    for(int i=0;i<s.length();i++)
+    for(int i=0; i<s.length(); i++)
     {
         if(s[i]=='(')
         {
@@ -2060,7 +2147,7 @@ string Matlab::findTheSignOperators(string s,int pos)
             break;
         i--;
     }
-    for(int j=0;j<temp.length();j++)
+    for(int j=0; j<temp.length(); j++)
     {
         replacingString+=temp[temp.length()-1-j];
     }
