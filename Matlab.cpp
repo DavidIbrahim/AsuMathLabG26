@@ -2137,7 +2137,7 @@ string Matlab:: dealWithInsideConcatenation(string instruction)
         bool isThereMatrixInside = checkStringForMatrix(matrixString.substr(1, matrixString.size() -2));
         if(isThereMatrixInside)
         {     string   solvedMatrixString = handleImplicitConcatinationFromRight(matrixString);
-            solvedMatrixString = handleImplicitConcatinationFromLeft(matrixString);
+            solvedMatrixString = handleImplicitConcatinationFromLeft(solvedMatrixString);
 
             replaceString(instruction,matrixString,solvedMatrixString);
 
