@@ -15,6 +15,9 @@ private:
         //bool checkIfSpecialMatrix(string instruction);
 
         string getInstructionWithoutSpecialMatrices(string instruction);
+        string handleImplicitConcatinationFromLeft (string instruction);
+        string handleImplicitConcatinationFromRight (string instruction);
+
 
 
 
