@@ -475,6 +475,7 @@ string CMatrix::getString2(){
                 sprintf(buffer, "%g ", values[iR][iC]);*/
                 s += values[iR][iC].getString2()+" ";
             }
+            s.erase(s.end()-1);
             s += ";";
      }
      s.erase(s.end()-1);//removes the last semicolon.

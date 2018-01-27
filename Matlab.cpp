@@ -148,7 +148,7 @@ bool Matlab::checkSignsForMatrixOperations(string s,int pos)
                 else
                     break;
             }
-            if(checkStringForMatrix(temp))
+            if(checkStringForMatrix(temp)||checkInstructionForFunctions(temp))
                 return 1;
             temp="";
             for(int i=pos-1; i>=0; i--)
@@ -158,7 +158,7 @@ bool Matlab::checkSignsForMatrixOperations(string s,int pos)
                 else
                     break;
             }
-            if(checkStringForMatrix(temp))
+            if(checkStringForMatrix(temp)||checkInstructionForFunctions(temp))
                 return 1;
             return 0;
         }
@@ -398,6 +398,8 @@ string Matlab::getInstructionWithoutExpressions(string instruction)
     string signOperators;
     string equivalentValue;
     simplifiedInstruction=solvingBrackets(instruction);
+    simplifiedInstruction=correctSigns(simplifiedInstruction);
+    //cout<<simplifiedInstruction<<endl;
     //dealing with powers first
     for(int i=simplifiedInstruction.length()-1; i>=0; i--)
     {
@@ -408,6 +410,8 @@ string Matlab::getInstructionWithoutExpressions(string instruction)
             replaceString(simplifiedInstruction,signOperators,equivalentValue);
         }
     }
+    simplifiedInstruction=correctSigns(simplifiedInstruction);
+   // cout<<simplifiedInstruction<<endl;
     //dealing with * & /
     for(int i=0; i<simplifiedInstruction.length(); i++)
     {
@@ -418,49 +422,21 @@ string Matlab::getInstructionWithoutExpressions(string instruction)
             replaceString(simplifiedInstruction,signOperators,equivalentValue);
         }
     }
+    simplifiedInstruction=correctSigns(simplifiedInstruction);
+   // cout<<simplifiedInstruction<<endl;
     //dealing with + & -
     for(int i=0; i<simplifiedInstruction.length(); i++)
     {
-        if((simplifiedInstruction[i]=='+'||simplifiedInstruction[i]=='-')&&!checkSignsForMatrixOperations(simplifiedInstruction,i))
+        if((simplifiedInstruction[i]=='+'||(simplifiedInstruction[i]=='-'&&!skipNegativeSign(simplifiedInstruction,i)))&&!checkSignsForMatrixOperations(simplifiedInstruction,i))
         {
             signOperators=findTheSignOperators(simplifiedInstruction,i);
-            // cout<<signOperators<<endl;
+            //cout<<signOperators<<endl;
             equivalentValue=getStringValue(signOperators);
             //cout<<equivalentValue<<endl;
             replaceString(simplifiedInstruction,signOperators,equivalentValue);
         }
     }
     return simplifiedInstruction;
-    /* this code is incorrect
-    istringstream is;
-    is.str(instruction);
-    char c; //to loop each character in the instruction
-    string s;
-    string temp; //stores the equivalent value or matrix of the string
-    while(is.get(c))
-    {
-        if(c!='['&&c!=']'&&c!=','&&c!=';'&&c!=' ')
-        {
-            s+=string(1,c);
-        }
-        else
-        {
-            if(checkStringForMatrix(s))//the string contains a matrix
-            {
-                temp=getStringMatrix(s);
-                replaceString(instruction,s,temp);
-            }
-            else //the string contains no matrix
-            {
-                temp=getStringValue(s);
-                replaceString(instruction,s,temp);
-            }
-            s="";
-            temp="";
-        }
-    }
-    return instruction;
-    */
 }
 /**
 * this fn takes the full instruction as it is ex: B = [1.2 2.3 A;[1.3 2.4;4.6 1.3],[3.2;7.8]];
@@ -472,14 +448,20 @@ string Matlab::getInstructionWithoutExpressions(string instruction)
 */
 string Matlab::getReadyInstruction(string instruction,vector<Matlab>& savedMatrices)
 {
+   // cout<<instruction<<endl;
     instruction=getInstructionWithoutMatlabNames(instruction,savedMatrices);
+    cout<<instruction<<endl;
     instruction=getInstructionWithoutSpecialMatrices(instruction);
+    cout<<instruction<<endl;
     instruction=getInstructionWithoutExpressions(instruction);
+    cout<<instruction<<endl;
     instruction=getInstructionWithoutFunctions(instruction);
+    cout<<instruction<<endl;
     //after removing functions we need another simplification
-    instruction=getInstructionWithoutConcatenation(instruction);
     instruction=getInstructionWithoutExpressions(instruction);
+    cout<<instruction<<endl;
     instruction=getStringMatrix(instruction);
+    //cout<<instruction<<endl;
     return instruction;
 }
 
@@ -2321,7 +2303,12 @@ string Matlab::findTheSignOperators(string s,int pos)
     while(1)
     {
         if(s[i]=='+'||s[i]=='-'||s[i]=='*'||s[i]=='/'||s[i]=='['||s[i]==']'||s[i]==' '||s[i]==';'||s[i]=='('||s[i]==')'||s[i]=='^')
+        {
+            if(s[i]=='-')
+                temp+=s[i];
             break;
+        }
+
         temp+=s[i];
         if(i==0)
             break;
@@ -2335,7 +2322,7 @@ string Matlab::findTheSignOperators(string s,int pos)
     i=pos+1;
     while(1)
     {
-        if(s[i]=='+'||s[i]=='-'||s[i]=='*'||s[i]=='/'||s[i]=='['||s[i]==']'||s[i]==' '||s[i]==';'||s[i]=='('||s[i]==')'||s[i]=='^')
+        if(s[i]=='+'||s[i]=='*'||s[i]=='/'||s[i]=='['||s[i]==']'||s[i]==' '||s[i]==';'||s[i]=='('||s[i]==')'||s[i]=='^'||(s[i]=='-'&&i!=pos+1))
             break;
         replacingString+=s[i];
         if(i==s.length()-1)
@@ -2345,8 +2332,6 @@ string Matlab::findTheSignOperators(string s,int pos)
     return replacingString;
 
 }
-
-
 
 
 
@@ -2419,4 +2404,31 @@ int   Matlab::findTheClosingBracketFromAspecificPostion(string s, int PositonOfO
 
 
 
+
+
+//returns 1 if the negative sign is not a separate operation ex:(-5+3)
+bool Matlab::skipNegativeSign(string s,int pos)
+{
+    if(pos==0||s[pos-1]=='['||s[pos-1]=='('||s[pos-1]==' '||s[pos-1]==';'||s[pos-1]=='*'||s[pos-1]=='/')
+        return 1;
+    return 0;
+}
+
+//this fn replaces each +- by - and each -- by + in string s
+string Matlab::correctSigns(string s)
+{
+    while(1)
+    {
+        if(s.find("+-")!=-1)
+        s.replace(s.find("+-"),2,"-");
+        else break;
+    }
+    while(1)
+    {
+        if(s.find("--")!=-1)
+        s.replace(s.find("--"),2,"+");
+        else break;
+    }
+    return s;
+}
 

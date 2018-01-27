@@ -106,7 +106,8 @@ private:
         string getStringValue(string complexString);
         string solvingBrackets(string s);
         string findTheSignOperators(string s,int pos);
-
+        bool skipNegativeSign(string s,int pos);
+        string correctSigns(string s);
 
 protected:
 
