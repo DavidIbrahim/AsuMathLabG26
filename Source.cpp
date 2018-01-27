@@ -7,58 +7,117 @@
 #include <string.h>
 #include <stdlib.h>
 #include "Matlab.h"
-#include "conio.h"
 
 
 
 using namespace std;
 int main(int argc, char*argv[])
 {
-    CMatrix q("[1 2;1 2]") ;
+    /*
+    	ifstream infile ("//home//samuel//Documents//CodeBlocks//Phase1_linux//example.m");
+    */
+    bool file_input = false;
+    istream* in = &cin;
+    ifstream infile;
+    if (argc == 2)
+    {
+        infile.open(argv[1]);
+        in = &infile;
+        file_input = true;
+    }
 
-    cout<<q.getString();
-    CMatrix v ;
-
-    v = q.power(3);
-    cout<<v.getString();
-
-    Matlab x;
-    string s="s s s [ [here no problem    at all ]]          hq               [ [here 2] ]  herenoway  [why ]  [ not  ] +[here]";
-     cout<<s<<endl;
-    x.trimAllSpacesExceptMatrix(s);
-     cout<<s<<endl;
-     getch();
-    cout<<x.solvetrignometry("8-sqrt(2+2)+cos(5)+8")<<endl;
-
-
-   //  x.findTheClosingBracketFromAspecificPostion( "85", 5,'[');
-
-
-
+    vector<Matlab> data;
+    string s;
+    string mat ="";
+    bool mat_intit = false;
+    bool mat_cont = false;
+    bool echo = false;
 
 
-/*
-CComplex a(1,0);
-  cout<<a.getString(1);
-CComplex l = a.power(-.2);
-  cout<<l.getString(0);
-*/
+    //ifstream infile("D:\\Users\\samue\\Documents\\Code Blocks\\Phase1\\example.m");
+
+    while(getline(*in,s))
+    {
+        int l = s.length();
+
+        Matlab m;
+        string result;
+        if(s[l-1]=='\r' || s[l-1]=='\n') s.erase(l-1); //fixing new line issue between Windows and Linux
+        if(s=="")continue;
+        //mat = s;
+        // cout<<s<<endl;
+        if(s.find('[')!= string::npos || mat_cont)
+            mat_intit = true;
+        else
+            mat_intit = false;
+
+
+        if(mat_intit)
+        {
+            mat+=s;
+            if(mat[mat.length()-1]!=';'&&mat[mat.length()-1]!='[') mat+=';';
+
+        }
+
+        if((m.findTheClosingBracket(mat,'[')==string::npos) && mat_intit)
+        {
+            mat_cont = true;
+        }
+        else
+            mat_cont =false;
+
+
+        if(mat_cont)continue;
+        //if(mat_cont) continue;
+
+        if (mat.length() >0)
+        {
+            //cout<<mat<<endl;
+            if(mat[mat.length()-1]== ';')
+            {
+                mat.erase(mat.length()-1);
+                echo = false;
+            }
+            else echo = true;
+
+//cout<< mat<<endl;
+//result = m.getReadyInstruction(mat,data);
+result = m.getInstructionWithoutFunctions(mat);
+            mat= "";
+
+        }
+        else if(s.find("=")==string::npos)
+        {
+            //Matlab::getMatlabFromVector(s,data).getString();
+        }
+        else
+        {
+            if(s[s.length()-1]== ';')
+            {
+                s.erase(s.length()-1);
+                echo = false;
+            }
+            else echo = true;
+
+ // result = m.getReadyInstruction(s,data);
 
 
 
+cout<<result<<endl;
+
+}
+if(echo)
+{
+cout <<result<<endl;
+
+}
 
 
-
-
-
-
-
-    getch();
-    //Matlab x;
-    //cout<<x.getStringMatrix("[[2 5] [2 5] [2 5]]");
-
-
-
-
+}
+    CMatrix A ( "[1 2 3;4 5 6;7 8 9;]");
+    Matlab n;
+    cout<< n.getReadyInstruction("L = (1.2+3.4-5.6)/(2.1*3.2+4.6)-12.1*3.1+(1.2+5.2)^(4/(3.2+5.6))",data);
+    //data[0].getString();
     return 0;
 }
+

@@ -466,6 +466,21 @@ string Matlab::getReadyInstruction(string instruction,vector<Matlab>& savedMatri
     return instruction;
 }
 
+
+/**
+* this fn takes the full instruction as it is ex: B = [1.2 2.3 A;[1.3 2.4;4.6 1.3],[3.2;7.8]];
+* and returns the resulted Matlab object from execution.
+* @param instruction the instruction taken from the user
+* @param savedMatrices the vector where all Matlab objects are stored
+  @return Matlab object
+*/
+Matlab Matlab::executeInstruction(string instruction,vector<Matlab>& savedMatrices)
+{
+    instruction = getReadyInstruction(instruction,savedMatrices);
+
+    return savedMatrices[0];
+}
+
 Matlab::Matlab()
 {
 
