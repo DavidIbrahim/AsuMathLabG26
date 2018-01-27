@@ -31,7 +31,7 @@ int main(int argc, char*argv[])
     string mat ="";
     bool mat_intit = false;
     bool mat_cont = false;
-    bool echo = false;
+    bool echo = true;
 
 
     //ifstream infile("D:\\Users\\samue\\Documents\\Code Blocks\\Phase1\\example.m");
@@ -55,7 +55,7 @@ int main(int argc, char*argv[])
         if(mat_intit)
         {
             mat+=s;
-            if(mat[mat.length()-1]!=';'&&mat[mat.length()-1]!='[') mat+=';';
+            if(mat[mat.length()-1]!=';'&&mat[mat.length()-1]!='[' && mat_cont) mat+=';';
 
         }
 
@@ -81,14 +81,24 @@ int main(int argc, char*argv[])
             else echo = true;
 
 //cout<< mat<<endl;
-//result = m.getReadyInstruction(mat,data);
-result = m.getInstructionWithoutFunctions(mat);
+m = m.executeInstruction(mat,data);
+
             mat= "";
 
         }
         else if(s.find("=")==string::npos)
         {
-            //Matlab::getMatlabFromVector(s,data).getString();
+                    bool found = false;
+                for (int i = 0; i<data.size();i++)
+    {
+
+        if(data[i].getName()==s)
+        {
+            data[i].print();
+            found = true;
+        }
+    }
+    if(!found) cout<< "Undefined variable "<<s<<endl;
         }
         else
         {
@@ -99,25 +109,30 @@ result = m.getInstructionWithoutFunctions(mat);
             }
             else echo = true;
 
- // result = m.getReadyInstruction(s,data);
+m = m.executeInstruction(s,data);
 
 
 
-cout<<result<<endl;
+
 
 }
 if(echo)
 {
-cout <<result<<endl;
+m.print();
 
 }
 
 
 }
     CMatrix A ( "[1 2 3;4 5 6;7 8 9;]");
-    Matlab n;
-    cout<< n.getReadyInstruction("L = (1.2+3.4-5.6)/(2.1*3.2+4.6)-12.1*3.1+(1.2+5.2)^(4/(3.2+5.6))",data);
+    Matlab n,k;
+    //n.executeInstruction("A = [8.9 7.3 4.8 2.4; 2.3 6.5 8.9 1.2; 4.9 3.8 7.2 7.5; 9.8 3.4 7.5 8.9]",data).print();
+//n.executeInstruction("X = 5",data).print();
+//n.executeInstruction("L = -8",data).print();
+    //cout<<n.getStringValue("(1.2+3.4-5.6)/(2.1*3.2+4.6)-12.1*3.1+(1.2+5.2)^(4/(3.2+5.6))");
     //data[0].getString();
+
+    //cout<<n.calcSimpleExpression("-12.1*3.1");
     return 0;
 }
 

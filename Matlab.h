@@ -106,13 +106,13 @@ private:
 
 
         string solvetrignometry(string s) ;
-
         string getStringValue(string complexString);
         string solvingBrackets(string s);
         string findTheSignOperators(string s,int pos);
         bool skipNegativeSign(string s,int pos);
         string correctSigns(string s);
-
+        Matlab updateVector(string name, string mat, vector<Matlab>& savedMatrices);
+        void print();
 protected:
 
 
