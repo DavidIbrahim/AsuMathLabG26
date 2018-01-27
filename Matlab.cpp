@@ -64,6 +64,7 @@ void Matlab:: trimAllSpaces(string & s)
             i--;
         }
 
+
     }
 }
 
@@ -914,80 +915,259 @@ string Matlab::calcSimpleExpression(string s)
 */
 
 
+
 string Matlab::solvetrignometry(string s)
 {
+	//cout << "why";
+//	s = "sqrt(4)+4";
+	string constants[17] =
+	{ "asinh","acosh","atanh"
+		,  "asin" ,"acos" ,"atan"
+		,  "sinh" ,"cosh" ,"tanh"
+		,  "sin"  ,"cos"  ,"tan"
+		,  "log10","log"
+		,  "ceil" , "floor"
+		,  "sqrt" };
 
-    string constants[3] = { "sin", "cos", "tan"  };
+	for (int i = 0; i < 17; i++)
+	{
+		//ex: s= "5+4+3+sin(4+5)+6"
+		int pos = s.find(constants[i]);//finds the first letter s here pos = 6
+		if (pos != string::npos)
+		{
+			char sign;
 
-    for (int i = 0; i < 3 ; i++)
-    {
-        //ex: s= "5+4+3+sin(4+5)+6"
-        int pos = s.find(constants[i]);//finds the first letter s here pos = 6
-        if (pos != string::npos)
-        {
-//to get the function
-            char sign ;
-            if(pos>0) sign = s[pos-1];
-            else
-            {
-                sign = '\0';
-            }
-
-            string strafter = s.substr(pos+3, s.length()-pos);//(4+5)+6
-            string Sbefore = s.substr(  0,pos -1 ); //5+4+3+
-            // get the position of the in function
-            int startingPosisition= strafter.find('(');//0
-            int endingPosition = findTheClosingBracket(strafter,'(');//4
-
-//to return it back later
-            string Safter = strafter.substr( endingPosition+1, strafter.length()-endingPosition ); //+6
-// get the brackets alone and get their  value
-            string calc = strafter.substr( startingPosisition+1, endingPosition-startingPosisition-1 ); //(4+5)
-            calc = getStringValue( calc );//9
-
-            // get the number in double
-            stringstream SSafter, ssresult ;
-            string Sresult;
-            double number,Dresult  ;
-            SSafter << calc;//9
-            SSafter >> number;//9
-            // get the trig of it
-            switch (i)
-            {
-            case 0:
-                Dresult = sin(number);
-                break;//sin(9) = .1564....
-            case 1:
-                Dresult = cos(number);
-                break;
-            case 2:
-                Dresult = tan(number);
-                break;
-            }
-            // return the answer to string
-            ssresult << Dresult;//.1564
-            ssresult >>std::fixed >> Sresult;//.1564
-            // put the string back together
-            if(sign == '-'||sign == '+')
-            {
-                char newSign = ((Dresult >  0 && sign == '+')||(Dresult<0 && sign =='-') ) ? '+' : '-';
-                if(Dresult<0) Sresult.erase(0,1);                                   // to delete the negative sign
-                s = Sbefore + newSign +Sresult + Safter;//5+4+3+.1564+6
-            }
-            else
-            {
-                s = Sresult+Safter;
-            }
-            // search again
-            i--;
-        }
+			if (pos>0)
+				sign = s[pos - 1];
+			 else
+				 sign = 'not';
 
 
-    }
+			//to get the function
+
+			string strafter = s.substr(pos + constants[i].length(), s.length() - pos);//(4+5)+6
+			string Sbefore;
+			if (pos > 0)
+				Sbefore = s.substr(0, pos - 1); //5+4+3
+			else
+				Sbefore = "";
+				// get the position of the in function
+			int startingPosisition = strafter.find('(');//0
+			int endingPosition = findTheClosingBracket(strafter, '(');//4
+
+																	  //to return it back later
+			string Safter = strafter.substr(endingPosition + 1, strafter.length() - endingPosition); //+6
+																									 // get the brackets alone and get their  value
+			string calc = strafter.substr(startingPosisition + 1, endingPosition - startingPosisition - 1); //(4+5)
+		    calc = getStringValue( calc );//9
+
+																											// get the number in double
+			stringstream SSafter, ssresult;
+			string Sresult;
+			double number, Dresult;
+			SSafter << calc;//9
+			SSafter >> number;//9
+							  // get the trig of it
+			switch (i)
+			{
+			case 0:
+				Dresult = asinh(number);
+				break;
+			case 1:
+				Dresult = acosh(number);
+				break;
+			case 2:
+				Dresult = atanh(number);
+				break;
+			case 3:
+				Dresult = asin(number);
+				break;
+			case 4:
+				Dresult = acos(number);
+				break;
+			case 5:
+				Dresult = atan(number);
+				break;
+			case 6:
+				Dresult = sinh(number);
+				break;
+			case 7:
+				Dresult = cosh(number);
+				break;
+			case 8:
+				Dresult = tanh(number);
+				break;
+			case 9:
+				Dresult = sin(number);
+				break;//sin(9) = .1564....
+			case 10:
+				Dresult = cos(number);
+				break;
+			case 11:
+				Dresult = tan(number);
+				break;
+			case 12:
+				Dresult = log10(number);
+				break;
+			case 13:
+				Dresult = log(number);
+				break;
+			case 14:
+				Dresult = ceil(number);
+				break;
+			case 15:
+				Dresult = floor(number);
+				break;
+			case 16:
+				Dresult = sqrt(number);
+				break;
+
+			}
+			// return the answer to string
+			ssresult << Dresult;//.1564
+			ssresult >> std::fixed >> Sresult;//.1564
+
+           // put the string back together
 
 
-    return  s;
+			string newSign = ""  ;
+
+
+
+			if (sign == '-')
+			{
+				if (Sresult[0] == '-')
+					Sresult.erase(0, 1);
+
+				if (Dresult > 0)
+					newSign = '-';
+
+				else if (Dresult < 0)
+				{
+					if (Sbefore[Sbefore.length()-1]=='*'|| Sbefore[Sbefore.length() - 1] == '/')
+					{
+						newSign = "";
+					}
+					else
+						newSign = '+';
+				}
+				else if (Dresult == 0)
+				{
+					newSign = '+';
+				}
+
+
+
+			}
+			else if (sign == '+')
+			{
+				if (Sresult[0] == '-')
+					Sresult.erase(0, 1);
+
+				if (Dresult > 0)
+				{
+					if (Sbefore[Sbefore.length() - 1] == '*' || Sbefore[Sbefore.length() - 1] == '/')
+					{
+						newSign = "";
+					}
+					else
+						newSign = '+';
+				}
+				else if (Dresult < 0)
+					newSign = '-';
+				else if (Dresult == 0)
+				{
+					if (Sbefore[Sbefore.length() - 1] == '*' || Sbefore[Sbefore.length() - 1] == '/')
+					{
+						newSign = "";
+					}
+					else
+						newSign = '+';
+
+				}
+
+			}
+
+
+
+
+
+
+
+			else if (sign == '*')
+			{
+
+				newSign = '*';
+
+
+
+			}
+
+			else if (sign == '/')
+			{
+				newSign = '/';
+
+
+			}
+
+
+
+
+
+
+			s = Sbefore + newSign + Sresult + Safter;//5+4+3+.1564+6
+
+
+
+
+
+
+
+
+
+
+/*
+			if (sign == '-' || sign == '+')
+			{
+				char newSign = (Dresult >  0 && sign == '+') ? '+' : '-';
+				if (Dresult<0) Sresult.erase(0, 1); // to delete the negative sign
+				s = Sbefore + newSign + Sresult + Safter;//5+4+3+.1564+6
+			}
+			else
+			{
+				s = Sresult + Safter;
+			}
+
+
+			*/
+
+			// search again
+			i--;
+
+
+
+	}
+
+
+	}
+
+
+	return  s;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /** @brief returns the instruction without special functions like sin()
  *
  * @param instruction it is the instruction without matlab names or special matrix ex: 1.2+sqrt([4.0 16.0],[16.0 4.0])+[6.0 pow(2,2) 3.0 4.0]
@@ -2153,6 +2333,79 @@ string Matlab::findTheSignOperators(string s,int pos)
 
 }
 
+
+
+/****
+ ***
+ ** @brief: it trims all the spaces of a given string . except the spaces inside the matrix
+ **
+ **  @brief helper method
+ **
+ **  @return: it takes the string by reference so return is void
+ ***
+ ****/
+
+void Matlab:: trimAllSpacesExceptMatrix(string & s)
+{
+    //	s.erase(s.begin(),std::find_if(s.begin(), s.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));//l. only
+    //	s.erase( std::find_if(s.rbegin(), s.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(),  s.end());//r. only
+    int endingpostion  ;
+    for (int i = 0; i < s.length(); i++)
+    {
+        if (s[i] == ' ')
+        {
+            s.erase( i,1 );
+            i--;
+        }
+        else if( s[i] == '[')
+        {
+            cout<<"here "<<i<<endingpostion<<endl;
+
+            endingpostion= findTheClosingBracketFromAspecificPostion(s,i,'[');
+//            cout<<"here "<<i<<endingpostion<<endl;
+
+             i=endingpostion;
+        }
+    }
+ //   cout<<s<<endl;
+}
+
+/****
+***
+** @breif this function purpose is an upgrade to findTheClosingBracket normal
+** @breif to get the postion of closed bracket searching for from a specific bracket
+** @param1 it takes the string to get its close bracket
+** @param2 the postion of the open bracket
+** @param3 the kind of bracket
+** @return the postion of closed bracket
+***
+****/
+int   Matlab::findTheClosingBracketFromAspecificPostion(string s, int PositonOfOpenBracket,char q )
+ {
+    // s="6456456 ?/[645]586";
+     string part ;
+     // PositonOfOpenBracket=s.find('[');
+     //part="[645]586"
+     part =s.substr( PositonOfOpenBracket   );
+     int     endingpostion= findTheClosingBracket(part,q);
+     return endingpostion+PositonOfOpenBracket ;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //returns 1 if the negative sign is not a separate operation ex:(-5+3)
 bool Matlab::skipNegativeSign(string s,int pos)
 {
@@ -2178,3 +2431,4 @@ string Matlab::correctSigns(string s)
     }
     return s;
 }
+

@@ -22,7 +22,10 @@ private:
         string getInstructionWithoutExpressions(string instruction);
         string getReadyInstruction(string instruction,vector<Matlab>& savedMatrices);
         void trimAllSpaces(string &s);
+        void trimAllSpacesExceptMatrix(string &s);
         string dealWithBrackets(string complexString);
+
+ int   findTheClosingBracketFromAspecificPostion(string s, int PositonOfOpenBracket,char q ) ;
 
 
 

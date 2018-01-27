@@ -1617,15 +1617,22 @@ CMatrix CMatrix::power(double number_double )
 {
     if(number_double==-1)
     {
-        CMatrix x( nR,nC );
-        x  = getInverse();
+        CMatrix x( nR , nC );
+        x  =  getInverse();
         return x;
     }
 
+    int sign =1;
+    if(  number_double<0 )
+    {
+        sign=-1;
+        number_double*=-1;
+    }
     CMatrix result( nR,nC,MI_EYE  );
     int number_int=number_double;
     if(number_double-number_int>0)
     {
+       // cout<<"here "<<sign<<endl;
         //then num contains fraction so
         if(nR!=1 || nC!=1 )
         {
@@ -1634,10 +1641,13 @@ CMatrix CMatrix::power(double number_double )
             CMatrix v (1,1) ;
             return v;
         }
+        number_double*=sign;
         result.values[0][0] = values[0][0].power(number_double);
+        return result;
     }
     else
     {
+
         while (number_int)
         {
             if (number_int & 1)
@@ -1646,7 +1656,17 @@ CMatrix CMatrix::power(double number_double )
             *this *= *this;
         }
     }
-    return result ;
+
+
+    if(sign==1)
+        return result ;
+    else
+        return result.getInverse() ;
+
+
+
+
+
 }
 
 
