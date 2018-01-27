@@ -2482,7 +2482,7 @@ string Matlab:: handleImplicitConcatinationFromRight(string instruction )
 
                     primary= instruction.substr(Begin+firstSemicolon+1,start-(End));// the part of the string that has been already modified
                     secondary=instruction.substr(0,Begin+firstSemicolon+1);// the part of the string that is not modified yet
-                   return  handleImplicitConcatinationFromRight(secondary)+primary.substr(0,primary.length()-1);
+                   return handleImplicitConcatinationFromRight(secondary)+primary.substr(0,primary.length()-1);
                    }
                   else
                   {
@@ -2496,7 +2496,7 @@ string Matlab:: handleImplicitConcatinationFromRight(string instruction )
                       instruction.insert(Begin+1,"[");
                       primary=instruction.substr(Begin+1);
                       secondary= instruction.substr(0,Begin+1);
-                      return dealWithConcatenation(handleImplicitConcatinationFromRight(secondary )+primary.substr(0,primary.length()-1));
+                      return  handleImplicitConcatinationFromRight(secondary )+primary.substr(0,primary.length()-1);
                      }}
                   }
               }
