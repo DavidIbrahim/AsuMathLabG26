@@ -411,7 +411,7 @@ string Matlab::getInstructionWithoutExpressions(string instruction)
         }
     }
     simplifiedInstruction=correctSigns(simplifiedInstruction);
-   // cout<<simplifiedInstruction<<endl;
+   //cout<<simplifiedInstruction<<endl;
     //dealing with * & /
     for(int i=0; i<simplifiedInstruction.length(); i++)
     {
@@ -423,7 +423,7 @@ string Matlab::getInstructionWithoutExpressions(string instruction)
         }
     }
     simplifiedInstruction=correctSigns(simplifiedInstruction);
-   // cout<<simplifiedInstruction<<endl;
+   //cout<<simplifiedInstruction<<endl;
     //dealing with + & -
     for(int i=0; i<simplifiedInstruction.length(); i++)
     {
@@ -453,16 +453,16 @@ string Matlab::getReadyInstruction(string instruction,vector<Matlab>& savedMatri
    // cout<<instruction<<endl;
 
     instruction=getInstructionWithoutMatlabNames(instruction,savedMatrices);
-    cout<<instruction<<endl;
+    //cout<<instruction<<endl;
     instruction=getInstructionWithoutSpecialMatrices(instruction);
-    cout<<instruction<<endl;
+    //cout<<instruction<<endl;
     instruction=getInstructionWithoutExpressions(instruction);
-    cout<<instruction<<endl;
+    //cout<<instruction<<endl;
     instruction=getInstructionWithoutFunctions(instruction);
-    cout<<instruction<<endl;
+    //cout<<instruction<<endl;
     //after removing functions we need another simplification
     instruction=getInstructionWithoutExpressions(instruction);
-    cout<<instruction<<endl;
+    //cout<<instruction<<endl;
     instruction=getStringMatrix(instruction);
     //cout<<instruction<<endl;
     return instruction;
@@ -478,9 +478,38 @@ string Matlab::getReadyInstruction(string instruction,vector<Matlab>& savedMatri
 */
 Matlab Matlab::executeInstruction(string instruction,vector<Matlab>& savedMatrices)
 {
-    instruction = getReadyInstruction(instruction,savedMatrices);
+    int pos = instruction.find("=");
+    //cout<< pos;
+    string name = instruction.substr(0,pos-1);
+    //cout <<name;
+    string mat = instruction.substr(pos+2);
+    //cout<<mat<<endl;
+    mat = getReadyInstruction(mat,savedMatrices);
 
-    return savedMatrices[0];
+    return updateVector(name,mat,savedMatrices);
+}
+
+/**
+* this fn updates the database and returns the updated Matlab object
+* @param Matrix name
+* @param Matrix value
+* @param savedMatrices the vector where all Matlab objects are stored
+  @return Matlab object
+*/
+
+Matlab Matlab::updateVector(string name, string mat, vector<Matlab>& savedMatrices)
+{
+    for (int i = 0; i<savedMatrices.size();i++)
+    {
+        if(savedMatrices[i].getName()==name)
+        {
+            savedMatrices[i] =  Matlab(name,CMatrix(mat));
+            return savedMatrices[i];
+        }
+    }
+
+ savedMatrices.push_back(Matlab(name,CMatrix(mat)));
+return savedMatrices[savedMatrices.size()-1];
 }
 
 Matlab::Matlab()
@@ -536,6 +565,21 @@ string Matlab::getString()
 
     return name+" = "+matrix.getString2();
 }
+
+
+/**
+* Prints the Matlab object
+*/
+
+void Matlab::print()
+{
+
+    cout << name<< " =" <<endl;
+    cout << matrix.getString();
+    return ;
+}
+
+
 
 /** @brief simplify the expression to the final string value
 *
@@ -2377,7 +2421,7 @@ void Matlab:: trimAllSpacesExceptMatrix(string & s)
         }
         else if( s[i] == '[')
         {
-            cout<<"here "<<i<<endingpostion<<endl;
+            //cout<<"here "<<i<<endingpostion<<endl;
 
             endingpostion= findTheClosingBracketFromAspecificPostion(s,i,'[');
 //            cout<<"here "<<i<<endingpostion<<endl;
