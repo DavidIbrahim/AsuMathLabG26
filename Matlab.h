@@ -21,6 +21,7 @@ private:
         public:
         string getInstructionWithoutExpressions(string instruction);
         string getReadyInstruction(string instruction,vector<Matlab>& savedMatrices);
+        Matlab executeInstruction(string instruction,vector<Matlab>& savedMatrices);
         void trimAllSpaces(string &s);
         string dealWithBrackets(string complexString);
 
