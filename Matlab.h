@@ -18,7 +18,7 @@ private:
         string handleImplicitConcatinationFromLeft (string instruction);
         string handleImplicitConcatinationFromRight (string instruction);
 
-
+         string dealWithInsideConcatenation(string instruction);
 
 
         public:
