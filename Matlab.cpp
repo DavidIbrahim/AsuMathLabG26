@@ -2488,11 +2488,14 @@ string Matlab:: handleImplicitConcatinationFromRight(string instruction )
                     // string between2 = instruction.substr()
                      for(int j=0;j<between.length();j++)
                      {
+                         cout<<between<<endl;
+                         if((between[j]!=']')&&(between[j]!=' '))
+                     {
                       instruction.insert(start,"]");
                       instruction.insert(Begin+1,"[");
                       primary=instruction.substr(Begin+1);
                       secondary= instruction.substr(0,Begin+1);
-                      return handleImplicitConcatinationFromRight(secondary )+primary.substr(0,primary.length()-1);
+                      return handleImplicitConcatinationFromRight(secondary )+primary.substr(0,primary.length()-1);}
                      }
                   }
               }
