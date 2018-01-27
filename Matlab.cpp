@@ -448,6 +448,7 @@ string Matlab::getInstructionWithoutExpressions(string instruction)
 */
 string Matlab::getReadyInstruction(string instruction,vector<Matlab>& savedMatrices)
 {
+    trimAllSpacesExceptMatrix(instruction);
    // cout<<instruction<<endl;
     instruction=getInstructionWithoutMatlabNames(instruction,savedMatrices);
     cout<<instruction<<endl;
