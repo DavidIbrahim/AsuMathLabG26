@@ -2489,6 +2489,7 @@ string Matlab::correctSigns(string s)
     return s;
 }
 
+
 string Matlab:: handleImplicitConcatinationFromRight(string instruction )
 {
     string primary, secondary;
@@ -2519,24 +2520,25 @@ string Matlab:: handleImplicitConcatinationFromRight(string instruction )
                     instruction.insert(start,"]");
                     instruction.insert(Begin+1+firstSemicolon+1,"[");
 
-                    primary= instruction.substr(End+firstSemicolon+3,start-(End));// the part of the string that has been already modified
-                    secondary=instruction.substr(0,End+firstSemicolon+3);// the part of the string that is not modified yet
-                    return  handleImplicitConcatinationFromRight(secondary)+primary.substr(0,primary.length()-1);
-                }
-                else
-                {
+                    primary= instruction.substr(Begin+firstSemicolon+1,start-(End));// the part of the string that has been already modified
+                    secondary=instruction.substr(0,Begin+firstSemicolon+1);// the part of the string that is not modified yet
+                   return handleImplicitConcatinationFromRight(secondary)+primary.substr(0,primary.length()-1);
+                   }
+                  else
+                  {
                     // string between2 = instruction.substr()
 
                      for(int j=0;j<between.length();j++)
                      {
-                         if((between[j]!=']')&&(between[j]!=' '))
+                          if((between[j]!=']')&&(between[j]!=' '))
                      {
+
                       instruction.insert(start,"]");
                       instruction.insert(Begin+1,"[");
                       primary=instruction.substr(Begin+1);
                       secondary= instruction.substr(0,Begin+1);
-                      return handleImplicitConcatinationFromRight(secondary )+primary.substr(0,primary.length()-1);}
-                     }
+                      return  handleImplicitConcatinationFromRight(secondary )+primary.substr(0,primary.length()-1);
+                     }}
                   }
               }
            }
