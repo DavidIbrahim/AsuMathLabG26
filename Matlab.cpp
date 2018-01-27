@@ -2448,3 +2448,107 @@ string Matlab::correctSigns(string s)
     return s;
 }
 
+string Matlab:: handleImplicitConcatinationFromRight(string instruction )
+{
+   string primary , secondary;
+   size_t start;
+   instruction = instruction+"]";
+   /////////first stage converts all commas to spaces .
+   for(int i=0;i<instruction.length();i++)
+   {if (instruction[i]==',')
+    instruction[i]=' ';
+   }
+   ////////second stage check for matrix between two semi-colons
+    for(int i=0;i<instruction.length();i++)
+    {
+
+           if (instruction[i]==']'&&instruction[i-1]!=']')
+           {
+              start=i;
+              size_t  Begin ,End;
+              Begin =instruction.rfind("]",start-1);
+              End =instruction.rfind("[",start-1);//first occurence of "]"
+              if (Begin!=std::string::npos && Begin>End)
+              {
+                  string between = instruction.substr(Begin+1,(start-(Begin)));// the non-matrix string
+                  size_t firstSemicolon = between.rfind(";",start-1);
+                  if(firstSemicolon!=std::string::npos)// to check that there is vertical conc.
+                  {
+                       instruction.insert(start,"]");
+                       instruction.insert(Begin+1+firstSemicolon+1,"[");
+
+                    primary= instruction.substr(End+firstSemicolon+3,start-(End));// the part of the string that has been already modified
+                    secondary=instruction.substr(0,End+firstSemicolon+3);// the part of the string that is not modified yet
+                   return  handleImplicitConcatinationFromRight(secondary)+primary.substr(0,primary.length()-1);
+                   }
+                  else
+                  {
+                    // string between2 = instruction.substr()
+                     for(int j=0;j<between.length();j++)
+                     {
+                      instruction.insert(start,"]");
+                      instruction.insert(Begin+1,"[");
+                      primary=instruction.substr(Begin+1);
+                      secondary= instruction.substr(0,Begin+1);
+                      return handleImplicitConcatinationFromRight(secondary )+primary.substr(0,primary.length()-1);
+                     }
+                  }
+              }
+           }
+    }
+        instruction=instruction.substr(0,(instruction.length()-1));
+    return instruction;
+}
+string Matlab:: handleImplicitConcatinationFromLeft(string instruction )
+{
+    instruction="["+instruction;
+    string primary , secondary;
+    size_t start;
+     for(int i=0;i<instruction.length();i++)
+   {if (instruction[i]==',')
+    instruction[i]=' ';
+   }
+    ////////second stage check for matrix between two semi-colons
+    for(int i=0;i<instruction.length();i++)
+    {
+        if (instruction[i]=='['&&instruction[i+1]!='[')
+           {
+              start=i;
+              size_t  Begin ,End;
+              Begin =instruction.find("[",start+1);// first occurence of "[" after i.
+              End =instruction.find("]",start+1);//first occurence of "]" after i.
+              if (Begin!=std::string::npos && Begin<End)// to check that there is implicit concatination.
+              {
+
+                  string between = instruction.substr(start+1,((Begin)-(start+1)));// the non-matrix string
+                  size_t firstSemicolon = between.find(";",0);
+                  if(firstSemicolon!=std::string::npos)// to check that there is vertical conc.
+                  {
+                       instruction.insert(start+1,"[");
+                       instruction.insert(start+1+firstSemicolon+1,"]");//the one added because string length increase by one from the previous line
+                       primary= instruction.substr(1,start+1+firstSemicolon+2);// the part of the string that has been already modified
+                       secondary=instruction.substr(start+1+firstSemicolon+3);// the part of the string that is not modified yet
+                       return  primary +handleImplicitConcatinationFromLeft(secondary);
+                   }
+                  else
+                  {
+                      for(int j=0;j<between.length();j++)
+                      {
+                          if (between[j]!=' ')
+                            {
+                                instruction.insert(start+1,"[");
+                                instruction.insert(Begin,"] ");
+                                primary=instruction.substr(1,End);
+                                secondary= instruction.substr(End+1);
+                                return primary +handleImplicitConcatinationFromLeft(secondary);
+                            }
+                      }
+                   }
+           }
+       }
+    }
+             instruction=instruction.substr(1);
+             return instruction;
+}
+
+
