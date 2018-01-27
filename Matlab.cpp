@@ -147,7 +147,7 @@ bool Matlab::checkSignsForMatrixOperations(string s,int pos)
                 else
                     break;
             }
-            if(checkStringForMatrix(temp))
+            if(checkStringForMatrix(temp)||checkInstructionForFunctions(temp))
                 return 1;
             temp="";
             for(int i=pos-1; i>=0; i--)
@@ -157,7 +157,7 @@ bool Matlab::checkSignsForMatrixOperations(string s,int pos)
                 else
                     break;
             }
-            if(checkStringForMatrix(temp))
+            if(checkStringForMatrix(temp)||checkInstructionForFunctions(temp))
                 return 1;
             return 0;
         }
@@ -471,14 +471,20 @@ string Matlab::getInstructionWithoutExpressions(string instruction)
 */
 string Matlab::getReadyInstruction(string instruction,vector<Matlab>& savedMatrices)
 {
+   // cout<<instruction<<endl;
     instruction=getInstructionWithoutMatlabNames(instruction,savedMatrices);
+    //cout<<instruction<<endl;
     instruction=getInstructionWithoutSpecialMatrices(instruction);
+    //cout<<instruction<<endl;
     instruction=getInstructionWithoutExpressions(instruction);
+    //cout<<instruction<<endl;
     instruction=getInstructionWithoutFunctions(instruction);
+    //cout<<instruction<<endl;
     //after removing functions we need another simplification
-    instruction=getInstructionWithoutConcatenation(instruction);
     instruction=getInstructionWithoutExpressions(instruction);
+    //cout<<instruction<<endl;
     instruction=getStringMatrix(instruction);
+    //cout<<instruction<<endl;
     return instruction;
 }
 
