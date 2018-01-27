@@ -411,7 +411,7 @@ string Matlab::getInstructionWithoutExpressions(string instruction)
         }
     }
     simplifiedInstruction=correctSigns(simplifiedInstruction);
-   // cout<<simplifiedInstruction<<endl;
+    // cout<<simplifiedInstruction<<endl;
     //dealing with * & /
     for(int i=0; i<simplifiedInstruction.length(); i++)
     {
@@ -423,7 +423,7 @@ string Matlab::getInstructionWithoutExpressions(string instruction)
         }
     }
     simplifiedInstruction=correctSigns(simplifiedInstruction);
-   // cout<<simplifiedInstruction<<endl;
+    // cout<<simplifiedInstruction<<endl;
     //dealing with + & -
     for(int i=0; i<simplifiedInstruction.length(); i++)
     {
@@ -449,7 +449,7 @@ string Matlab::getInstructionWithoutExpressions(string instruction)
 string Matlab::getReadyInstruction(string instruction,vector<Matlab>& savedMatrices)
 {
     trimAllSpacesExceptMatrix(instruction);
-   // cout<<instruction<<endl;
+    // cout<<instruction<<endl;
     instruction=getInstructionWithoutMatlabNames(instruction,savedMatrices);
     cout<<instruction<<endl;
     instruction=getInstructionWithoutSpecialMatrices(instruction);
@@ -934,204 +934,177 @@ string Matlab::calcSimpleExpression(string s)
 
 string Matlab::solvetrignometry(string s)
 {
-	//cout << "why";
+    //cout << "why";
 //	s = "sqrt(4)+4";
-	string constants[17] =
-	{ "asinh","acosh","atanh"
-		,  "asin" ,"acos" ,"atan"
-		,  "sinh" ,"cosh" ,"tanh"
-		,  "sin"  ,"cos"  ,"tan"
-		,  "log10","log"
-		,  "ceil" , "floor"
-		,  "sqrt" };
+    string constants[17] =
+    {
+        "asinh","acosh","atanh"
+        ,  "asin","acos","atan"
+        ,  "sinh","cosh","tanh"
+        ,  "sin","cos","tan"
+        ,  "log10","log"
+        ,  "ceil", "floor"
+        ,  "sqrt"
+    };
 
-	for (int i = 0; i < 17; i++)
-	{
-		//ex: s= "5+4+3+sin(4+5)+6"
-		int pos = s.find(constants[i]);//finds the first letter s here pos = 6
-		if (pos != string::npos)
-		{
-			char sign;
+    for (int i = 0; i < 17; i++)
+    {
+        //ex: s= "5+4+3+sin(4+5)+6"
+        int pos = s.find(constants[i]);//finds the first letter s here pos = 6
+        if (pos != string::npos)
+        {
+            char sign;
 
-			if (pos>0)
-				sign = s[pos - 1];
-			 else
-				 sign = 'not';
-
-
-			//to get the function
-
-			string strafter = s.substr(pos + constants[i].length(), s.length() - pos);//(4+5)+6
-			string Sbefore;
-			if (pos > 0)
-				Sbefore = s.substr(0, pos - 1); //5+4+3
-			else
-				Sbefore = "";
-				// get the position of the in function
-			int startingPosisition = strafter.find('(');//0
-			int endingPosition = findTheClosingBracket(strafter, '(');//4
-
-																	  //to return it back later
-			string Safter = strafter.substr(endingPosition + 1, strafter.length() - endingPosition); //+6
-																									 // get the brackets alone and get their  value
-			string calc = strafter.substr(startingPosisition + 1, endingPosition - startingPosisition - 1); //(4+5)
-		    calc = getStringValue( calc );//9
-
-																											// get the number in double
-			stringstream SSafter, ssresult;
-			string Sresult;
-			double number, Dresult;
-			SSafter << calc;//9
-			SSafter >> number;//9
-							  // get the trig of it
-			switch (i)
-			{
-			case 0:
-				Dresult = asinh(number);
-				break;
-			case 1:
-				Dresult = acosh(number);
-				break;
-			case 2:
-				Dresult = atanh(number);
-				break;
-			case 3:
-				Dresult = asin(number);
-				break;
-			case 4:
-				Dresult = acos(number);
-				break;
-			case 5:
-				Dresult = atan(number);
-				break;
-			case 6:
-				Dresult = sinh(number);
-				break;
-			case 7:
-				Dresult = cosh(number);
-				break;
-			case 8:
-				Dresult = tanh(number);
-				break;
-			case 9:
-				Dresult = sin(number);
-				break;//sin(9) = .1564....
-			case 10:
-				Dresult = cos(number);
-				break;
-			case 11:
-				Dresult = tan(number);
-				break;
-			case 12:
-				Dresult = log10(number);
-				break;
-			case 13:
-				Dresult = log(number);
-				break;
-			case 14:
-				Dresult = ceil(number);
-				break;
-			case 15:
-				Dresult = floor(number);
-				break;
-			case 16:
-				Dresult = sqrt(number);
-				break;
-
-			}
-			// return the answer to string
-			ssresult << Dresult;//.1564
-			ssresult >> std::fixed >> Sresult;//.1564
-
-           // put the string back together
+            if (pos>0)
+                sign = s[pos - 1];
+            else
+                sign = 'not';
 
 
-			string newSign = ""  ;
+            //to get the function
+
+            string strafter = s.substr(pos + constants[i].length(), s.length() - pos);//(4+5)+6
+            string Sbefore;
+            if (pos > 0)
+                Sbefore = s.substr(0, pos - 1); //5+4+3
+            else
+                Sbefore = "";
+            // get the position of the in function
+            int startingPosisition = strafter.find('(');//0
+            int endingPosition = findTheClosingBracket(strafter, '(');//4
+
+            //to return it back later
+            string Safter = strafter.substr(endingPosition + 1, strafter.length() - endingPosition); //+6
+            // get the brackets alone and get their  value
+            string calc = strafter.substr(startingPosisition + 1, endingPosition - startingPosisition - 1); //(4+5)
+            calc = getStringValue( calc );//9
+
+            // get the number in double
+            stringstream SSafter, ssresult;
+            string Sresult;
+            double number, Dresult;
+            SSafter << calc;//9
+            SSafter >> number;//9
+            // get the trig of it
+            switch (i)
+            {
+            case 0:
+                Dresult = asinh(number);
+                break;
+            case 1:
+                Dresult = acosh(number);
+                break;
+            case 2:
+                Dresult = atanh(number);
+                break;
+            case 3:
+                Dresult = asin(number);
+                break;
+            case 4:
+                Dresult = acos(number);
+                break;
+            case 5:
+                Dresult = atan(number);
+                break;
+            case 6:
+                Dresult = sinh(number);
+                break;
+            case 7:
+                Dresult = cosh(number);
+                break;
+            case 8:
+                Dresult = tanh(number);
+                break;
+            case 9:
+                Dresult = sin(number);
+                break;//sin(9) = .1564....
+            case 10:
+                Dresult = cos(number);
+                break;
+            case 11:
+                Dresult = tan(number);
+                break;
+            case 12:
+                Dresult = log10(number);
+                break;
+            case 13:
+                Dresult = log(number);
+                break;
+            case 14:
+                Dresult = ceil(number);
+                break;
+            case 15:
+                Dresult = floor(number);
+                break;
+            case 16:
+                Dresult = sqrt(number);
+                break;
+
+            }
+            // return the answer to string
+            ssresult << Dresult;//.1564
+            ssresult >> std::fixed >> Sresult;//.1564
+
+            // put the string back together
 
 
-
-			if (sign == '-')
-			{
-				if (Sresult[0] == '-')
-					Sresult.erase(0, 1);
-
-				if (Dresult > 0)
-					newSign = '-';
-
-				else if (Dresult < 0)
-				{
-					if (Sbefore[Sbefore.length()-1]=='*'|| Sbefore[Sbefore.length() - 1] == '/')
-					{
-						newSign = "";
-					}
-					else
-						newSign = '+';
-				}
-				else if (Dresult == 0)
-				{
-					newSign = '+';
-				}
+            string newSign = ""  ;
 
 
 
-			}
-			else if (sign == '+')
-			{
-				if (Sresult[0] == '-')
-					Sresult.erase(0, 1);
+            if (sign == '-')
+            {
+                if (Sresult[0] == '-')
+                    Sresult.erase(0, 1);
 
-				if (Dresult > 0)
-				{
-					if (Sbefore[Sbefore.length() - 1] == '*' || Sbefore[Sbefore.length() - 1] == '/')
-					{
-						newSign = "";
-					}
-					else
-						newSign = '+';
-				}
-				else if (Dresult < 0)
-					newSign = '-';
-				else if (Dresult == 0)
-				{
-					if (Sbefore[Sbefore.length() - 1] == '*' || Sbefore[Sbefore.length() - 1] == '/')
-					{
-						newSign = "";
-					}
-					else
-						newSign = '+';
+                if (Dresult > 0)
+                    newSign = '-';
 
-				}
-
-			}
+                else if (Dresult < 0)
+                {
+                    if (Sbefore[Sbefore.length()-1]=='*'|| Sbefore[Sbefore.length() - 1] == '/')
+                    {
+                        newSign = "";
+                    }
+                    else
+                        newSign = '+';
+                }
+                else if (Dresult == 0)
+                {
+                    newSign = '+';
+                }
 
 
 
+            }
+            else if (sign == '+')
+            {
+                if (Sresult[0] == '-')
+                    Sresult.erase(0, 1);
 
+                if (Dresult > 0)
+                {
+                    if (Sbefore[Sbefore.length() - 1] == '*' || Sbefore[Sbefore.length() - 1] == '/')
+                    {
+                        newSign = "";
+                    }
+                    else
+                        newSign = '+';
+                }
+                else if (Dresult < 0)
+                    newSign = '-';
+                else if (Dresult == 0)
+                {
+                    if (Sbefore[Sbefore.length() - 1] == '*' || Sbefore[Sbefore.length() - 1] == '/')
+                    {
+                        newSign = "";
+                    }
+                    else
+                        newSign = '+';
 
+                }
 
-
-			else if (sign == '*')
-			{
-
-				newSign = '*';
-
-
-
-			}
-
-			else if (sign == '/')
-			{
-				newSign = '/';
-
-
-			}
-
-
-
-
-
-
-			s = Sbefore + newSign + Sresult + Safter;//5+4+3+.1564+6
+            }
 
 
 
@@ -1139,36 +1112,65 @@ string Matlab::solvetrignometry(string s)
 
 
 
+            else if (sign == '*')
+            {
+
+                newSign = '*';
 
 
 
-/*
-			if (sign == '-' || sign == '+')
-			{
-				char newSign = (Dresult >  0 && sign == '+') ? '+' : '-';
-				if (Dresult<0) Sresult.erase(0, 1); // to delete the negative sign
-				s = Sbefore + newSign + Sresult + Safter;//5+4+3+.1564+6
-			}
-			else
-			{
-				s = Sresult + Safter;
-			}
+            }
+
+            else if (sign == '/')
+            {
+                newSign = '/';
 
 
-			*/
-
-			// search again
-			i--;
+            }
 
 
 
-	}
 
 
-	}
+
+            s = Sbefore + newSign + Sresult + Safter;//5+4+3+.1564+6
 
 
-	return  s;
+
+
+
+
+
+
+
+
+            /*
+            			if (sign == '-' || sign == '+')
+            			{
+            				char newSign = (Dresult >  0 && sign == '+') ? '+' : '-';
+            				if (Dresult<0) Sresult.erase(0, 1); // to delete the negative sign
+            				s = Sbefore + newSign + Sresult + Safter;//5+4+3+.1564+6
+            			}
+            			else
+            			{
+            				s = Sresult + Safter;
+            			}
+
+
+            			*/
+
+            // search again
+            i--;
+
+
+
+        }
+
+
+    }
+
+
+    return  s;
 }
 
 
@@ -1505,6 +1507,7 @@ string Matlab::extractStringInsideFunction(string instruction)
 
 string Matlab::getStringMatrix(string complexString)
 {
+    complexString = dealWithInsideConcatenation(complexString);
 
     complexString = dealwithSpecialFunctions(complexString);
     string oldString = "";
@@ -1514,10 +1517,10 @@ string Matlab::getStringMatrix(string complexString)
         complexString = dealwithOperators(complexString);
     }
     oldString = "";
- while(oldString != complexString)
+    while(oldString != complexString)
     {
         oldString= complexString;
-    complexString = dealWithConcatenation(complexString);
+        complexString = dealWithConcatenation(complexString);
     }
 
 
@@ -1738,7 +1741,7 @@ string Matlab::dealwithOperators(string instruction)
     }
 
 
-      /// matrix ./ matrix operator
+    /// matrix ./ matrix operator
     operator_ = "./";
     pos = 0;
     while(pos!=string::npos)
@@ -1917,7 +1920,7 @@ string Matlab :: dealWithAddAndSubOperators(string instruction, string operator_
             leftMatrix = leftMatrix + rightMatrix;
         else if(operator_=="-"||operator_==".-")
             leftMatrix = leftMatrix - rightMatrix;
-         else if(operator_==".*")
+        else if(operator_==".*")
             leftMatrix = leftMatrix.dot_mult(rightMatrix);
 
 
@@ -2010,7 +2013,7 @@ string Matlab :: dealWithAddAndSubOperators(string instruction, string operator_
             rightMatrix = rightMatrix- atof(numberMultiplied.c_str());
         else if(operator_==".*")
             rightMatrix = rightMatrix * atof(numberMultiplied.c_str());
-          else if(operator_=="/")
+        else if(operator_=="/")
             rightMatrix =  atof(numberMultiplied.c_str()) /rightMatrix ;
 
 
@@ -2087,7 +2090,7 @@ void Matlab::dealWithConcatenationHelperFn(string &instruction,string s)
 
     }
 
-   // if(!isThereSquareBracketsContainingTheConcatanatedMatrix && isThereConcatenation) throw("syntax error");
+    // if(!isThereSquareBracketsContainingTheConcatanatedMatrix && isThereConcatenation) throw("syntax error");
 
 
 }
@@ -2102,12 +2105,49 @@ string Matlab::dealWithConcatenation(string instruction)
     dealWithConcatenationHelperFn(instruction,"];[");
     dealWithConcatenationHelperFn(instruction,"] [");
     dealWithConcatenationHelperFn(instruction,"],[");
+     dealWithConcatenationHelperFn(instruction,"] ; [");
+    dealWithConcatenationHelperFn(instruction,"]  [");
+    dealWithConcatenationHelperFn(instruction,"] , [");
+     dealWithConcatenationHelperFn(instruction,"]; [");
+    dealWithConcatenationHelperFn(instruction,"]   [");
+    dealWithConcatenationHelperFn(instruction,"], [");
+     dealWithConcatenationHelperFn(instruction,"] ;[");
+    dealWithConcatenationHelperFn(instruction,"]    [");
+    dealWithConcatenationHelperFn(instruction,"] ,[");
     return instruction;
 
 }
 
 
+string Matlab:: dealWithInsideConcatenation(string instruction)
+{
 
+    int openingBracket =0;
+    int closingBracket = 0;
+    while (openingBracket != -1)
+    {
+        openingBracket = instruction.find("[",closingBracket);
+        closingBracket = findTheClosingBracket(instruction,'[',openingBracket);
+        string matrixString = "";
+        if(openingBracket!=-1,closingBracket!=-1)
+             matrixString = instruction.substr(openingBracket,closingBracket-openingBracket+1);
+        else break;
+
+        bool isThereMatrixInside = checkStringForMatrix(matrixString.substr(1, matrixString.size() -2));
+        if(isThereMatrixInside)
+        {     string   solvedMatrixString = handleImplicitConcatinationFromRight(matrixString);
+            solvedMatrixString = handleImplicitConcatinationFromLeft(matrixString);
+
+            replaceString(instruction,matrixString,solvedMatrixString);
+
+        }
+
+
+    }
+
+    return instruction;
+
+}
 
 string Matlab::findTheMatrix(string instruction,bool openingBracket,int pos)
 {
@@ -2380,10 +2420,10 @@ void Matlab:: trimAllSpacesExceptMatrix(string & s)
             endingpostion= findTheClosingBracketFromAspecificPostion(s,i,'[');
 //            cout<<"here "<<i<<endingpostion<<endl;
 
-             i=endingpostion;
+            i=endingpostion;
         }
     }
- //   cout<<s<<endl;
+//   cout<<s<<endl;
 }
 
 /****
@@ -2397,14 +2437,14 @@ void Matlab:: trimAllSpacesExceptMatrix(string & s)
 ***
 ****/
 int   Matlab::findTheClosingBracketFromAspecificPostion(string s, int PositonOfOpenBracket,char q )
- {
+{
     // s="6456456 ?/[645]586";
-     string part ;
-     // PositonOfOpenBracket=s.find('[');
-     //part="[645]586"
-     part =s.substr( PositonOfOpenBracket   );
-     int     endingpostion= findTheClosingBracket(part,q);
-     return endingpostion+PositonOfOpenBracket ;
+    string part ;
+    // PositonOfOpenBracket=s.find('[');
+    //part="[645]586"
+    part =s.substr( PositonOfOpenBracket   );
+    int     endingpostion= findTheClosingBracket(part,q);
+    return endingpostion+PositonOfOpenBracket ;
 }
 
 
@@ -2436,13 +2476,13 @@ string Matlab::correctSigns(string s)
     while(1)
     {
         if(s.find("+-")!=-1)
-        s.replace(s.find("+-"),2,"-");
+            s.replace(s.find("+-"),2,"-");
         else break;
     }
     while(1)
     {
         if(s.find("--")!=-1)
-        s.replace(s.find("--"),2,"+");
+            s.replace(s.find("--"),2,"+");
         else break;
     }
     return s;
@@ -2450,105 +2490,107 @@ string Matlab::correctSigns(string s)
 
 string Matlab:: handleImplicitConcatinationFromRight(string instruction )
 {
-   string primary , secondary;
-   size_t start;
-   instruction = instruction+"]";
-   /////////first stage converts all commas to spaces .
-   for(int i=0;i<instruction.length();i++)
-   {if (instruction[i]==',')
-    instruction[i]=' ';
-   }
-   ////////second stage check for matrix between two semi-colons
-    for(int i=0;i<instruction.length();i++)
+    string primary, secondary;
+    size_t start;
+    instruction = instruction+"]";
+    /////////first stage converts all commas to spaces .
+    for(int i=0; i<instruction.length(); i++)
+    {
+        if (instruction[i]==',')
+            instruction[i]=' ';
+    }
+    ////////second stage check for matrix between two semi-colons
+    for(int i=0; i<instruction.length(); i++)
     {
 
-           if (instruction[i]==']'&&instruction[i-1]!=']')
-           {
-              start=i;
-              size_t  Begin ,End;
-              Begin =instruction.rfind("]",start-1);
-              End =instruction.rfind("[",start-1);//first occurence of "]"
-              if (Begin!=std::string::npos && Begin>End)
-              {
-                  string between = instruction.substr(Begin+1,(start-(Begin)));// the non-matrix string
-                  size_t firstSemicolon = between.rfind(";",start-1);
-                  if(firstSemicolon!=std::string::npos)// to check that there is vertical conc.
-                  {
-                       instruction.insert(start,"]");
-                       instruction.insert(Begin+1+firstSemicolon+1,"[");
+        if (instruction[i]==']'&&instruction[i-1]!=']')
+        {
+            start=i;
+            size_t  Begin,End;
+            Begin =instruction.rfind("]",start-1);
+            End =instruction.rfind("[",start-1);//first occurence of "]"
+            if (Begin!=std::string::npos && Begin>End)
+            {
+                string between = instruction.substr(Begin+1,(start-(Begin)));// the non-matrix string
+                size_t firstSemicolon = between.rfind(";",start-1);
+                if(firstSemicolon!=std::string::npos)// to check that there is vertical conc.
+                {
+                    instruction.insert(start,"]");
+                    instruction.insert(Begin+1+firstSemicolon+1,"[");
 
                     primary= instruction.substr(End+firstSemicolon+3,start-(End));// the part of the string that has been already modified
                     secondary=instruction.substr(0,End+firstSemicolon+3);// the part of the string that is not modified yet
-                   return  handleImplicitConcatinationFromRight(secondary)+primary.substr(0,primary.length()-1);
-                   }
-                  else
-                  {
+                    return  handleImplicitConcatinationFromRight(secondary)+primary.substr(0,primary.length()-1);
+                }
+                else
+                {
                     // string between2 = instruction.substr()
-                     for(int j=0;j<between.length();j++)
-                     {
-                      instruction.insert(start,"]");
-                      instruction.insert(Begin+1,"[");
-                      primary=instruction.substr(Begin+1);
-                      secondary= instruction.substr(0,Begin+1);
-                      return handleImplicitConcatinationFromRight(secondary )+primary.substr(0,primary.length()-1);
-                     }
-                  }
-              }
-           }
+                    for(int j=0; j<between.length(); j++)
+                    {
+                        instruction.insert(start,"]");
+                        instruction.insert(Begin+1,"[");
+                        primary=instruction.substr(Begin+1);
+                        secondary= instruction.substr(0,Begin+1);
+                        return handleImplicitConcatinationFromRight(secondary )+primary.substr(0,primary.length()-1);
+                    }
+                }
+            }
+        }
     }
-        instruction=instruction.substr(0,(instruction.length()-1));
+    instruction=instruction.substr(0,(instruction.length()-1));
     return instruction;
 }
 string Matlab:: handleImplicitConcatinationFromLeft(string instruction )
 {
     instruction="["+instruction;
-    string primary , secondary;
+    string primary, secondary;
     size_t start;
-     for(int i=0;i<instruction.length();i++)
-   {if (instruction[i]==',')
-    instruction[i]=' ';
-   }
+    for(int i=0; i<instruction.length(); i++)
+    {
+        if (instruction[i]==',')
+            instruction[i]=' ';
+    }
     ////////second stage check for matrix between two semi-colons
-    for(int i=0;i<instruction.length();i++)
+    for(int i=0; i<instruction.length(); i++)
     {
         if (instruction[i]=='['&&instruction[i+1]!='[')
-           {
-              start=i;
-              size_t  Begin ,End;
-              Begin =instruction.find("[",start+1);// first occurence of "[" after i.
-              End =instruction.find("]",start+1);//first occurence of "]" after i.
-              if (Begin!=std::string::npos && Begin<End)// to check that there is implicit concatination.
-              {
+        {
+            start=i;
+            size_t  Begin,End;
+            Begin =instruction.find("[",start+1);// first occurence of "[" after i.
+            End =instruction.find("]",start+1);//first occurence of "]" after i.
+            if (Begin!=std::string::npos && Begin<End)// to check that there is implicit concatination.
+            {
 
-                  string between = instruction.substr(start+1,((Begin)-(start+1)));// the non-matrix string
-                  size_t firstSemicolon = between.find(";",0);
-                  if(firstSemicolon!=std::string::npos)// to check that there is vertical conc.
-                  {
-                       instruction.insert(start+1,"[");
-                       instruction.insert(start+1+firstSemicolon+1,"]");//the one added because string length increase by one from the previous line
-                       primary= instruction.substr(1,start+1+firstSemicolon+2);// the part of the string that has been already modified
-                       secondary=instruction.substr(start+1+firstSemicolon+3);// the part of the string that is not modified yet
-                       return  primary +handleImplicitConcatinationFromLeft(secondary);
-                   }
-                  else
-                  {
-                      for(int j=0;j<between.length();j++)
-                      {
-                          if (between[j]!=' ')
-                            {
-                                instruction.insert(start+1,"[");
-                                instruction.insert(Begin,"] ");
-                                primary=instruction.substr(1,End);
-                                secondary= instruction.substr(End+1);
-                                return primary +handleImplicitConcatinationFromLeft(secondary);
-                            }
-                      }
-                   }
-           }
-       }
+                string between = instruction.substr(start+1,((Begin)-(start+1)));// the non-matrix string
+                size_t firstSemicolon = between.find(";",0);
+                if(firstSemicolon!=std::string::npos)// to check that there is vertical conc.
+                {
+                    instruction.insert(start+1,"[");
+                    instruction.insert(start+1+firstSemicolon+1,"]");//the one added because string length increase by one from the previous line
+                    primary= instruction.substr(1,start+1+firstSemicolon+2);// the part of the string that has been already modified
+                    secondary=instruction.substr(start+1+firstSemicolon+3);// the part of the string that is not modified yet
+                    return  primary +handleImplicitConcatinationFromLeft(secondary);
+                }
+                else
+                {
+                    for(int j=0; j<between.length(); j++)
+                    {
+                        if (between[j]!=' ')
+                        {
+                            instruction.insert(start+1,"[");
+                            instruction.insert(Begin,"] ");
+                            primary=instruction.substr(1,End);
+                            secondary= instruction.substr(End+1);
+                            return primary +handleImplicitConcatinationFromLeft(secondary);
+                        }
+                    }
+                }
+            }
+        }
     }
-             instruction=instruction.substr(1);
-             return instruction;
+    instruction=instruction.substr(1);
+    return instruction;
 }
 
 
