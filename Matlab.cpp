@@ -448,8 +448,9 @@ string Matlab::getInstructionWithoutExpressions(string instruction)
 */
 string Matlab::getReadyInstruction(string instruction,vector<Matlab>& savedMatrices)
 {
+
     trimAllSpacesExceptMatrix(instruction);
-    // cout<<instruction<<endl;
+
     instruction=getInstructionWithoutMatlabNames(instruction,savedMatrices);
     cout<<instruction<<endl;
     instruction=getInstructionWithoutSpecialMatrices(instruction);
@@ -2525,17 +2526,21 @@ string Matlab:: handleImplicitConcatinationFromRight(string instruction )
                 else
                 {
                     // string between2 = instruction.substr()
-                    for(int j=0; j<between.length(); j++)
-                    {
-                        instruction.insert(start,"]");
-                        instruction.insert(Begin+1,"[");
-                        primary=instruction.substr(Begin+1);
-                        secondary= instruction.substr(0,Begin+1);
-                        return handleImplicitConcatinationFromRight(secondary )+primary.substr(0,primary.length()-1);
-                    }
-                }
-            }
-        }
+
+                     for(int j=0;j<between.length();j++)
+                     {
+                         if((between[j]!=']')&&(between[j]!=' '))
+                     {
+                      instruction.insert(start,"]");
+                      instruction.insert(Begin+1,"[");
+                      primary=instruction.substr(Begin+1);
+                      secondary= instruction.substr(0,Begin+1);
+                      return handleImplicitConcatinationFromRight(secondary )+primary.substr(0,primary.length()-1);}
+                     }
+                  }
+              }
+           }
+
     }
     instruction=instruction.substr(0,(instruction.length()-1));
     return instruction;
