@@ -62,20 +62,24 @@ int main(int argc, char*argv[])
         else
             mat_intit = false;
 
-
-        if(mat_intit)
-        {
-            mat+=s;
-            if(mat[mat.length()-1]!=';'&&mat[mat.length()-1]!='[' && mat_cont) mat+=';';
-
-        }
-
+        if(mat_intit) mat+=s;
         if((m.findTheClosingBracket(mat,'[')==string::npos) && mat_intit)
         {
             mat_cont = true;
         }
         else
-            mat_cont =false;
+           mat_cont =false;
+
+
+
+        if(mat_intit)
+        {
+
+            if(mat[mat.length()-1]!=';'&&mat[mat.length()-1]!='[' && mat_cont) mat+=';';
+
+        }
+
+
 
 
         if(mat_cont)continue;
@@ -133,13 +137,17 @@ int main(int argc, char*argv[])
 
         }
 
-
+mat= "";
     }
     CMatrix A ( "[1 2 3;4 5 6;7 8 9;]");
     Matlab m,n,k;
     m = m.executeInstruction("A = 5.5 + 12 * sin(0.4) + 2.2^4",data);
     m = m.executeInstruction("B = [1.2 2.3 A;[1.3 2.4;4.6 1.3],[3.2;7.8]]",data);
-    data[1].print();
+    m = m.executeInstruction("C = [[B [3.4; 2.1; 3.5+9.1]];1.2^3 3+1.2 15/(2.1+10*sin(0.12))  1.2]",data);
+    m = m.executeInstruction("D = rand(4,4)",data);
+    m = m.executeInstruction("Y = (C^3 * sin(1./D))^(0.1)",data);
+
+    data[4].print();
 
     //n.executeInstruction("A = [8.9 7.3 4.8 2.4; 2.3 6.5 8.9 1.2; 4.9 3.8 7.2 7.5; 9.8 3.4 7.5 8.9]",data).print();
 //n.executeInstruction("X = 5",data).print();
