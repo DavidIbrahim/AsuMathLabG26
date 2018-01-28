@@ -19,6 +19,36 @@
 
 
 /**
+*
+* @brief helper methods for validating the user input
+**/
+
+void checkBrackets(string instruction) {
+    int counter1 = 0;
+    int counter2 = 0;
+    for(int i = 0; i<instruction.size(); i++) {
+
+        if(instruction[i]=='(') counter1++;
+        else if(instruction[i]=='[') counter2++;
+        else if(instruction[i]==')') counter1--;
+        else if(instruction[i]==']') counter2--;
+
+    }
+
+    if(counter2 != 0 || counter1 !=0 )  throw 1;
+}
+
+void checkOutput(string output){
+
+    string validOutput = "[ 1234567890]+-.;i"
+
+    for(int i = 0; i<output.size(); i++) {
+
+        if(validOutput.find(output[i]) == -1  ) throw 2;
+    }
+}
+
+/**
  *  @brief: it reverses the string
  *
  *  @brief helper method for getStringValue
