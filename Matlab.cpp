@@ -2190,18 +2190,22 @@ string Matlab::dealWithConcatenation(string instruction)
 {
 
 
-    dealWithConcatenationHelperFn(instruction,"];[");
     dealWithConcatenationHelperFn(instruction,"] [");
     dealWithConcatenationHelperFn(instruction,"],[");
-     dealWithConcatenationHelperFn(instruction,"] ; [");
+    dealWithConcatenationHelperFn(instruction,"];[");
+
     dealWithConcatenationHelperFn(instruction,"]  [");
     dealWithConcatenationHelperFn(instruction,"] , [");
-     dealWithConcatenationHelperFn(instruction,"]; [");
+     dealWithConcatenationHelperFn(instruction,"] ; [");
+
     dealWithConcatenationHelperFn(instruction,"]   [");
     dealWithConcatenationHelperFn(instruction,"], [");
-     dealWithConcatenationHelperFn(instruction,"] ;[");
+     dealWithConcatenationHelperFn(instruction,"]; [");
+
     dealWithConcatenationHelperFn(instruction,"]    [");
     dealWithConcatenationHelperFn(instruction,"] ,[");
+     dealWithConcatenationHelperFn(instruction,"] ;[");
+
     return instruction;
 
 }
@@ -2232,6 +2236,7 @@ string Matlab:: dealWithInsideConcatenation(string instruction)
 
 
     }
+    instruction = dealWithConcatenation(instruction);
 
     return instruction;
 
