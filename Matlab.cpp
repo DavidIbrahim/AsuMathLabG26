@@ -193,7 +193,7 @@ string Matlab::getInstructionWithoutMatlabNames(string instruction,vector<Matlab
     string notVariableNames =" ;[],()+-%^*/.";
     for(int i =0; i<savedMatrices.size(); i++)
     {
-        int position = 1;
+        int position = 0;
         while(true)
         {
 
@@ -203,9 +203,10 @@ string Matlab::getInstructionWithoutMatlabNames(string instruction,vector<Matlab
             {
                 char afterVariableName = instruction[position+currentName.length()];
                 char beforeVariableName = instruction[position-1];
+
                 if((notVariableNames.find(afterVariableName)!=string::npos
                         || afterVariableName =='\0')&&  // ea3ny law el 7rf el abl wa b3d el name
-                        notVariableNames.find(beforeVariableName)!=string::npos)   // tl3o 7aga msh bt3'erle fe asm el variable
+                        (notVariableNames.find(beforeVariableName)!=string::npos || position==0))   // tl3o 7aga msh bt3'erle fe asm el variable
                 {
                     //eb2a dh aked hwa el variable el mtsgl 3ndy fe
                     //current name ... 3lshan mmkn ekon currentName = s
