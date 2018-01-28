@@ -466,6 +466,11 @@ CMatrix CMatrix::operator/(double d)
 }
 
 string CMatrix::getString2(){
+
+     if(nC==1 && nR==1)
+     {
+        return values[0][0];
+     }
      string s="[";
      bool isReal=this->isReal();
      for (int iR = 0; iR < nR; iR++)
