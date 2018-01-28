@@ -1688,6 +1688,9 @@ string Matlab::dealwithOperators(string instruction)
 {
 
 
+    //dealing with transpose ' operator
+
+    instruction = dealWithAddAndSubOperators(instruction,"'");
 
     // first dealing with .^ operator
 
@@ -1902,7 +1905,7 @@ string Matlab::dealwithOperators(string instruction)
     }
 
 
-    instruction = dealWithAddAndSubOperators(instruction,"/");
+   instruction = dealWithAddAndSubOperators(instruction,"/");
 
     /// matrix / matrix operator
     operator_ = '/';
@@ -2002,7 +2005,8 @@ string Matlab :: dealWithAddAndSubOperators(string instruction, string operator_
             leftMatrix = leftMatrix - rightMatrix;
         else if(operator_==".*")
             leftMatrix = leftMatrix.dot_mult(rightMatrix);
-
+        else if(operator_=="/")
+             leftMatrix.div(rightMatrix);
 
 
 
@@ -2059,7 +2063,10 @@ string Matlab :: dealWithAddAndSubOperators(string instruction, string operator_
             leftMatrix = leftMatrix * atof(numberMultiplied.c_str());
         else if(operator_=="/")
             leftMatrix = leftMatrix / atof(numberMultiplied.c_str());
-
+        else if(operator_ == "'"){
+            leftMatrix = leftMatrix.getTranspose();
+            ending = pos+1;
+        }
 
         string replacedString = instruction.substr(beginning,ending-beginning);
         replaceString(instruction,replacedString,sign+leftMatrix.getString2());
@@ -2095,6 +2102,7 @@ string Matlab :: dealWithAddAndSubOperators(string instruction, string operator_
             rightMatrix = rightMatrix * atof(numberMultiplied.c_str());
         else if(operator_=="/")
             rightMatrix =  atof(numberMultiplied.c_str()) /rightMatrix ;
+
 
 
 
