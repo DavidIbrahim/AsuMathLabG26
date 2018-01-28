@@ -40,7 +40,7 @@ void checkBrackets(string instruction) {
 
 void checkOutput(string output){
 
-    string validOutput = "[ 1234567890]+-.;i"
+    string validOutput = "[ 1234567890]+-.;i";
 
     for(int i = 0; i<output.size(); i++) {
 
