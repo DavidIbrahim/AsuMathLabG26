@@ -219,8 +219,8 @@ Matlab getMatlab(string name,vector<Matlab> & savedMatrices){
 
 string Matlab::getInstructionWithoutMatlabNames(string instruction,vector<Matlab>& savedMatrices)
 {
-    string notMatlabNames = "0123456789 ,;[]";
-    string notVariableNames =" ;[],()+-%^*/.";
+
+    string notVariableNames =" ;[],()+-%^*/.'";
     for(int i =0; i<savedMatrices.size(); i++)
     {
         int position = 0;
@@ -2190,18 +2190,22 @@ string Matlab::dealWithConcatenation(string instruction)
 {
 
 
-    dealWithConcatenationHelperFn(instruction,"];[");
     dealWithConcatenationHelperFn(instruction,"] [");
     dealWithConcatenationHelperFn(instruction,"],[");
-     dealWithConcatenationHelperFn(instruction,"] ; [");
+    dealWithConcatenationHelperFn(instruction,"];[");
+
     dealWithConcatenationHelperFn(instruction,"]  [");
     dealWithConcatenationHelperFn(instruction,"] , [");
-     dealWithConcatenationHelperFn(instruction,"]; [");
+     dealWithConcatenationHelperFn(instruction,"] ; [");
+
     dealWithConcatenationHelperFn(instruction,"]   [");
     dealWithConcatenationHelperFn(instruction,"], [");
-     dealWithConcatenationHelperFn(instruction,"] ;[");
+     dealWithConcatenationHelperFn(instruction,"]; [");
+
     dealWithConcatenationHelperFn(instruction,"]    [");
     dealWithConcatenationHelperFn(instruction,"] ,[");
+     dealWithConcatenationHelperFn(instruction,"] ;[");
+
     return instruction;
 
 }
@@ -2232,6 +2236,7 @@ string Matlab:: dealWithInsideConcatenation(string instruction)
 
 
     }
+    instruction = dealWithConcatenation(instruction);
 
     return instruction;
 
