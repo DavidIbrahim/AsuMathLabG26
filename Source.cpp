@@ -38,6 +38,17 @@ int main(int argc, char*argv[])
 
     while(getline(*in,s))
     {
+        for (int i = 0; i < s.length(); i++)
+        {
+            if (s[i] == ' ')
+            {
+                s.erase( i,1 );
+                i--;
+            }
+            else break;
+
+
+        }
         int l = s.length();
 
         Matlab m;
@@ -81,24 +92,24 @@ int main(int argc, char*argv[])
             else echo = true;
 
 //cout<< mat<<endl;
-m = m.executeInstruction(mat,data);
+            m = m.executeInstruction(mat,data);
 
             mat= "";
 
         }
         else if(s.find("=")==string::npos)
         {
-                    bool found = false;
-                for (int i = 0; i<data.size();i++)
-    {
+            bool found = false;
+            for (int i = 0; i<data.size(); i++)
+            {
 
-        if(data[i].getName()==s)
-        {
-            data[i].print();
-            found = true;
-        }
-    }
-    if(!found) cout<< "Undefined variable "<<s<<endl;
+                if(data[i].getName()==s)
+                {
+                    data[i].print();
+                    found = true;
+                }
+            }
+            if(!found) cout<< "Undefined variable "<<s<<endl;
         }
         else
         {
@@ -109,23 +120,27 @@ m = m.executeInstruction(mat,data);
             }
             else echo = true;
 
-m = m.executeInstruction(s,data);
+            m = m.executeInstruction(s,data);
 
 
 
 
 
-}
-if(echo)
-{
-m.print();
+        }
+        if(echo)
+        {
+            m.print();
 
-}
+        }
 
 
-}
+    }
     CMatrix A ( "[1 2 3;4 5 6;7 8 9;]");
-    Matlab n,k;
+    Matlab m,n,k;
+    m = m.executeInstruction("A = 5.5 + 12 * sin(0.4) + 2.2^4",data);
+    m = m.executeInstruction("B = [1.2 2.3 A;[1.3 2.4;4.6 1.3],[3.2;7.8]]",data);
+    data[1].print();
+
     //n.executeInstruction("A = [8.9 7.3 4.8 2.4; 2.3 6.5 8.9 1.2; 4.9 3.8 7.2 7.5; 9.8 3.4 7.5 8.9]",data).print();
 //n.executeInstruction("X = 5",data).print();
 //n.executeInstruction("L = -8",data).print();
