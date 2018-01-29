@@ -35,16 +35,15 @@ void checkBrackets(string instruction) {
 
     }
 
-    if(counter2 != 0 || counter1 !=0 )  throw 1;
+    if(counter2 != 0 || counter1 !=0 )  throw ("invalid bracket closing");
 }
-
 void checkOutput(string output){
 
-    string validOutput = "[ 1234567890]+-.;i";
+    string validOutput = "[ 1234567890]+-.;ie";
 
     for(int i = 0; i<output.size(); i++) {
 
-        if(validOutput.find(output[i]) == -1  ) throw 2;
+        if(validOutput.find(output[i]) == -1  ) throw ("error has occured");
     }
 }
 
@@ -499,6 +498,7 @@ string Matlab::getReadyInstruction(string instruction,vector<Matlab>& savedMatri
     //cout<<instruction<<endl;
     instruction=getStringMatrix(instruction);
     //cout<<instruction<<endl;
+    checkOutput(instruction);
     return instruction;
 }
 
@@ -512,6 +512,7 @@ string Matlab::getReadyInstruction(string instruction,vector<Matlab>& savedMatri
 */
 Matlab Matlab::executeInstruction(string instruction,vector<Matlab>& savedMatrices)
 {
+    checkBrackets(instruction);
     int pos = instruction.find("=");
     //cout<< pos;
     string name = instruction.substr(0,pos-1);
