@@ -1623,7 +1623,7 @@ string extractTheNumber( string const &mainString,int positionOfFirstDigit,bool 
         int positionOfLastDigit = positionOfFirstDigit;
         bool  stillWhiteSpace = true;
         while((mainString[positionOfLastDigit]>='0' && mainString[positionOfLastDigit]<='9')||stillWhiteSpace
-              ||mainString[positionOfLastDigit]=='.')
+              ||mainString[positionOfLastDigit]=='.'||mainString[positionOfFirstDigit ]=='-')
         {
             if(stillWhiteSpace)
                 if(mainString[positionOfLastDigit]!=' ') stillWhiteSpace = false;
@@ -1639,7 +1639,8 @@ string extractTheNumber( string const &mainString,int positionOfFirstDigit,bool 
 
         int positionOfLastDigit = positionOfFirstDigit;
         bool  stillWhiteSpace = true;
-        while((mainString[positionOfFirstDigit]>='0' && mainString[positionOfFirstDigit]<='9')||stillWhiteSpace|| mainString[positionOfFirstDigit]=='.')
+        while((mainString[positionOfFirstDigit]>='0' && mainString[positionOfFirstDigit]<='9')||stillWhiteSpace
+              || mainString[positionOfFirstDigit]=='.')
         {
             if(stillWhiteSpace)
                 if(mainString[positionOfFirstDigit]!=' ') stillWhiteSpace = false;
