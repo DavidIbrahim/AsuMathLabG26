@@ -169,6 +169,8 @@ int main(int argc, char*argv[])
     m = m.executeInstruction("Y = (C^3 * sin(1./D))^(0.1)",data);
 
 */
+Matlab n;
+//n.executeInstruction("B = [1.2 2.3 33.5986;[1.3 2.4;4.6 1.3],[3.2;7.8]]",data).print();
  //data[4].print();
 
     //n.executeInstruction("A = [8.9 7.3 4.8 2.4; 2.3 6.5 8.9 1.2; 4.9 3.8 7.2 7.5; 9.8 3.4 7.5 8.9]",data).print();

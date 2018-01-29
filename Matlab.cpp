@@ -988,10 +988,11 @@ string Matlab::calcSimpleExpression(string s)
             i--;
         }
 
+
     }
 
 
-
+    //if (s[0]!='+' && s[0]!='-') s= '+'+s;
     return s;
 
 
