@@ -437,6 +437,7 @@ string Matlab::getInstructionWithoutExpressions(string instruction)
     string equivalentValue;
     simplifiedInstruction=solvingBrackets(instruction);
     simplifiedInstruction=correctSigns(simplifiedInstruction);
+    simplifiedInstruction=correctDotFor1DMatrix(simplifiedInstruction);
     //cout<<simplifiedInstruction<<endl;
     //dealing with powers first
     for(int i=simplifiedInstruction.length()-1; i>=0; i--)
@@ -2759,5 +2760,20 @@ string Matlab:: handleImplicitConcatinationFromLeft(string instruction )
     return instruction;
 }
 
-
+//this fn removes for ex: .+ by + if this is operation for 1D matrix
+string Matlab::correctDotFor1DMatrix(string s)
+{
+    for(int i=0;i<s.length();i++)
+    {
+        if(s[i]=='.'&&(s[i+1]=='+'||s[i+1]=='-'||s[i+1]=='*'||s[i+1]=='/'||s[i+1]=='^'))
+        {
+            //cout<<s[i-1]<<endl<<s[i+1]<<endl<<s[i+2]<<endl;
+            if(s[i-1]!=']'&&s[i-1]!=')'&&s[i+2]!='['&&s[i+2]!='(')
+            {
+                s.replace(i,2,string(1,s[i+1]));
+            }
+        }
+    }
+    return s;
+}
 
