@@ -1452,7 +1452,7 @@ string Matlab::getInstructionWithoutFunctions(string instruction)
 //                break;
             case 16:
                 replacedString="sqrt("+extractedString+")";
-               finalMatrix=CMatrix(finalMatrix).sqrt_element().getString2();
+                finalMatrix=CMatrix(finalMatrix).sqrt_element().getString2();
                 break;
 //            case 17:
 //                replacedString="exp("+extractedString+")";
@@ -1622,7 +1622,7 @@ string extractTheNumber( string const &mainString,int positionOfFirstDigit,bool 
         int positionOfLastDigit = positionOfFirstDigit;
         bool  stillWhiteSpace = true;
         while((mainString[positionOfLastDigit]>='0' && mainString[positionOfLastDigit]<='9')||stillWhiteSpace
-              ||mainString[positionOfLastDigit]=='.')
+                ||mainString[positionOfLastDigit]=='.')
         {
             if(stillWhiteSpace)
                 if(mainString[positionOfLastDigit]!=' ') stillWhiteSpace = false;
@@ -2212,9 +2212,9 @@ string Matlab::dealWithConcatenation(string instruction)
     dealWithConcatenationHelperFn(instruction,"]    [");
     dealWithConcatenationHelperFn(instruction,"] ,[");
     dealWithConcatenationHelperFn(instruction,"] ;[");
- dealWithConcatenationHelperFn(instruction,"];[");
- dealWithConcatenationHelperFn(instruction,"]; [");
-dealWithConcatenationHelperFn(instruction,"] ; [");
+    dealWithConcatenationHelperFn(instruction,"];[");
+    dealWithConcatenationHelperFn(instruction,"]; [");
+    dealWithConcatenationHelperFn(instruction,"] ; [");
 
     return instruction;
 
@@ -2226,7 +2226,7 @@ string Matlab:: dealWithInsideConcatenation(string instruction)
 
     int openingBracket =instruction.size();
     int closingBracket =0;
-       string matrixString = "";
+    string matrixString = "";
     while (openingBracket != -1)
     {
         openingBracket = instruction.rfind("[",openingBracket);
@@ -2246,7 +2246,7 @@ string Matlab:: dealWithInsideConcatenation(string instruction)
 
         }
 
-    openingBracket--;
+        openingBracket--;
     }
     instruction = dealWithConcatenation(instruction);
 
@@ -2319,10 +2319,11 @@ string Matlab::dealwithSpecialFunctionsHelperFunction(string instruction,string 
 
         string rightStringMatrix = "";
         if(specialFunction!="")
-                rightStringMatrix = getStringMatrix(instruction.substr(positionOftheRightMatrixBeginning,positionOfClosingBracket-positionOftheRightMatrixBeginning));
-        else {
-                string subtsring = instruction.substr(positionOfOpeningBracket+1,positionOfClosingBracket-positionOfOpeningBracket-1);
-               rightStringMatrix = getStringMatrix(subtsring);
+            rightStringMatrix = getStringMatrix(instruction.substr(positionOftheRightMatrixBeginning,positionOfClosingBracket-positionOftheRightMatrixBeginning));
+        else
+        {
+            string subtsring = instruction.substr(positionOfOpeningBracket+1,positionOfClosingBracket-positionOfOpeningBracket-1);
+            rightStringMatrix = getStringMatrix(subtsring);
         }
         CMatrix rightMatrix(rightStringMatrix);
 
@@ -2460,7 +2461,7 @@ string Matlab::solvingBrackets(string s)
                 if(!checkStringForMatrix(temp))
                 {
                     replacingString=getStringValue(temp);
-                replaceString(s,temp,replacingString,i);
+                    replaceString(s,temp,replacingString,i);
                 }
 
             }
