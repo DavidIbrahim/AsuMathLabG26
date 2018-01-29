@@ -1443,10 +1443,10 @@ string Matlab::getInstructionWithoutFunctions(string instruction)
 //                replacedString="floor("+extractedString+")";
 //                finalMatrix=CMatrix(finalMatrix).floor_element().getString2();
 //                break;
-//            case 16:
-//                replacedString="sqrt("+extractedString+")";
-//                finalMatrix=CMatrix(finalMatrix).sqrt_element().getString2();
-//                break;
+            case 16:
+                replacedString="sqrt("+extractedString+")";
+               finalMatrix=CMatrix(finalMatrix).sqrt_element().getString2();
+                break;
 //            case 17:
 //                replacedString="exp("+extractedString+")";
 //                finalMatrix=CMatrix(finalMatrix).exp_element().getString2();
@@ -1466,6 +1466,7 @@ string Matlab::getInstructionWithoutFunctions(string instruction)
             break;*/
             default:
                 throw("not supported function");
+                break;
             }
             replaceString(instruction,replacedString,finalMatrix);
         }
@@ -1565,7 +1566,7 @@ string Matlab::extractStringInsideFunction(string instruction)
         {
 
             int startingpostion= instruction.find('(',pos);
-            int endingPosition = findTheClosingBracket(instruction,'(');
+            int endingPosition = findTheClosingBracket(instruction,'(',startingpostion);
             return instruction.substr( startingpostion+1, endingPosition-startingpostion-1 );
 
         }
@@ -2432,10 +2433,11 @@ string Matlab::solvingBrackets(string s)
                 int endPosition=findTheClosingBracket(s,'(',i);
                 temp=s.substr(i,endPosition-i+1);
                 if(!checkStringForMatrix(temp))
+                {
                     replacingString=getStringValue(temp);
-                else
-                    throw("error");
                 replaceString(s,temp,replacingString,i);
+                }
+
             }
         }
     }
