@@ -1639,7 +1639,7 @@ string extractTheNumber( string const &mainString,int positionOfFirstDigit,bool 
 
         int positionOfLastDigit = positionOfFirstDigit;
         bool  stillWhiteSpace = true;
-        while((mainString[positionOfFirstDigit]>='0' && mainString[positionOfFirstDigit]<='9')||stillWhiteSpace|| mainString[positionOfLastDigit]=='.')
+        while((mainString[positionOfFirstDigit]>='0' && mainString[positionOfFirstDigit]<='9')||stillWhiteSpace|| mainString[positionOfFirstDigit]=='.')
         {
             if(stillWhiteSpace)
                 if(mainString[positionOfFirstDigit]!=' ') stillWhiteSpace = false;
@@ -1649,7 +1649,7 @@ string extractTheNumber( string const &mainString,int positionOfFirstDigit,bool 
         }
         if(positionOfFirstDigit == 0&&(mainString[positionOfFirstDigit]>='0' && mainString[positionOfFirstDigit]<='9')) positionOfFirstDigit = -1;
 
-        string answer = mainString.substr(positionOfFirstDigit+1, positionOfLastDigit -positionOfFirstDigit+1  );
+        string answer = mainString.substr(positionOfFirstDigit+1, positionOfLastDigit -positionOfFirstDigit  );
         return answer;
 
 
@@ -1805,7 +1805,7 @@ string Matlab::dealwithOperators(string instruction)
 
     }
     instruction = dealWithAddAndSubOperators(instruction,".*");
-
+    instruction = dealWithAddAndSubOperators(instruction,"*");
     /// number * matrix operator
     operator_ = '*';
     pos = 0;
@@ -1949,6 +1949,8 @@ string Matlab::dealwithOperators(string instruction)
         old = instruction;
         instruction =dealWithAddAndSubOperators(instruction,".+");
         instruction =dealWithAddAndSubOperators(instruction,"+");
+        trimAllSpacesExceptMatrix(instruction);
+        instruction = getInstructionWithoutExpressions(instruction);
     }
     old = "";
     while(instruction!=old)
@@ -1957,6 +1959,8 @@ string Matlab::dealwithOperators(string instruction)
 
         instruction =dealWithAddAndSubOperators(instruction,".-");
         instruction =dealWithAddAndSubOperators(instruction,"-");
+        trimAllSpacesExceptMatrix(instruction);
+        instruction = getInstructionWithoutExpressions(instruction);
     }
     return instruction;
 
@@ -2102,6 +2106,26 @@ string Matlab :: dealWithAddAndSubOperators(string instruction, string operator_
 
         CMatrix rightMatrix(rightStringMatrix);
 
+            int beginning = instruction.rfind(numberMultiplied,pos);
+
+        string sign = "";
+        bool leftNumberIsPositive = true;
+        for(int i = beginning-1 ; i>0; i--)
+        {
+            if(instruction[i]=='-')
+            {
+                leftNumberIsPositive = false;
+                break;
+            }
+            if(instruction[i] != ' ') break;
+        }
+
+        if(!leftNumberIsPositive)
+        {
+            numberMultiplied = "-"+numberMultiplied;
+            beginning--;
+            sign = "+";
+        }
 
 
         if(operator_=="+"||operator_==".+")
@@ -2112,14 +2136,19 @@ string Matlab :: dealWithAddAndSubOperators(string instruction, string operator_
             rightMatrix = rightMatrix * atof(numberMultiplied.c_str());
         else if(operator_=="/")
             rightMatrix =  atof(numberMultiplied.c_str()) /rightMatrix ;
-
+         else if(operator_=="*")
+            rightMatrix =  rightMatrix *atof(numberMultiplied.c_str()) ;
 
 
 
         int ending = instruction.find(rightStringMatrix,pos)+rightStringMatrix.size();
-        int beginning= instruction.rfind(numberMultiplied,pos);
+         beginning= instruction.rfind(numberMultiplied,pos);
         string replacedString = instruction.substr(beginning,ending-beginning);
-        replaceString(instruction,replacedString,rightMatrix.getString2());
+       string replacingString = rightMatrix.getString2();
+       if(!leftNumberIsPositive) replacingString = sign+"[" + replacingString + "]";
+
+        replaceString(instruction,replacedString,replacingString);
+
         pos= instruction.find(operator_);
 
     }
