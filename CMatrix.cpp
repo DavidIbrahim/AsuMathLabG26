@@ -1574,12 +1574,13 @@ the comment from the throw******************************************************
       CMatrix result( nR ,nC );
       for(int iR=0;iR<result.nR;iR++)
         for(int iC=0;iC<result.nC;iC++)
-            {result.values[iR][iC] =  m.values[iR][iC]/ values[iR][iC];}
+            {result.values[iR][iC] =  values[iR][iC]/ m.values[iR][iC];
+
+            }
 
   return result ;
   }
-///** @brief it div each element with its equiv. element
-// *  @param1  the matrix that does the call
+
 // *  @param2  another matrix as i/p
 // *  @return a matrix where each element is div with its equiv element @param1 / @param2
 // *
