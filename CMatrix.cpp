@@ -1515,7 +1515,7 @@ the comment from the throw******************************************************
     if(m.nR!=nR || m.nC!=nC )
         {
        printf("error: quotient: nonconformant arguments (op1 is %dx%d, op2 is %dx%d)\n",nR,nC,m.nR,m.nC);
-       // throw("error");
+       throw("");
         CMatrix v (1,1,0) ;
         return v;
         }
@@ -1566,7 +1566,7 @@ the comment from the throw******************************************************
     if(m.nR!=nR || m.nC!=nC )
         {
        printf("error: quotient: nonconformant arguments (op1 is %dx%d, op2 is %dx%d)\n",nR,nC,m.nR,m.nC);
-       // throw("error");
+        throw("");
         CMatrix v (1,1,0) ;
         return v;
         }
@@ -1643,7 +1643,7 @@ CMatrix CMatrix::power(double number_double )
         if(nR!=1 || nC!=1 )
         {
             printf("error: according to  the specs if the pow of the value was fraction then the matrix must be 1x1 \n");
-            //   throw("error");
+            throw("");
             CMatrix v (1,1) ;
             return v;
         }

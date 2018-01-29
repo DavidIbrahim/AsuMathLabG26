@@ -7,15 +7,22 @@
 #include <string.h>
 #include <stdlib.h>
 #include "Matlab.h"
-
-
-
+#include <exception>
+#include <typeinfo>
+/*
+struct MyException : public exception{
+const char * what () const throw(){
+return "error occured!";}};
+*/
 using namespace std;
 int main(int argc, char*argv[])
 {
     /*
     	ifstream infile ("//home//samuel//Documents//CodeBlocks//Phase1_linux//example.m");
     */
+    try
+    {
+
     bool file_input = false;
     istream* in = &cin;
     ifstream infile;
@@ -68,7 +75,7 @@ int main(int argc, char*argv[])
             mat_cont = true;
         }
         else
-           mat_cont =false;
+            mat_cont =false;
 
 
 
@@ -137,7 +144,7 @@ int main(int argc, char*argv[])
 
         }
 
-mat= "";
+        mat= "";
     }
     CMatrix A ( "[1 2 3;4 5 6;7 8 9;]");
     Matlab m,n,k;
@@ -156,6 +163,18 @@ mat= "";
     //data[0].getString();
 
     //cout<<n.calcSimpleExpression("-12.1*3.1");
+    //CMatrix *pb =0;
+    //typeid(*pb);
+    }
+
+    catch(const char* error)
+    {
+        cout<<error<<endl;
+    }
+    catch(exception &e)
+    {
+        cout<< "exception caught: "<< e.what()<<endl;
+    }
     return 0;
 }
 
