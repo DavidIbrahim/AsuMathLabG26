@@ -113,6 +113,8 @@ private:
         string correctSigns(string s);
         Matlab updateVector(string name, string mat, vector<Matlab>& savedMatrices);
         void print();
+        //bool checkDotOperationFor1DMatrix(string s,int pos);
+        string correctDotFor1DMatrix(string s);
 protected:
 
 
