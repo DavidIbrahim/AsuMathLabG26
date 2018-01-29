@@ -86,7 +86,7 @@ void CMatrix::copy(string s) {
   for(int i=0;i<s.length();i++)
   {
       if(s[i]==' ') noOfSpaces2 ++;
-      if(s[i]==';'||i=s.length()-1)
+      if(s[i]==';'||i==s.length()-1)
       {
           if(noOfSpaces2!=noOfSpaces1) throw("invalid matrix dimensions");
           else noOfSpaces2=0;
