@@ -1,3 +1,4 @@
+
 #include<stdio.h>
 #include <iostream>
 #include"CMatrix.h"
@@ -436,9 +437,6 @@ string Matlab::getInstructionWithoutExpressions(string instruction)
     simplifiedInstruction=solvingBrackets(instruction);
     simplifiedInstruction=correctSigns(simplifiedInstruction);
     //cout<<simplifiedInstruction<<endl;
-    simplifiedInstruction=correctDotFor1DMatrix(simplifiedInstruction);
-    //cout<<simplifiedInstruction<<endl;
-    //cout<<simplifiedInstruction<<endl;
     //dealing with powers first
     for(int i=simplifiedInstruction.length()-1; i>=0; i--)
     {
@@ -491,7 +489,9 @@ string Matlab::getInstructionWithoutExpressions(string instruction)
 */
 string Matlab::getReadyInstruction(string instruction,vector<Matlab>& savedMatrices)
 {
+
     trimAllSpacesExceptMatrix(instruction);
+
     instruction=getInstructionWithoutMatlabNames(instruction,savedMatrices);
     //cout<<instruction<<endl;
     instruction=getInstructionWithoutSpecialMatrices(instruction);
@@ -870,6 +870,12 @@ string Matlab::calcSimpleExpression(string s)
             reverse(Sbefore);
             copySbefore.erase(count, copySbefore.length() - count);
             reverse(copySbefore);
+            int neg = copySbefore.find("-");
+            if(neg!=string::npos)
+            {
+            copySbefore = copySbefore.substr(neg);
+            }
+
             Dbefore = atof(copySbefore.c_str());
             //now for the sign of the sbefore
             int entered = 0;
@@ -1453,7 +1459,7 @@ string Matlab::getInstructionWithoutFunctions(string instruction)
 //                break;
             case 16:
                 replacedString="sqrt("+extractedString+")";
-               finalMatrix=CMatrix(finalMatrix).sqrt_element().getString2();
+                finalMatrix=CMatrix(finalMatrix).sqrt_element().getString2();
                 break;
 //            case 17:
 //                replacedString="exp("+extractedString+")";
@@ -1623,7 +1629,7 @@ string extractTheNumber( string const &mainString,int positionOfFirstDigit,bool 
         int positionOfLastDigit = positionOfFirstDigit;
         bool  stillWhiteSpace = true;
         while((mainString[positionOfLastDigit]>='0' && mainString[positionOfLastDigit]<='9')||stillWhiteSpace
-              ||mainString[positionOfLastDigit]=='.')
+                ||mainString[positionOfLastDigit]=='.')
         {
             if(stillWhiteSpace)
                 if(mainString[positionOfLastDigit]!=' ') stillWhiteSpace = false;
@@ -1639,7 +1645,7 @@ string extractTheNumber( string const &mainString,int positionOfFirstDigit,bool 
 
         int positionOfLastDigit = positionOfFirstDigit;
         bool  stillWhiteSpace = true;
-        while((mainString[positionOfFirstDigit]>='0' && mainString[positionOfFirstDigit]<='9')||stillWhiteSpace|| mainString[positionOfFirstDigit]=='.')
+        while((mainString[positionOfFirstDigit]>='0' && mainString[positionOfFirstDigit]<='9')||stillWhiteSpace|| mainString[positionOfLastDigit]=='.')
         {
             if(stillWhiteSpace)
                 if(mainString[positionOfFirstDigit]!=' ') stillWhiteSpace = false;
@@ -1649,7 +1655,7 @@ string extractTheNumber( string const &mainString,int positionOfFirstDigit,bool 
         }
         if(positionOfFirstDigit == 0&&(mainString[positionOfFirstDigit]>='0' && mainString[positionOfFirstDigit]<='9')) positionOfFirstDigit = -1;
 
-        string answer = mainString.substr(positionOfFirstDigit+1, positionOfLastDigit -positionOfFirstDigit  );
+        string answer = mainString.substr(positionOfFirstDigit+1, positionOfLastDigit -positionOfFirstDigit+1  );
         return answer;
 
 
@@ -1805,7 +1811,7 @@ string Matlab::dealwithOperators(string instruction)
 
     }
     instruction = dealWithAddAndSubOperators(instruction,".*");
-    instruction = dealWithAddAndSubOperators(instruction,"*");
+
     /// number * matrix operator
     operator_ = '*';
     pos = 0;
@@ -1949,8 +1955,6 @@ string Matlab::dealwithOperators(string instruction)
         old = instruction;
         instruction =dealWithAddAndSubOperators(instruction,".+");
         instruction =dealWithAddAndSubOperators(instruction,"+");
-        trimAllSpacesExceptMatrix(instruction);
-        instruction = getInstructionWithoutExpressions(instruction);
     }
     old = "";
     while(instruction!=old)
@@ -1959,8 +1963,6 @@ string Matlab::dealwithOperators(string instruction)
 
         instruction =dealWithAddAndSubOperators(instruction,".-");
         instruction =dealWithAddAndSubOperators(instruction,"-");
-        trimAllSpacesExceptMatrix(instruction);
-        instruction = getInstructionWithoutExpressions(instruction);
     }
     return instruction;
 
@@ -2106,26 +2108,6 @@ string Matlab :: dealWithAddAndSubOperators(string instruction, string operator_
 
         CMatrix rightMatrix(rightStringMatrix);
 
-            int beginning = instruction.rfind(numberMultiplied,pos);
-
-        string sign = "";
-        bool leftNumberIsPositive = true;
-        for(int i = beginning-1 ; i>0; i--)
-        {
-            if(instruction[i]=='-')
-            {
-                leftNumberIsPositive = false;
-                break;
-            }
-            if(instruction[i] != ' ') break;
-        }
-
-        if(!leftNumberIsPositive)
-        {
-            numberMultiplied = "-"+numberMultiplied;
-            beginning--;
-            sign = "+";
-        }
 
 
         if(operator_=="+"||operator_==".+")
@@ -2136,19 +2118,14 @@ string Matlab :: dealWithAddAndSubOperators(string instruction, string operator_
             rightMatrix = rightMatrix * atof(numberMultiplied.c_str());
         else if(operator_=="/")
             rightMatrix =  atof(numberMultiplied.c_str()) /rightMatrix ;
-         else if(operator_=="*")
-            rightMatrix =  rightMatrix *atof(numberMultiplied.c_str()) ;
+
 
 
 
         int ending = instruction.find(rightStringMatrix,pos)+rightStringMatrix.size();
-         beginning= instruction.rfind(numberMultiplied,pos);
+        int beginning= instruction.rfind(numberMultiplied,pos);
         string replacedString = instruction.substr(beginning,ending-beginning);
-       string replacingString = rightMatrix.getString2();
-       if(!leftNumberIsPositive) replacingString = sign+"[" + replacingString + "]";
-
-        replaceString(instruction,replacedString,replacingString);
-
+        replaceString(instruction,replacedString,rightMatrix.getString2());
         pos= instruction.find(operator_);
 
     }
@@ -2242,9 +2219,9 @@ string Matlab::dealWithConcatenation(string instruction)
     dealWithConcatenationHelperFn(instruction,"]    [");
     dealWithConcatenationHelperFn(instruction,"] ,[");
     dealWithConcatenationHelperFn(instruction,"] ;[");
- dealWithConcatenationHelperFn(instruction,"];[");
- dealWithConcatenationHelperFn(instruction,"]; [");
-dealWithConcatenationHelperFn(instruction,"] ; [");
+    dealWithConcatenationHelperFn(instruction,"];[");
+    dealWithConcatenationHelperFn(instruction,"]; [");
+    dealWithConcatenationHelperFn(instruction,"] ; [");
 
     return instruction;
 
@@ -2256,7 +2233,7 @@ string Matlab:: dealWithInsideConcatenation(string instruction)
 
     int openingBracket =instruction.size();
     int closingBracket =0;
-       string matrixString = "";
+    string matrixString = "";
     while (openingBracket != -1)
     {
         openingBracket = instruction.rfind("[",openingBracket);
@@ -2276,7 +2253,7 @@ string Matlab:: dealWithInsideConcatenation(string instruction)
 
         }
 
-    openingBracket--;
+        openingBracket--;
     }
     instruction = dealWithConcatenation(instruction);
 
@@ -2349,10 +2326,11 @@ string Matlab::dealwithSpecialFunctionsHelperFunction(string instruction,string 
 
         string rightStringMatrix = "";
         if(specialFunction!="")
-                rightStringMatrix = getStringMatrix(instruction.substr(positionOftheRightMatrixBeginning,positionOfClosingBracket-positionOftheRightMatrixBeginning));
-        else {
-                string subtsring = instruction.substr(positionOfOpeningBracket+1,positionOfClosingBracket-positionOfOpeningBracket-1);
-               rightStringMatrix = getStringMatrix(subtsring);
+            rightStringMatrix = getStringMatrix(instruction.substr(positionOftheRightMatrixBeginning,positionOfClosingBracket-positionOftheRightMatrixBeginning));
+        else
+        {
+            string subtsring = instruction.substr(positionOfOpeningBracket+1,positionOfClosingBracket-positionOfOpeningBracket-1);
+            rightStringMatrix = getStringMatrix(subtsring);
         }
         CMatrix rightMatrix(rightStringMatrix);
 
@@ -2490,7 +2468,7 @@ string Matlab::solvingBrackets(string s)
                 if(!checkStringForMatrix(temp))
                 {
                     replacingString=getStringValue(temp);
-                replaceString(s,temp,replacingString,i);
+                    replaceString(s,temp,replacingString,i);
                 }
 
             }
@@ -2750,20 +2728,4 @@ string Matlab:: handleImplicitConcatinationFromLeft(string instruction )
     return instruction;
 }
 
-//this fn removes for ex: .+ by + if this is operation for 1D matrix
-string Matlab::correctDotFor1DMatrix(string s)
-{
-    for(int i=0;i<s.length();i++)
-    {
-        if(s[i]=='.'&&(s[i+1]=='+'||s[i+1]=='-'||s[i+1]=='*'||s[i+1]=='/'||s[i+1]=='^'))
-        {
-            //cout<<s[i-1]<<endl<<s[i+1]<<endl<<s[i+2]<<endl;
-            if(s[i-1]!=']'&&s[i-1]!=')'&&s[i+2]!='['&&s[i+2]!='(')
-            {
-                s.replace(i,2,string(1,s[i+1]));
-            }
-        }
-    }
-    return s;
-}
 

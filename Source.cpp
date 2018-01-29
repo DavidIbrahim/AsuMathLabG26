@@ -20,8 +20,7 @@ int main(int argc, char*argv[])
     /*
     	ifstream infile ("//home//samuel//Documents//CodeBlocks//Phase1_linux//example.m");
     */
-    try
-    {
+
 
     bool file_input = false;
     istream* in = &cin;
@@ -45,107 +44,122 @@ int main(int argc, char*argv[])
 
     while(getline(*in,s))
     {
-        for (int i = 0; i < s.length(); i++)
+        try
         {
-            if (s[i] == ' ')
+            for (int i = 0; i < s.length(); i++)
             {
-                s.erase( i,1 );
-                i--;
+                if (s[i] == ' ')
+                {
+                    s.erase( i,1 );
+                    i--;
+                }
+                else break;
+
+
             }
-            else break;
+            int l = s.length();
 
+            Matlab m;
+            string result;
+            if(s[l-1]=='\r' || s[l-1]=='\n') s.erase(l-1); //fixing new line issue between Windows and Linux
+            if(s=="")continue;
+            //mat = s;
+            // cout<<s<<endl;
+            if(s.find('[')!= string::npos || mat_cont)
+                mat_intit = true;
+            else
+                mat_intit = false;
 
-        }
-        int l = s.length();
-
-        Matlab m;
-        string result;
-        if(s[l-1]=='\r' || s[l-1]=='\n') s.erase(l-1); //fixing new line issue between Windows and Linux
-        if(s=="")continue;
-        //mat = s;
-        // cout<<s<<endl;
-        if(s.find('[')!= string::npos || mat_cont)
-            mat_intit = true;
-        else
-            mat_intit = false;
-
-        if(mat_intit) mat+=s;
-        if((m.findTheClosingBracket(mat,'[')==string::npos) && mat_intit)
-        {
-            mat_cont = true;
-        }
-        else
-            mat_cont =false;
-
-
-
-        if(mat_intit)
-        {
-
-            if(mat[mat.length()-1]!=';'&&mat[mat.length()-1]!='[' && mat_cont) mat+=';';
-
-        }
-
-
-
-
-        if(mat_cont)continue;
-        //if(mat_cont) continue;
-
-        if (mat.length() >0)
-        {
-            //cout<<mat<<endl;
-            if(mat[mat.length()-1]== ';')
+            if(mat_intit) mat+=s;
+            if((m.findTheClosingBracket(mat,'[')==string::npos) && mat_intit)
             {
-                mat.erase(mat.length()-1);
-                echo = false;
+                mat_cont = true;
             }
-            else echo = true;
+            else
+                mat_cont =false;
+
+
+
+            if(mat_intit)
+            {
+
+                if(mat[mat.length()-1]!=';'&&mat[mat.length()-1]!='[' && mat_cont) mat+=';';
+
+            }
+
+
+
+
+            if(mat_cont)continue;
+            //if(mat_cont) continue;
+
+            if (mat.length() >0)
+            {
+                //cout<<mat<<endl;
+                if(mat[mat.length()-1]== ';')
+                {
+                    mat.erase(mat.length()-1);
+                    echo = false;
+                }
+                else echo = true;
 
 //cout<< mat<<endl;
-            m = m.executeInstruction(mat,data);
+                m = m.executeInstruction(mat,data);
+
+                mat= "";
+
+            }
+            else if(s.find("=")==string::npos)
+            {
+                bool found = false;
+                for (int i = 0; i<data.size(); i++)
+                {
+
+                    if(data[i].getName()==s)
+                    {
+                        data[i].print();
+                        found = true;
+                    }
+                }
+                if(!found) cout<< "Undefined variable "<<s<<endl;
+            }
+            else
+            {
+                if(s[s.length()-1]== ';')
+                {
+                    s.erase(s.length()-1);
+                    echo = false;
+                }
+                else echo = true;
+
+                m = m.executeInstruction(s,data);
+
+
+
+
+
+            }
+            if(echo)
+            {
+                m.print();
+
+            }
 
             mat= "";
-
         }
-        else if(s.find("=")==string::npos)
+
+        catch(const char* error)
         {
-            bool found = false;
-            for (int i = 0; i<data.size(); i++)
-            {
-
-                if(data[i].getName()==s)
-                {
-                    data[i].print();
-                    found = true;
-                }
-            }
-            if(!found) cout<< "Undefined variable "<<s<<endl;
+            cout<<error<<endl;
         }
-        else
+        catch(exception &e)
         {
-            if(s[s.length()-1]== ';')
-            {
-                s.erase(s.length()-1);
-                echo = false;
-            }
-            else echo = true;
-
-            m = m.executeInstruction(s,data);
-
-
-
-
-
-        }
-        if(echo)
-        {
-            m.print();
-
+            cout<< "exception caught: "<< e.what()<<endl;
         }
 
-        mat= "";
+
     }
+/*
     CMatrix A ( "[1 2 3;4 5 6;7 8 9;]");
     Matlab m,n,k;
     m = m.executeInstruction("A = 5.5 + 12 * sin(0.4) + 2.2^4",data);
@@ -154,7 +168,8 @@ int main(int argc, char*argv[])
     m = m.executeInstruction("D = rand(4,4)",data);
     m = m.executeInstruction("Y = (C^3 * sin(1./D))^(0.1)",data);
 
-    data[4].print();
+*/
+ //data[4].print();
 
     //n.executeInstruction("A = [8.9 7.3 4.8 2.4; 2.3 6.5 8.9 1.2; 4.9 3.8 7.2 7.5; 9.8 3.4 7.5 8.9]",data).print();
 //n.executeInstruction("X = 5",data).print();
@@ -165,16 +180,7 @@ int main(int argc, char*argv[])
     //cout<<n.calcSimpleExpression("-12.1*3.1");
     //CMatrix *pb =0;
     //typeid(*pb);
-    }
 
-    catch(const char* error)
-    {
-        cout<<error<<endl;
-    }
-    catch(exception &e)
-    {
-        cout<< "exception caught: "<< e.what()<<endl;
-    }
     return 0;
 }
 
