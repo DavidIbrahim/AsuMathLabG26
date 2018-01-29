@@ -75,6 +75,23 @@ CMatrix CMatrix::operator=(string s) {//////////////////////////////////////////
 
 void CMatrix::copy(string s) {
   reset();
+  int noOfSemicolons=0;
+  int noOfSpaces1=0;
+  int noOfSpaces2=0;
+  for(int i=0;i<s.length();i++)
+    {
+        if(s[i]==';') break;
+        if(s[i]==' ') noOfSpaces1++;
+    }
+  for(int i=0;i<s.length();i++)
+  {
+      if(s[i]==' ') noOfSpaces2 ++;
+      if(s[i]==';'||i=s.length()-1)
+      {
+          if(noOfSpaces2!=noOfSpaces1) throw("invalid matrix dimensions");
+          else noOfSpaces2=0;
+      }
+  }
   char *buffer = new char[s.length() + 1];
   strcpy(buffer, s.c_str());
   const char *lineSeparators = ";\r\n";
