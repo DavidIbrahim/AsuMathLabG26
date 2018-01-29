@@ -869,6 +869,12 @@ string Matlab::calcSimpleExpression(string s)
             reverse(Sbefore);
             copySbefore.erase(count, copySbefore.length() - count);
             reverse(copySbefore);
+            int neg = copySbefore.find("-");
+            if(neg!=string::npos)
+            {
+            copySbefore = copySbefore.substr(neg);
+            }
+
             Dbefore = atof(copySbefore.c_str());
             //now for the sign of the sbefore
             int entered = 0;
