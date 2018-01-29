@@ -2201,19 +2201,20 @@ string Matlab::dealWithConcatenation(string instruction)
 
     dealWithConcatenationHelperFn(instruction,"] [");
     dealWithConcatenationHelperFn(instruction,"],[");
-    dealWithConcatenationHelperFn(instruction,"];[");
+
 
     dealWithConcatenationHelperFn(instruction,"]  [");
     dealWithConcatenationHelperFn(instruction,"] , [");
-    dealWithConcatenationHelperFn(instruction,"] ; [");
 
     dealWithConcatenationHelperFn(instruction,"]   [");
     dealWithConcatenationHelperFn(instruction,"], [");
-    dealWithConcatenationHelperFn(instruction,"]; [");
 
     dealWithConcatenationHelperFn(instruction,"]    [");
     dealWithConcatenationHelperFn(instruction,"] ,[");
     dealWithConcatenationHelperFn(instruction,"] ;[");
+ dealWithConcatenationHelperFn(instruction,"];[");
+ dealWithConcatenationHelperFn(instruction,"]; [");
+dealWithConcatenationHelperFn(instruction,"] ; [");
 
     return instruction;
 
@@ -2223,14 +2224,15 @@ string Matlab::dealWithConcatenation(string instruction)
 string Matlab:: dealWithInsideConcatenation(string instruction)
 {
 
-    int openingBracket =0;
-    int closingBracket = 0;
+    int openingBracket =instruction.size();
+    int closingBracket =0;
+       string matrixString = "";
     while (openingBracket != -1)
     {
-        openingBracket = instruction.find("[",closingBracket);
+        openingBracket = instruction.rfind("[",openingBracket);
         closingBracket = findTheClosingBracket(instruction,'[',openingBracket);
-        string matrixString = "";
-        if(openingBracket!=-1,closingBracket!=-1)
+
+        if(openingBracket!=-1&&closingBracket!=-1)
             matrixString = instruction.substr(openingBracket,closingBracket-openingBracket+1);
         else break;
 
@@ -2239,14 +2241,15 @@ string Matlab:: dealWithInsideConcatenation(string instruction)
         {
             string   solvedMatrixString = handleImplicitConcatinationFromRight(matrixString);
             solvedMatrixString = handleImplicitConcatinationFromLeft(solvedMatrixString);
-
+            solvedMatrixString = dealWithConcatenation(solvedMatrixString);
             replaceString(instruction,matrixString,solvedMatrixString);
 
         }
 
-
+    openingBracket--;
     }
     instruction = dealWithConcatenation(instruction);
+
 
     return instruction;
 
