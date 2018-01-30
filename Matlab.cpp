@@ -501,7 +501,7 @@ string Matlab::getReadyInstruction(string instruction,vector<Matlab>& savedMatri
     //cout<<instruction<<endl;
     instruction=getInstructionWithoutExpressions(instruction);
     //cout<<instruction<<endl;
-    instruction=getInstructionWithoutFunctions(instruction);
+   instruction=getInstructionWithoutFunctions(instruction);
     //cout<<instruction<<endl;
     //after removing functions we need another simplification
     instruction=getInstructionWithoutExpressions(instruction);
@@ -1707,7 +1707,7 @@ int indexOfTheBracket(bool squareBracket,bool searchingForBeginning,string instr
             for(int i =indexOfOperator;  i<instruction.size() ; i++)
             {
                 if(instruction[i] == bracketToSearchFor) return i;
-                if(i-indexOfOperator>2 && instruction[i]!=' ') return -1;
+                if(i-indexOfOperator>0 && instruction[i]!=' ') return -1;
 
             }
             return -1 ;
