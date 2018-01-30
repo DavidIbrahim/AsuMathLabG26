@@ -76,7 +76,8 @@ CMatrix CMatrix::operator=(string s) {//////////////////////////////////////////
 void CMatrix::copy(string s) {
   reset();
 
-
+if(s[0]=='[' && s[s.length()-1]==']')
+{
   int noOfSpaces1=0;
   int noOfSpaces2=0;
   for(int i=0;i<s.length();i++)
@@ -95,7 +96,7 @@ void CMatrix::copy(string s) {
           else noOfSpaces2=0;
       }
   }
-  */
+}
   char *buffer = new char[s.length() + 1];
   strcpy(buffer, s.c_str());
   const char *lineSeparators = ";\r\n";
