@@ -47,6 +47,7 @@ void checkBrackets(string instruction)
 void checkOutput(string output)
 {
 
+    if(output=="inf") throw("inf");
     string validOutput = "[ 1234567890]+-.;ie";
 
     for(int i = 0; i<output.size(); i++)
