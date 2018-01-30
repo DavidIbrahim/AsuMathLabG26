@@ -75,17 +75,18 @@ CMatrix CMatrix::operator=(string s) {//////////////////////////////////////////
 
 void CMatrix::copy(string s) {
   reset();
-  int noOfSemicolons=0;
   int noOfSpaces1=0;
   int noOfSpaces2=0;
   for(int i=0;i<s.length();i++)
     {
+
+        if((s[i]==' '||s[i]==','||s[i]==']'||s[i]==';')&&(s[i-1]=='1'||s[i-1]=='2'||s[i-1]=='3'||s[i-1]=='4'||s[i-1]=='5'||s[i-1]=='6'||s[i-1]=='7'||s[i-1]=='8'||s[i-1]=='9'||s[i-1]=='0'||s[i-1]=='i'))
+            noOfSpaces1++;
         if(s[i]==';') break;
-        if(s[i]==' ') noOfSpaces1++;
     }
   for(int i=0;i<s.length();i++)
   {
-      if(s[i]==' ') noOfSpaces2 ++;
+      if((s[i]==' '||s[i]==','||s[i]==']'||s[i]==';')&&(s[i-1]=='1'||s[i-1]=='2'||s[i-1]=='3'||s[i-1]=='4'||s[i-1]=='5'||s[i-1]=='6'||s[i-1]=='7'||s[i-1]=='8'||s[i-1]=='9'||s[i-1]=='0'||s[i-1]=='i')) noOfSpaces2 ++;
       if(s[i]==';'||i==s.length()-1)
       {
           if(noOfSpaces2!=noOfSpaces1) throw("invalid matrix dimensions");
