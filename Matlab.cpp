@@ -529,6 +529,8 @@ Matlab Matlab::executeInstruction(string instruction,vector<Matlab>& savedMatric
     string name = instruction.substr(0,pos-1);
     //cout <<name;
     string mat = instruction.substr(pos+2);
+
+
     //cout<<mat<<endl;
     string new_string = "";
     while((pos=mat.find("*-"))!=string::npos)
@@ -667,6 +669,7 @@ void Matlab::print()
 string Matlab::getStringValue(string complexString)
 {
 
+    int isThereComplex = complexString.find("i");
 
     trimAllSpaces(complexString);
     //make sure all operations are in the form expected
@@ -679,7 +682,7 @@ string Matlab::getStringValue(string complexString)
 
     complexString=dealWithBrackets(complexString);
 
-    complexString = calcSimpleExpression(complexString);
+   if(isThereComplex==-1) complexString = calcSimpleExpression(complexString);
     return complexString;
 }
 
@@ -743,7 +746,7 @@ string Matlab::calcSimpleExpression(string s)
 {
 
     string operators[5] = { "^","*", "/","+","-" };
-    char numbers[11] = { '0','1','2','3','4','5','6','7','8','9','.' };
+    char numbers[] = { '0','1','2','3','4','5','6','7','8','9','.' };
     if (( s[0] == '-'))
         s = '0' + s;
 
