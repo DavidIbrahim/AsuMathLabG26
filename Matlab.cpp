@@ -1707,7 +1707,7 @@ int indexOfTheBracket(bool squareBracket,bool searchingForBeginning,string instr
             for(int i =indexOfOperator;  i<instruction.size() ; i++)
             {
                 if(instruction[i] == bracketToSearchFor) return i;
-                if(i-indexOfOperator>0 && instruction[i]!=' ') return -1;
+                if(i-indexOfOperator>1 && instruction[i]!=' ') return -1;
 
             }
             return -1 ;
