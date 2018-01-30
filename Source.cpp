@@ -44,6 +44,7 @@ int main(int argc, char*argv[])
 
     while(getline(*in,s))
     {
+
         try
         {
             for (int i = 0; i < s.length(); i++)
@@ -151,10 +152,12 @@ int main(int argc, char*argv[])
         catch(const char* error)
         {
             cout<<error<<endl;
+            mat ="";
         }
         catch(exception &e)
         {
             cout<< "exception caught: "<< e.what()<<endl;
+            mat="";
         }
 
 
