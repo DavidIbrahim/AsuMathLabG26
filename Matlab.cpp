@@ -18,6 +18,7 @@
 #include<math.h>
 #include <iomanip>
 #include <limits>
+#include <ctype.h>
 
 
 /**
@@ -528,6 +529,35 @@ Matlab Matlab::executeInstruction(string instruction,vector<Matlab>& savedMatric
     //cout <<name;
     string mat = instruction.substr(pos+2);
     //cout<<mat<<endl;
+    string new_string = "";
+    while((pos=mat.find("*-"))!=string::npos)
+    {
+        pos+=2;
+        char c = mat[pos];
+        while(isdigit(c)||c=='.')
+        {
+            new_string+=c;
+            pos++;
+            c = mat[pos];
+
+        }
+replaceString(mat,"-"+new_string,"[-"+new_string+"]",pos-new_string.length()-2);
+    }
+
+    new_string = "";
+        while((pos=mat.find("/-"))!=string::npos)
+    {
+        pos+=2;
+        char c = mat[pos];
+        while(isdigit(c)||c=='.')
+        {
+            new_string+=c;
+            pos++;
+            c = mat[pos];
+
+        }
+replaceString(mat,"-"+new_string,"[-"+new_string+"]",pos-new_string.length()-2);
+    }
     mat = getReadyInstruction(mat,savedMatrices);
 
     return updateVector(name,mat,savedMatrices);

@@ -75,6 +75,7 @@ CMatrix CMatrix::operator=(string s) {//////////////////////////////////////////
 
 void CMatrix::copy(string s) {
   reset();
+  /*
   int noOfSemicolons=0;
   int noOfSpaces1=0;
   int noOfSpaces2=0;
@@ -92,6 +93,7 @@ void CMatrix::copy(string s) {
           else noOfSpaces2=0;
       }
   }
+  */
   char *buffer = new char[s.length() + 1];
   strcpy(buffer, s.c_str());
   const char *lineSeparators = ";\r\n";
